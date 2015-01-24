@@ -4,7 +4,7 @@ var port = process.env.PORT
 
 if( port === undefined ) port = 5000
 
-var static = st( { path: __dirname + '/saxan' , url: '/' } )
+var static = st( { path: __dirname + '/public' , index: '' } )
 
 http.createServer( function( req , res ){
     static( req , res )
