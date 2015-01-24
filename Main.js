@@ -116,13 +116,13 @@
     function ShowLinks( Show ){
         var T = Show.id
         var M = '<div style="align-items: center; justify-content: center; display: flex; flex-direction: row; height: 100%;" >\
-            <div class="lt" style="width: 150px;" >\
-                <div class="marginBT pointer randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
-                <div class="marginBT pointer randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
+            <div style="text-align: left;  width: 150px;" >\
+                <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
+                <div class="randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
                 </div>\
-            <div class="rt" style="width: 150px;" >\
-                <div class="marginBT pointer randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
-                <div class="marginBT pointer randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
+            <div style="text-align: right; width: 150px;" >\
+                <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
+                <div class="randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
                 </div>\
             </div>'
         var B = 'Exit'
