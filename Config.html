@@ -1,0 +1,330 @@
+<html>
+    <TITLE>Edit Shows</TITLE>
+    <head>
+        <link rel="icon" href="http://i.imgur.com/leTCfh3.png" type="image/png"/>
+        <style>
+            ::-webkit-scrollbar     {
+                display             : none                  ;
+                }
+            *                       {
+                background-color    : #000                  ;
+                border-color        : #777                  ;
+                color               : #FFF                  ;
+                }
+            body                    {
+                margin              : 0                     ;
+                }
+            input                   {
+                border-radius       : 5px                   ;
+                border-style        : solid                 ;
+                font-family         : 'Courier New'         ;
+                height              : 28px                  ;
+                padding             : 2px 5px               ;
+                text-align          : left                  ;
+                width               : 95%                   ;
+                }
+            input.head              {
+                background-color    : #666                  ;
+                border-color        : #333                  ;
+                margin              : 0 10px                ;
+                text-align          : center                ;
+                width               : calc( 100% / 6 - 24px )    ;
+                }
+            table                   {
+                width               : 100%                  ;
+                }
+            td                      {
+                text-align          : center                ;
+                }
+            th                      {
+                text-align          : center                ;
+                white-space         : pre                   ;
+                }
+            tr                      {
+                height              : 30px                  ;
+                }
+            .centerText             {
+                text-align          : center                ;
+                }
+            #head                   {
+                height              : 30px                  ;
+                left                : 0                     ;
+                margin              : auto                  ;
+                padding             : 10px 0                ;
+                position            : fixed                 ;
+                right               : 0                     ;
+                top                 : 0                     ;
+                width               : 100%                  ;
+                z-index             : 100                   ;
+                }
+            #tableMain              {
+                padding-top         : 50px                  ;
+                }
+            </style>
+        <script src="Functions.js" type="text/javascript"></script>
+        <script>
+            if( !localStorage.Backup ){
+                var s = ''
+                s += 'ShowList=[]\n'
+                s += 'function Show(Title){\n'
+                s += 'this.t=Title\n'
+                s += 'this.l=""\n'
+                s += 'this.i=""\n'
+                s += 'this.w=""\n'
+                s += 'this.n=""\n'
+                s += 'this.s=""\n'
+                s += 'ShowList.push(this)}\n'
+                s += 'template=["Title","Level","IMDB","Wikipedia","Netflix","Watch Series"]'
+                localStorage.Backup = s
+                }
+            try{
+                eval( localStorage.ShowListing )
+                localStorage.Backup = localStorage.ShowListing
+                }
+            catch( e ){
+                localStorage.Failure = localStorage.ShowListing
+                localStorage.ShowListing = localStorage.Backup
+                }
+            var row = 0
+            var skipThe = false
+            function mainFunc(){
+                var main = document.getElementById( 'main' )
+                var head = document.getElementById( 'head' )
+                var tr
+                var th
+                var td
+                var input
+
+                tr = document.createElement( 'tr' )
+                th = document.createElement( 'th' )
+                    th.textContent = 'Count'
+                    tr.appendChild( th )
+
+                for( var i = 0 ; i < template.length ; i ++ ){
+                    th = document.createElement( 'th' )
+                    th.textContent = template[ i ]
+                    tr.appendChild( th )
+                    }
+
+                main.appendChild( tr )
+
+                for( var i = 0 ; i < ShowList.length ; i++ ){
+                    tr = document.createElement( 'tr' )
+                    th = document.createElement( 'th' )
+                    tr.appendChild( th )
+                    for( var j in ShowList[ i ] ){
+                        td    = document.createElement( 'td' )
+                        input = document.createElement( 'input' )
+                            input.type  = 'text'
+                            input.value = ShowList[ i ][ j ]
+                            switch( j ){
+                                case 't':
+                                    input.placeholder = 'Title'
+                                    break
+                                case 'l':
+                                    input.placeholder = 'Level'
+                                    input.classList.add( 'centerText' )
+                                    break
+                                case 'i':
+                                    input.placeholder = 'IMDB'
+                                    break
+                                case 'n':
+                                    input.placeholder = 'Netflix'
+                                    break
+                                case 's':
+                                    input.placeholder = 'Watch Series'
+                                    break
+                                case 'w':
+                                    input.placeholder = 'Wikipedia'
+                                    break
+                                }
+                        td.appendChild( input )
+                        tr.appendChild( td )
+                        }
+                    main.appendChild( tr )
+                    }
+                checkNumbers()
+                rows = document.getElementsByTagName( 'tr' ).length - 1
+                }
+            function alphabetize(){
+                var main   = document.getElementById( 'main' )
+                var trs    = document.getElementsByTagName( 'tr' )
+                var double = main.cloneNode( true )
+                var sorted = document.createElement( 'tbody' )
+                double.removeChild( double.firstElementChild )
+                var list   = double.children
+                var t      = 0
+                while( list.length > 0 ){
+                    var i = 0
+                    for( var j = 0 ; j < list.length ; j++ ){
+                        var iV = list[ i ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+                        var jV = list[ j ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+                        if( skipThe ){
+                            iV = iV.replace( /^(the |a )/ , '' )
+                            jV = jV.replace( /^(the |a )/ , '' )
+                            }
+                        if( iV > jV ) i = j
+                        }
+                    sorted.appendChild( list[ i ] )
+                    t++
+                    }
+                while( main.childNodes.length > 1 ) main.removeChild( main.firstChild.nextSibling )
+                while( sorted.childElementCount > 0 ) main.appendChild( sorted.firstElementChild )
+                checkNumbers()
+                }
+            function checkNumbers(){
+                var trs = document.getElementsByTagName( 'tr' )
+                for( var i = 1 ; i < trs.length ; i++ ){
+                    trs[ i ].firstElementChild.textContent = i.pad( 3 , ' ' ).replace( / /g , '\u00a0' )
+                    }
+                }
+            function deleteRow(){
+                var p = prompt( 'What row do you want to delete?' )
+                if( p ) p = p * 1
+                else return
+                if( p == 0 || p > rows ) return
+                var trs = document.getElementsByTagName( 'tr' )
+                trs[ p ].parentNode.removeChild( trs[ p ] )
+                rows--
+                checkNumbers()
+                }
+            function insertRow(){
+                var p = '0'
+                if( p ) p = p * 1
+                else return
+                var main = document.getElementById( 'main' )
+                var trs  = document.getElementsByTagName( 'tr' )
+                var tr
+                var th
+                var td
+                var input
+                rows++
+
+                tr = document.createElement( 'tr' )
+                th = document.createElement( 'th' )
+                    th.textContent = p + 1
+                tr.appendChild( th )
+
+                for( var i = 0 ; i < template.length ; i++ ){
+                    td = document.createElement( 'td' )
+                    input = document.createElement( 'input' )
+                    input.type = 'text'
+                        switch( i ){
+                            case 0:
+                                input.placeholder = 'Title'
+                                break
+                            case 1:
+                                input.placeholder = 'Level'
+                                input.classList.add( 'centerText' )
+                                break
+                            case 2:
+                                input.placeholder = 'IMDB'
+                                break
+                            case 3:
+                                input.placeholder = 'Wikipedia'
+                                break
+                            case 4:
+                                input.placeholder = 'Netflix'
+                                break
+                            case 5:
+                                input.placeholder = 'Watch Series'
+                                break
+                            }
+                    td.appendChild( input )
+                    tr.appendChild( td )
+                    }
+
+                if( p < rows - 1 ) main.insertBefore( tr , trs[ p + 1 ] )
+                else main.appendChild( tr )
+                checkNumbers()
+                scroll( 0 , 0 )
+                }
+            function levelSort(){
+                var main   = document.getElementById( 'main' )
+                var trs    = document.getElementsByTagName( 'tr' )
+                var double = main.cloneNode( true )
+                var sorted = document.createElement( 'tbody' )
+                double.removeChild( double.firstElementChild )
+                var list   = double.children
+                var t      = 0
+                while( list.length > 0 ){
+                    var i = 0
+                    for( var j = 0 ; j < list.length ; j++ ){
+                        var iV = list[ i ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+                        var jV = list[ j ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+                        if( iV > jV ) i = j
+                        }
+                    sorted.appendChild( list[ i ] )
+                    t++
+                    }
+                while( main.childNodes.length > 1 ) main.removeChild( main.firstChild.nextSibling )
+                while( sorted.childElementCount > 0 ) main.appendChild( sorted.firstElementChild )
+                checkNumbers()
+                }
+            function saveLocal(){
+                alphabetize()
+                var trs = document.getElementsByTagName( 'tr' )
+                if( trs.length < 10 ) return false
+                var s = 'ShowList = []\n'
+                s += 'function Show( Title ){\n'
+                s += 'this.t = Title\n'
+                s += 'this.l = ""\n'
+                s += 'this.i = ""\n'
+                s += 'this.w = ""\n'
+                s += 'this.n = ""\n'
+                s += 'this.s = ""\n'
+                s += 'ShowList.push( this ) }\n'
+                s += 'template = [ "Title" , "Level" , "IMDB" , "Wikipedia" , "Netflix" , "Watch Series" ]\n'
+                for( var i = 1 ; i < trs.length ; i++ ){
+                    s += 'newShow = new Show( "' + trs[ i ].children[ 1 ].firstChild.value + '" )\n'
+                    s += 'newShow.l = "' + trs[ i ].children[ 2 ].firstChild.value + '"\n'
+                    s += 'newShow.i = "' + trs[ i ].children[ 3 ].firstChild.value + '"\n'
+                    s += 'newShow.w = "' + trs[ i ].children[ 4 ].firstChild.value + '"\n'
+                    s += 'newShow.n = "' + trs[ i ].children[ 5 ].firstChild.value + '"\n'
+                    s += 'newShow.s = "' + trs[ i ].children[ 6 ].firstChild.value + '"\n'
+                    }
+                // console.log(s)
+                localStorage.ShowListing = s
+                }
+            function saveFile(){
+                alphabetize()
+                var trs = document.getElementsByTagName( 'tr' )
+                var s = ''
+                s = s + 'ShowList = []\nfunction Show( Title ){\n    this.t = Title\n'
+                s = s + '    this.l = \'\'\n'
+                s = s + '    this.i = \'\'\n'
+                s = s + '    this.w = \'\'\n'
+                s = s + '    this.n = \'\'\n'
+                s = s + '    this.s = \'\'\n'
+                s = s + '    ShowList.push( this )\n    }\n'
+                s = s + 'template = [\n'
+                for( var i = 0 ; i < template.length ; i++ ){
+                    s = s + '    \'' + template[ i ] + '\',\n'
+                    }
+                s = s + '    ]\n'
+                for( var i = 1 ; i < trs.length ; i++ ){
+                    s = s + 'newShow  = new Show( \'' + ( trs[ i ].children[ 1 ].firstChild.value.replace( /'/g , "\\'" ) + '\'' ).padR( 32 ) + ')\n'
+                    s = s + '    newShow.l = \'' + trs[ i ].children[ 2 ].firstChild.value + '\'\n'
+                    s = s + '    newShow.i = \'' + trs[ i ].children[ 3 ].firstChild.value + '\'\n'
+                    s = s + '    newShow.w = \'' + trs[ i ].children[ 4 ].firstChild.value + '\'\n'
+                    s = s + '    newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
+                    s = s + '    newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
+                window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
+                    }
+                }
+            </script>
+        </head>
+    <body onload="mainFunc()">
+        <div id="head">
+            <input type="button" value="Alphabetize" class="head" onclick="alphabetize()" />
+            <input type="button" value="Delete Row"  class="head" onclick="deleteRow()"   />
+            <input type="button" value="Insert Row"  class="head" onclick="insertRow()"   />
+            <input type="button" value="Level Sort"  class="head" onclick="levelSort()"   />
+            <input type="button" value="Save Local"  class="head" onclick="saveLocal()"   />
+            <input type="button" value="Save File"   class="head" onclick="saveFile()"    />
+            </div>
+        <table id="tableMain">
+            <tbody id="main"></tbody>
+            </table>
+        </body>
+    </html>

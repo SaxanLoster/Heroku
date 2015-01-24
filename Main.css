@@ -1,0 +1,83 @@
+::-webkit-scrollbar     {
+    display             :   none                    ;
+    }
+*                       {
+    cursor              :   default                 ;
+    font-family         :   "Palatino Linotype"     ;
+    font-size           :   0                       ;
+    margin              :   0px                     ;
+    /*white-space         :   nowrap                  ;*/
+    }
+input                   {
+    background-color    :   #333                    ;
+    border-color        :   #000                    ;
+    border-radius       :   15px                    ;
+    border-width        :   3px                     ;
+    color               :   #FFF                    ;
+    cursor              :   pointer                 ;
+    height              :   100%                    ;
+    font-variant        :   small-caps              ;
+    font-weight         :   bold                    ;
+    letter-spacing      :   3px                     ;
+    margin              :   0px                     ;
+    outline             :   0px                     ;
+    padding             :   0px                     ;
+    }
+show                    {
+    border              :   0px solid rgba(0,0,0,0) ;
+    border-width        :   0 25px                  ;
+    box-sizing          :   border-box              ;
+    color               :   #FFF                    ;
+    cursor              :   pointer                 ;
+    display             :   none                    ;
+    float               :   left                    ;
+    font-size           :   28px                    ;
+    font-variant        :   small-caps              ;
+    height              :   1px                     ;
+    letter-spacing      :   2px                     ;
+    overflow            :   hidden                  ;
+    white-space         :   nowrap                  ;
+    }
+show:hover              {
+    color               :   #FFAFAF                 ;
+    }
+.active                 {
+    background-color    :   #777                    ;
+    color               :   #000                    ;
+    }
+.perm                   {
+    color               :   #4682B4                 ;
+    }
+.perm:hover             {
+    color               :   #AFAFFF                 ;
+    }
+.randomLinks            {
+    font-size           :   24px                    ;
+    white-space         :   pre                     ;
+    width               :   auto                    ;
+    }
+.randomLinks:hover      {
+    color               :   #FFAFAF                 ;
+    }
+show.hide               {
+    display             :   none                    ;
+    }
+#Buttons                  {
+    background-color    :   #000                    ;
+    bottom              :   0px                     ;
+    display             :   block                   ;
+    margin              :   0px auto                ;
+    position            :   fixed                   ;
+    text-align          :   center                  ;
+    width               :   100%                    ;
+    }
+#Shows                  {
+    cursor              :   default                 ;
+    display             :   block                   ;
+    margin              :   0px                     ;
+    marginLeft          :   auto                    ;
+    marginRight         :   auto                    ;
+    overflow            :   scroll                  ;
+    padding             :   0px                     ;
+    width               :   100%                    ;
+    }
