@@ -309,7 +309,8 @@
                     s = s + '    newShow.w = \'' + trs[ i ].children[ 4 ].firstChild.value + '\'\n'
                     s = s + '    newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
                     s = s + '    newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
-                window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
+                // window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
+                require('fs').writeFile('MyShows.js' , s )
                     }
                 }
             </script>
