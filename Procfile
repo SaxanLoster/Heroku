@@ -1,1 +1,1 @@
-web node heroku/Server
+web node Server
