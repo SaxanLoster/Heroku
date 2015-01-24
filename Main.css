@@ -51,8 +51,12 @@ show:hover              {
 .perm:hover             {
     color               :   #AFAFFF                 ;
     }
+.pointer
 .randomLinks            {
+    cursor              :   pointer                 ;
     font-size           :   24px                    ;
+    margin-bottom       :   5px                     ;
+    margin-top          :   5px                     ;
     white-space         :   pre                     ;
     width               :   auto                    ;
     }
