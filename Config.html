@@ -68,7 +68,7 @@
                 s += 'ShowList=[]\n'
                 s += 'function Show(Title){\n'
                 s += 'this.t=Title\n'
-                s += 'this.l=""\n'
+                s += 'this.l="1"\n'
                 s += 'this.i=""\n'
                 s += 'this.w=""\n'
                 s += 'this.n=""\n'
@@ -94,6 +94,8 @@
                 var th
                 var td
                 var input
+
+                removeChildren( main )
 
                 tr = document.createElement( 'tr' )
                 th = document.createElement( 'th' )
@@ -264,11 +266,11 @@
             function saveLocal(){
                 alphabetize()
                 var trs = document.getElementsByTagName( 'tr' )
-                if( trs.length < 10 ) return false
+                if( trs.length < 2 ) return false
                 var s = 'ShowList = []\n'
                 s += 'function Show( Title ){\n'
                 s += 'this.t = Title\n'
-                s += 'this.l = ""\n'
+                s += 'this.l = "1"\n'
                 s += 'this.i = ""\n'
                 s += 'this.w = ""\n'
                 s += 'this.n = ""\n'
@@ -310,7 +312,7 @@
                     s = s + '    newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
                     s = s + '    newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
                 // window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
-                require('fs').writeFile( 'MyShows.js' , s )
+                // require('fs').writeFile( 'MyShows.js' , s )
                     }
                 }
             </script>

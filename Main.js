@@ -30,7 +30,7 @@
         Display: [],
         Height: 0,
         Hidden: [],
-        Levels: [ 'level1' , 'level2' , 'level3' , 'level4' ],
+        Levels: [],
         Max: 0,
         Permanent: [],
         Visible: [],
@@ -276,7 +276,7 @@
             s += 'ShowList=[]\n'
             s += 'function Show(Title){\n'
             s += 'this.t=Title\n'
-            s += 'this.l=""\n'
+            s += 'this.l="1"\n'
             s += 'this.i=""\n'
             s += 'this.w=""\n'
             s += 'this.n=""\n'
@@ -286,6 +286,9 @@
             localStorage.ShowListing = s
             }
         if( !localStorage.Permanent ) localStorage.Permanent = ''
+        eval( localStorage.ShowListing )
+        for( var i = 0 ; i < ShowList.length ; i++ ) if( !ShowInfo.Levels.has( 'level' + ShowList[ i ].l ) ) ShowInfo.Levels.push( 'level' + ShowList[ i ].l )
+        ShowInfo.Levels.sort()
         }
     function DeclareStyleSheet(){
         document.styleSheets[ StyleSheets.A ].addRule( 'Body' )
@@ -309,7 +312,7 @@
             B.value       = ''
             B.onmousedown = OnConfigureClick
             A.appendChild( B )
-        for( var i = 0 ; i < ShowInfo.Levels.length ; i++ ){
+        for( var i = 0 ; i < ShowInfo.Levels.length && ShowInfo.Levels.length > 1 ; i++ ){
             B             = document.createElement( 'Input' )
             B.id          = ShowInfo.Levels[ i ]
             B.type        = 'button'
@@ -319,7 +322,6 @@
             }
         }
     function CreateShowList(){
-        eval( localStorage.ShowListing )
         var B  = document.getElementById( 'Shows' ),
             iM = 'http://www.imdb.com/title/',
             iB = 'http://www.imdb.com/find?q=',
@@ -343,9 +345,10 @@
             Show.dataset.w   = ShowList[ i ].w != '' ? wM + ShowList[ i ].w.toHyperLink() : wB + ShowList[ i ].t.toHyperLink() + wE
             Show.onmousedown = OnShowClick
             Show.textContent = ShowList[ i ].t
-            Show.classList.add( 'level' + ( ShowList[ i ].l ) )
+            Show.classList.add( 'level' + ShowList[ i ].l )
             document.getElementById( 'Shows' ).appendChild( Show )
             }
+        if( ShowInfo.Levels.Length == 1 ) ccss( '.level1' , 'display' , 'block' , StyleSheets.B )
         if( localStorage.Permanent != '' ) ShowInfo.Permanent = localStorage.Permanent.split( '|' )
         for( var i = 0 ; i < ShowInfo.Permanent.length ; i++ ) ShowInfo.All[ ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
         ccss( '.perm' , 'display' , 'block' , StyleSheets.B )
