@@ -49,7 +49,6 @@
         RowsInfo.Count = R > 0 ? R : Math.ceil( ShowInfo.Visible.length / C )
         StyleElements()
         }
-        }
 // Display
     function CountDisplay(){
         ShowInfo.Display = []
