@@ -263,6 +263,14 @@
                 while( sorted.childElementCount > 0 ) main.appendChild( sorted.firstElementChild )
                 checkNumbers()
                 }
+            function loadFromFile(){
+                var A = document.createElement( 'Script' )
+                A.src = 'Shows.js'
+                A.type = 'text/javascript'
+                document.querySelector( 'body' ).appendChild( A )
+                document.querySelector( 'body' ).removeChild( A )
+                mainFunc()
+                }
             function saveLocal(){
                 alphabetize()
                 var trs = document.getElementsByTagName( 'tr' )
@@ -311,7 +319,7 @@
                     s = s + '    newShow.w = \'' + trs[ i ].children[ 4 ].firstChild.value + '\'\n'
                     s = s + '    newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
                     s = s + '    newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
-                // window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
+                window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
                 // require('fs').writeFile( 'MyShows.js' , s )
                     }
                 }
@@ -320,11 +328,11 @@
     <body onload="mainFunc()">
         <div id="head">
             <input type="button" value="Alphabetize" class="head" onclick="alphabetize()" />
-            <input type="button" value="Delete Row"  class="head" onclick="deleteRow()"   />
-            <input type="button" value="Insert Row"  class="head" onclick="insertRow()"   />
-            <input type="button" value="Level Sort"  class="head" onclick="levelSort()"   />
-            <input type="button" value="Save Local"  class="head" onclick="saveLocal()"   />
-            <input type="button" value="Save File"   class="head" onclick="saveFile()"    />
+            <input type="button" value="Delete Row"  class="head" onclick="deleteRow()" />
+            <input type="button" value="Insert Row"  class="head" onclick="insertRow()" />
+            <input type="button" value="Level Sort"  class="head" onclick="levelSort()" />
+            <input type="button" value="Save Local"  class="head" onclick="saveLocal()" />
+            <input type="button" value="Save File"   class="head" onclick="saveFile()" />
             </div>
         <table id="tableMain">
             <tbody id="main"></tbody>
