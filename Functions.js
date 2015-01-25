@@ -16,6 +16,15 @@ Math.average = function(){
     for( var i = 0 ; i < arguments.length ; i++ ) Total += arguments[ i ]
     return Total / arguments.length
     }
+Number.prototype.C = function(){
+    return Math.ceil( this )
+    }
+Number.prototype.F = function(){
+    return Math.floor( this )
+    }
+Number.prototype.R = function(){
+    return Math.round( this )
+    }
 Number.prototype.pad = function( size , text ){
     var i = 0
     var n = this < 0

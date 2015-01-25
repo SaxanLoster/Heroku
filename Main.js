@@ -101,39 +101,43 @@
                 RowsInfo.Count = RowsInfo.Max
                 break
             case  A && !B :
-                var Cm = Math.ceil( ShowInfo.Display.length / RowsInfo.Max )
-                var CM = ColsInfo.Max
-                var Rm = Math.ceil( ShowInfo.Display.length / ColsInfo.Max )
-                var RM = RowsInfo.Max
                 var S = Math.sqrt( ShowInfo.Max / ShowInfo.Display.length )
-                var c1 = Math.floor( CM / S )
-                var c2 = Math.ceil( CM / S )
-                var r1 = Math.ceil( ShowInfo.Display.length / c1 )
-                var r2 = Math.ceil( ShowInfo.Display.length / c2 )
-                switch( true ){
-                    case ( c2 > CM || r2 > RM ) :
-                        ColsInfo.Count = c1
-                        RowsInfo.Count = r1
-                        break
-                    case ( c1 < Cm || r1 < Rm ) :
-                        ColsInfo.Count = c2
-                        RowsInfo.Count = r2
-                        break
-                    case ( c1 * r1 < c2 * r2 ) :
-                        ColsInfo.Count = c1
-                        RowsInfo.Count = r1
-                        break
-                    case ( c1 * r1 > c2 * r2 ) :
-                        ColsInfo.Count = c2
-                        RowsInfo.Count = r2
-                        break
-                    case ( c1 * r1 == c2 * r2 ) :
-                        ColsInfo.Count = c1
-                        RowsInfo.Count = r1
-                        break
+                var Cm = ( ShowInfo.Display.length / RowsInfo.Max ).C()
+                var CM = ColsInfo.Max
+                var Rm = ( ShowInfo.Display.length / ColsInfo.Max ).C()
+                var RM = RowsInfo.Max
+                if( Math.abs( ( CM / S ).R() - CM/S ) < .25 ){
+                    ColsInfo.Count = Math.max( ( CM / S ).R() , ( ShowInfo.Display.length / RM ).C() )
+                    RowsInfo.Count = ( ShowInfo.Display.length / ColsInfo.Count ).C()
                     }
-                // ColsInfo.Count = Math.max( Math.round( ColsInfo.Max / S ) , Math.ceil( ShowInfo.Display.length / RowsInfo.Max ) )
-                // RowsInfo.Count = Math.ceil( ShowInfo.Display.length / ColsInfo.Count )
+                else{
+                    var c1 = ( CM / S ).F()
+                    var c2 = ( CM / S ).C()
+                    var r1 = ( ShowInfo.Display.length / c1 ).C()
+                    var r2 = ( ShowInfo.Display.length / c2 ).C()
+                    switch( true ){
+                        case ( c2 > CM || r2 > RM ) :
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
+                            break
+                        case ( c1 < Cm || r1 < Rm ) :
+                            ColsInfo.Count = c2
+                            RowsInfo.Count = r2
+                            break
+                        case ( c1 * r1 < c2 * r2 ) :
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
+                            break
+                        case ( c1 * r1 > c2 * r2 ) :
+                            ColsInfo.Count = c2
+                            RowsInfo.Count = r2
+                            break
+                        case ( c1 * r1 == c2 * r2 ) :
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
+                            break
+                        }
+                    }
                 break
             case !A &&  C :
                 ColsInfo.Count = ColsInfo.Max
