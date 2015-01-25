@@ -83,6 +83,14 @@
         RowsAndColumns()
         StyleElements()
         }
+    function PermanentItemToggle( ShowTitle ){
+        switch(  ShowInfo.Permanent.has( ShowTitle ) ){
+            case  true : ShowInfo.Permanent.splice( ShowInfo.Permanent.indexOf( ShowTitle ) , 1 ) ; break
+            case !true : ShowInfo.Permanent.push( ShowTitle ) ; break
+            }
+        ShowInfo.Permanent.sort()
+        localStorage.Permanent = ShowInfo.Permanent.join( '|' )
+        }
     function RowsAndColumns(){
         var A = ShowInfo.Display.length <= ShowInfo.Max,
             B = Booleans.EnableModification,
@@ -166,19 +174,35 @@
         MainDisplayFunctions()
         }
     function OnConfigureClick(){
-        switch( event.which ){
-            case 1 :
-                Booleans.EnableModification = !Booleans.EnableModification
-                // Booleans.EnableModification ? this.style.backgroundColor = '#777' : this.style.backgroundColor = ''
-                MainDisplayFunctions()
+        switch( localStorage.User ){
+            case 'Advanced' :
+                switch( event.which ){
+                    case 1 :
+                        Booleans.EnableModification = !Booleans.EnableModification
+                        MainDisplayFunctions()
+                        break
+                    case 2 :
+                        Booleans.LeftToRight = !Booleans.LeftToRight
+                        MainDisplayFunctions()
+                        break
+                    case 3 :
+                        if( ShowInfo.Hidden.length > 0 ) ShowInfo.Hidden.pop().classList.remove( 'hide' )
+                        MainDisplayFunctions()
+                        break
+                    }
                 break
-            case 2 :
-                Booleans.LeftToRight = !Booleans.LeftToRight
-                MainDisplayFunctions()
-                break
-            case 3 :
-                if( ShowInfo.Hidden.length > 0 ) ShowInfo.Hidden.pop().classList.remove( 'hide' )
-                MainDisplayFunctions()
+            case 'Basic' :
+                switch( event.which ){
+                    case 1 :
+                        window.open( 'Config.html' )
+                        break
+                    case 2 :
+                        break
+                    case 3 :
+                        if( ShowInfo.Hidden.length > 0 ) ShowInfo.Hidden.pop().classList.remove( 'hide' )
+                        MainDisplayFunctions()
+                        break
+                    }
                 break
             }
         }
@@ -224,36 +248,53 @@
             StyleElements()
         }
     function OnShowClick(){
-        var A = true || Booleans.EnableModification,
-            B = ShowInfo.Permanent.has( this.id )
-        switch( event.which ){
-            case 1 :
-                ClickInfo.Elem1 = ClickInfo.Elem2
-                ClickInfo.Elem2 = event.toElement
-                ClickInfo.Time1 = ClickInfo.Time2
-                ClickInfo.Time2 = event.timeStamp
-                switch( true ){
-                    case event.ctrlKey :
+        switch( localStorage.User ){
+            case 'Advanced' :
+                switch( event.which ){
+                    case 1 :
+                        ClickInfo.Elem1 = ClickInfo.Elem2
+                        ClickInfo.Elem2 = event.toElement
+                        ClickInfo.Time1 = ClickInfo.Time2
+                        ClickInfo.Time2 = event.timeStamp
+                        switch( true ){
+                            case event.ctrlKey :
+                                ShowLinks( this )
+                                break
+                            case ( ClickInfo.Time2 - ClickInfo.Time1 ) < 250 && ClickInfo.Elem1 == ClickInfo.Elem2 :
+                                ShowInfo.Permanent.has( this.id ) ? this.classList.remove( 'perm' ) : this.classList.add( 'perm' )
+                                PermanentItemToggle( this.id )
+                                MainDisplayFunctions()
+                                break
+                            case !this.classList.contains( 'perm' ) :
+                                this.classList.add( 'perm' )
+                                break
+                            }
+                        break
+                    case 2 :
                         ShowLinks( this )
                         break
-                    case A &&  B && ( ClickInfo.Time2 - ClickInfo.Time1 ) < 250 && ClickInfo.Elem1 == ClickInfo.Elem2 :
-                        this.classList.remove( 'perm' )
-                        PermanentItemRemove( this.id )
-                        MainDisplayFunctions()
-                        break
-                    case A && !B && ( ClickInfo.Time2 - ClickInfo.Time1 ) < 250 && ClickInfo.Elem1 == ClickInfo.Elem2 :
-                        this.classList.add( 'perm' )
-                        PermanentItemAdd( this.id )
-                        MainDisplayFunctions()
-                        break
+                    case 3 :
+                        if( this.classList.contains( 'perm' ) ){
+                            this.classList.toggle( 'perm' )
+                            MainDisplayFunctions()
+                            }
+                        else{
+                            this.classList.add( 'hide' )
+                            ShowInfo.Hidden.push( this )
+                            MainDisplayFunctions()
+                            }
                     }
                 break
-            case 2 :
-                ShowLinks( this )
-                break
-            case 3 :
-                switch( A ){
-                    case true :
+            case 'Basic' :
+                switch( event.which ){
+                    case 1 :
+                        this.classList.toggle( 'perm' )
+                        MainDisplayFunctions()
+                        break
+                    case 2 :
+                        ShowLinks( this )
+                        break
+                    case 3 :
                         this.classList.add( 'hide' )
                         ShowInfo.Hidden.push( this )
                         MainDisplayFunctions()
@@ -285,6 +326,8 @@
             s += 'template=["Title","Level","IMDB","Wikipedia","Netflix","Watch Series"]'
             localStorage.ShowListing = s
             }
+        if( !localStorage.User ) localStorage.User = 'Basic'
+        // if( localStorage.User == 'Advanced' )
         if( !localStorage.Permanent ) localStorage.Permanent = ''
         eval( localStorage.ShowListing )
         for( var i = 0 ; i < ShowList.length ; i++ ) if( !ShowInfo.Levels.has( 'level' + ShowList[ i ].l ) ) ShowInfo.Levels.push( 'level' + ShowList[ i ].l )
@@ -309,14 +352,14 @@
             B             = document.createElement( 'Input' )
             B.id          = 'level0'
             B.type        = 'button'
-            B.value       = ''
+            B.value       = localStorage.User == 'Basic' ? 'Configure' : ''
             B.onmousedown = OnConfigureClick
             A.appendChild( B )
         for( var i = 0 ; i < ShowInfo.Levels.length && ShowInfo.Levels.length > 1 ; i++ ){
             B             = document.createElement( 'Input' )
             B.id          = ShowInfo.Levels[ i ]
             B.type        = 'button'
-            B.value       = ''
+            B.value       = localStorage.User == 'Basic' ? 'Level ' + ( i + 1 ) : ''
             B.onmousedown = OnLevelClick
             A.appendChild( B )
             }
@@ -348,23 +391,12 @@
             Show.classList.add( 'level' + ShowList[ i ].l )
             document.getElementById( 'Shows' ).appendChild( Show )
             }
-        if( ShowInfo.Levels.Length == 1 ) ccss( '.level1' , 'display' , 'block' , StyleSheets.B )
-        if( localStorage.Permanent != '' ) ShowInfo.Permanent = localStorage.Permanent.split( '|' )
-        for( var i = 0 ; i < ShowInfo.Permanent.length ; i++ ) ShowInfo.All[ ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
+        if( localStorage.User == 'Basic' || ShowInfo.Levels.Length == 1 ){
+            ccss( '.level1' , 'display' , 'block' , StyleSheets.B )
+            }
+        else{
+            if( localStorage.Permanent != '' ) ShowInfo.Permanent = localStorage.Permanent.split( '|' )
+            for( var i = 0 ; i < ShowInfo.Permanent.length ; i++ ) ShowInfo.All[ ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
+            }
         ccss( '.perm' , 'display' , 'block' , StyleSheets.B )
-        }
-// Permanent List
-    function PermanentItemAdd( ShowTitle ){
-        if( !ShowInfo.Permanent.has( ShowTitle ) ){
-            ShowInfo.Permanent.push( ShowTitle )
-            ShowInfo.Permanent.sort()
-            localStorage.Permanent = ShowInfo.Permanent.join( '|' )
-            }
-        }
-    function PermanentItemRemove( ShowTitle ){
-        if( ShowInfo.Permanent.has( ShowTitle ) ){
-            ShowInfo.Permanent.splice( ShowInfo.Permanent.indexOf( ShowTitle ) , 1 )
-            ShowInfo.Permanent.sort()
-            localStorage.Permanent = ShowInfo.Permanent.join( '|' )
-            }
         }

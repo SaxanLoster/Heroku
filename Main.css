@@ -16,6 +16,7 @@ input                   {
     color               :   #FFF                    ;
     cursor              :   pointer                 ;
     height              :   100%                    ;
+    font-size           :   15px                    ;
     font-variant        :   small-caps              ;
     font-weight         :   bold                    ;
     letter-spacing      :   3px                     ;
