@@ -179,6 +179,7 @@
                 for( var i = 1 ; i < trs.length ; i++ ){
                     trs[ i ].firstElementChild.textContent = i.pad( 3 , ' ' ).replace( / /g , '\u00a0' )
                     }
+                eventListeners()
                 }
             function deleteRow(){
                 var p = prompt( 'What row do you want to delete?' )
@@ -189,6 +190,13 @@
                 trs[ p ].parentNode.removeChild( trs[ p ] )
                 rows--
                 checkNumbers()
+                }
+            function eventListeners(){
+                var A = document.querySelectorAll( 'input[type="text"]' )
+                for( var i = 0 ; i < A.length ; i++ ){
+                    A[ i ].addEventListener( 'focus' , onFocus )
+                    A[ i ].addEventListener( 'keydown' , onKeyDown )
+                    }
                 }
             function insertRow(){
                 var p = '0'
@@ -270,7 +278,18 @@
                 A.type = 'text/javascript'
                 document.querySelector( 'body' ).appendChild( A )
                 document.querySelector( 'body' ).removeChild( A )
-                mainFunc()
+                setTimeout( mainFunc , 250 )
+                }
+            function onFocus(){
+                event.srcElement.select()
+                }
+            function onKeyDown(){
+                if( event.keyCode == 13 ){
+                    var A = event.srcElement
+                    var B = A.placeholder
+                    if( event.shiftKey ) A.parentElement.parentElement.previousSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+                    else                 A.parentElement.parentElement.nextSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+                    }
                 }
             function saveLocal(){
                 alphabetize()
