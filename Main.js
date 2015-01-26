@@ -152,11 +152,11 @@
     function ShowLinks( Show ){
         var T = Show.id
         var M = '<div style="align-items: center; justify-content: center; display: flex; flex-direction: row; height: 100%;" >\
-            <div style="text-align: left;  width: 150px;" >\
+            <div style="text-align: left;  height: 84px; width: 150px; position: absolute; top: 0; bottom: 0; left: 0; right: 50%; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
                 </div>\
-            <div style="text-align: right; width: 150px;" >\
+            <div style="text-align: right; height: 84px; width: 150px; position: absolute; top: 0; bottom: 0; left: 50%; right: 0; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
                 </div>\
@@ -314,6 +314,7 @@
                     }
                 break
             case 'Basic' :
+                if( !event.which ) ShowLinks( this )
                 switch( event.which ){
                     case 1 :
                         this.classList.toggle( 'perm' )
