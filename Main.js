@@ -314,7 +314,7 @@
                     }
                 break
             case 'Basic' :
-                if( !event.which ) ShowLinks( this )
+                if( navigator.platform == "MacIntel" ) ShowLinks( this )
                 switch( event.which ){
                     case 1 :
                         this.classList.toggle( 'perm' )
