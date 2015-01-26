@@ -306,6 +306,7 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
     AlertHolder.appendChild( AlertFooter )
     AlertFooter.appendChild( AlertButton )
     ButtonSize()
+    AlertHeader.style.lineHeight = AlertHeader.offsetHeight + 'px'
     window.addEventListener( 'resize' , ButtonSize )
     if( Clock > 0 ) window[ 'timer' ] = setTimeout( Close , Clock )
     }

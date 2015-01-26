@@ -204,39 +204,29 @@
     function OnConfigureClick(){
         switch( localStorage.User ){
             case 'Advanced' :
-                switch( event.which ){
-                    case 1 :
+                switch( event.button ){
+                    case 0 :
                         Booleans.MinimunSize = !Booleans.MinimunSize
                         MainDisplayFunctions()
                         break
-                    case 2 :
+                    case 1 :
                         Booleans.LeftToRight = !Booleans.LeftToRight
                         MainDisplayFunctions()
                         break
-                    case 3 :
+                    case 2 :
                         if( ShowInfo.Hidden.length > 0 ) ShowInfo.Hidden.pop().classList.remove( 'hide' )
                         MainDisplayFunctions()
                         break
                     }
                 break
             case 'Basic' :
-                switch( event.which ){
-                    case 1 :
-                        window.open( 'Config.html' )
-                        break
-                    case 2 :
-                        break
-                    case 3 :
-                        if( ShowInfo.Hidden.length > 0 ) ShowInfo.Hidden.pop().classList.remove( 'hide' )
-                        MainDisplayFunctions()
-                        break
-                    }
+                window.open( 'Config.html' )
                 break
             }
         }
     function OnLevelClick(){
-        switch( event.which ){
-            case 1 :
+        switch( event.button ){
+            case 0 :
                 this.classList.toggle( 'active' )
                 if( this.classList.contains( 'active' ) ){
                     ccss( '.perm'       , 'display' , ''      , StyleSheets.B )
@@ -248,14 +238,14 @@
                     }
                 MainDisplayFunctions()
                 break
-            case 2 :
+            case 1 :
                 HideAllShows()
                 this.classList.add( 'active' )
                 ccss( '.perm'       , 'display' , ''      , StyleSheets.B )
                 ccss( '.' + this.id , 'display' , 'block' , StyleSheets.B )
                 MainDisplayFunctions()
                 break
-            case 3 :
+            case 2 :
                 HideAllShows()
                 ccss( '.perm' , 'display' , 'block' , StyleSheets.B )
                 MainDisplayFunctions()
@@ -276,10 +266,11 @@
             StyleElements()
         }
     function OnShowClick(){
+        console.log(event.button)
         switch( localStorage.User ){
             case 'Advanced' :
-                switch( event.which ){
-                    case 1 :
+                switch( event.button ){
+                    case 0 :
                         ClickInfo.Elem1 = ClickInfo.Elem2
                         ClickInfo.Elem2 = event.toElement
                         ClickInfo.Time1 = ClickInfo.Time2
@@ -298,10 +289,10 @@
                                 break
                             }
                         break
-                    case 2 :
+                    case 1 :
                         ShowLinks( this )
                         break
-                    case 3 :
+                    case 2 :
                         if( this.classList.contains( 'perm' ) ){
                             this.classList.toggle( 'perm' )
                             MainDisplayFunctions()
@@ -314,21 +305,7 @@
                     }
                 break
             case 'Basic' :
-                if( navigator.platform == "MacIntel" ) ShowLinks( this )
-                switch( event.which ){
-                    case 1 :
-                        this.classList.toggle( 'perm' )
-                        MainDisplayFunctions()
-                        break
-                    case 2 :
-                        ShowLinks( this )
-                        break
-                    case 3 :
-                        this.classList.add( 'hide' )
-                        ShowInfo.Hidden.push( this )
-                        MainDisplayFunctions()
-                        break
-                    }
+                ShowLinks( this )
                 break
             }
         }
@@ -422,6 +399,7 @@
             }
         if( localStorage.User == 'Basic' || ShowInfo.Levels.Length == 1 ){
             ccss( '.level1' , 'display' , 'block' , StyleSheets.B )
+            if( document.querySelector( '#level1' ) ) document.querySelector( '#level1' ).classList.add( 'active' )
             }
         else{
             if( localStorage.Permanent != '' ) ShowInfo.Permanent = localStorage.Permanent.split( '|' )
