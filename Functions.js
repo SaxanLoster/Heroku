@@ -16,15 +16,9 @@ Math.average = function(){
     for( var i = 0 ; i < arguments.length ; i++ ) Total += arguments[ i ]
     return Total / arguments.length
     }
-Number.prototype.C = function(){
-    return Math.ceil( this )
-    }
-Number.prototype.F = function(){
-    return Math.floor( this )
-    }
-Number.prototype.R = function(){
-    return Math.round( this )
-    }
+Math.C = Math.ceil
+Math.F = Math.floor
+Math.R = Math.round
 Number.prototype.pad = function( size , text ){
     var i = 0
     var n = this < 0
@@ -306,7 +300,7 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
     AlertHolder.appendChild( AlertFooter )
     AlertFooter.appendChild( AlertButton )
     ButtonSize()
-    AlertHeader.style.lineHeight = AlertHeader.offsetHeight + 'px'
+    // AlertHeader.style.lineHeight = AlertHeader.offsetHeight + 'px'
     window.addEventListener( 'resize' , ButtonSize )
     if( Clock > 0 ) window[ 'timer' ] = setTimeout( Close , Clock )
     }

@@ -1,5 +1,8 @@
 // Variables
-    StyleSheets = { A: 1 , B: 2 }
+    StyleSheets = {
+        A: 1,
+        B: 2,
+        }
     Booleans  = {
         LeftToRight: !true,
         MinimunSize: !true,
@@ -102,19 +105,19 @@
                 break
             case  A && !B :
                 var S = Math.sqrt( ShowInfo.Max / ShowInfo.Display.length )
-                var Cm = ( ShowInfo.Display.length / RowsInfo.Max ).C()
+                var Cm = Math.C( ShowInfo.Display.length / RowsInfo.Max )
                 var CM = ColsInfo.Max
-                var Rm = ( ShowInfo.Display.length / ColsInfo.Max ).C()
+                var Rm = Math.C( ShowInfo.Display.length / ColsInfo.Max )
                 var RM = RowsInfo.Max
-                if( Math.abs( ( CM / S ).R() - CM/S ) < .25 ){
-                    ColsInfo.Count = Math.max( ( CM / S ).R() , ( ShowInfo.Display.length / RM ).C() )
-                    RowsInfo.Count = ( ShowInfo.Display.length / ColsInfo.Count ).C()
+                if( Math.abs( Math.R( CM / S ) - CM/S ) < .25 ){
+                    ColsInfo.Count = Math.max( Math.R( CM / S ) , Math.C( ShowInfo.Display.length / RM ) )
+                    RowsInfo.Count = Math.C( ShowInfo.Display.length / ColsInfo.Count )
                     }
                 else{
-                    var c1 = ( CM / S ).F()
-                    var c2 = ( CM / S ).C()
-                    var r1 = ( ShowInfo.Display.length / c1 ).C()
-                    var r2 = ( ShowInfo.Display.length / c2 ).C()
+                    var c1 = Math.F( CM / S )
+                    var c2 = Math.C( CM / S )
+                    var r1 = Math.C( ShowInfo.Display.length / c1 )
+                    var r2 = Math.C( ShowInfo.Display.length / c2 )
                     switch( true ){
                         case ( c2 > CM || r2 > RM ) :
                             ColsInfo.Count = c1
@@ -152,11 +155,11 @@
     function ShowLinks( Show ){
         var T = Show.id
         var M = '<div style="align-items: center; justify-content: center; display: flex; flex-direction: row; height: 100%;" >\
-            <div style="text-align: left;  height: 84px; width: 150px; position: absolute; top: 0; bottom: 0; left: 0; right: 50%; margin: auto;" >\
+            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 0; right: 40%; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
                 </div>\
-            <div style="text-align: right; height: 84px; width: 150px; position: absolute; top: 0; bottom: 0; left: 50%; right: 0; margin: auto;" >\
+            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 40%; right: 0; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
                 </div>\
@@ -333,7 +336,6 @@
             localStorage.ShowListing = s
             }
         if( !localStorage.User ) localStorage.User = 'Basic'
-        // if( localStorage.User == 'Advanced' )
         if( !localStorage.Permanent ) localStorage.Permanent = ''
         eval( localStorage.ShowListing )
         for( var i = 0 ; i < ShowList.length ; i++ ) if( !ShowInfo.Levels.has( 'level' + ShowList[ i ].l ) ) ShowInfo.Levels.push( 'level' + ShowList[ i ].l )

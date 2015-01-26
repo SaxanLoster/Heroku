@@ -3,18 +3,18 @@
     <head>
         <link rel="icon" href="http://i.imgur.com/leTCfh3.png" type="image/png"/>
         <style>
-            ::-webkit-scrollbar     {
+            ::-webkit-scrollbar{
                 display: none;
                 }
-            *                       {
+            *{
                 background-color: #000;
                 border-color: #777;
                 color: #FFF;
                 }
-            body                    {
+            body{
                 margin: 0;
                 }
-            input                   {
+            input{
                 border-radius: 5px;
                 border-style: solid;
                 font-family: 'Courier New';
@@ -23,30 +23,30 @@
                 text-align: left;
                 width: 95%;
                 }
-            input.head              {
+            input.head{
                 background-color: #666;
                 border-color: #333;
                 margin: 0 10px;
                 text-align: center;
                 /*width: calc( 100% / 6 - 24px );*/
                 }
-            table                   {
+            table{
                 width: 100%;
                 }
-            td                      {
+            td{
                 text-align: center;
                 }
-            th                      {
+            th{
                 text-align: center;
                 white-space: pre;
                 }
-            tr                      {
+            tr{
                 height: 30px;
                 }
-            .centerText             {
+            .centerText{
                 text-align: center;
                 }
-            #head                   {
+            #head{
                 height: 30px;
                 left: 0;
                 margin: auto;
@@ -57,7 +57,7 @@
                 width: 100%;
                 z-index: 100;
                 }
-            #tableMain              {
+            #tableMain{
                 padding-top: 50px;
                 }
             </style>
@@ -356,12 +356,12 @@
         </head>
     <body onload="mainFunc()" onresize="onResize()">
         <div id="head">
-            <input type="button" value="Alphabetize" class="head" onclick="alphabetize()" />
-            <input type="button" value="Delete Row"  class="head" onclick="deleteRow()" />
-            <input type="button" value="Insert Row"  class="head" onclick="insertRow()" />
-            <input type="button" value="Level Sort"  class="head" onclick="levelSort()" />
-            <input type="button" value="Save Local"  class="head" onclick="saveLocal()" />
-            <input type="button" value="Save File"   class="head" onclick="saveFile()" />
+            <input type="button" class="head" value="Alphabetize" onclick="alphabetize()" />
+            <input type="button" class="head" value="Delete Row"  onclick="deleteRow()" />
+            <input type="button" class="head" value="Insert Row"  onclick="insertRow()" />
+            <input type="button" class="head" value="Level Sort"  onclick="levelSort()" />
+            <input type="button" class="head" value="Save Local"  onclick="saveLocal()" />
+            <input type="button" class="head" value="Save File"   onclick="saveFile()" />
             </div>
         <table id="tableMain">
             <tbody id="main"></tbody>
