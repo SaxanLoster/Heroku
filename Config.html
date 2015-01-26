@@ -28,7 +28,7 @@
                 border-color: #333;
                 margin: 0 10px;
                 text-align: center;
-                /*width: calc( 100% / 6 - 24px );*/
+                width: calc( 100% / 6 - 24px );
                 }
             table{
                 width: 100%;
@@ -294,7 +294,7 @@
                 }
             function onResize(){
                 var A = document.querySelectorAll( 'input.head' )
-                var B = ( innerWidth / A.length ).F()
+                var B = Math.F( innerWidth / A.length )
                 document.querySelector( '#head' ).style.width       = B * A.length
                 document.querySelector( '#head' ).style.marginLeft  = ( innerWidth - ( B * A.length ) ) / 2
                 document.querySelector( '#head' ).style.marginRight = ( innerWidth - ( B * A.length ) ) / 2
