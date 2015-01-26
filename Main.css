@@ -25,8 +25,8 @@ input{
     padding: 0px;
     }
 show{
+    border: 0 solid rgba(0,0,0,0);
     border-width: 0 25px;
-    border: 0px solid rgba(0,0,0,0);
     box-sizing: border-box;
     color: #FFF;
     cursor: pointer;
@@ -79,8 +79,8 @@ show.hide{
     cursor: default;
     display: block;
     margin: 0px;
-    marginLeft: auto;
-    marginRight: auto;
+    margin-left: auto;
+    margin-right: auto;
     overflow: scroll;
     padding: 0px;
     width: 100%;
