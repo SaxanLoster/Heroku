@@ -28,7 +28,7 @@
                 border-color: #333;
                 margin: 0 10px;
                 text-align: center;
-                width: calc( 100% / 6 - 24px );
+                /*width: calc( 100% / 6 - 24px );*/
                 }
             table                   {
                 width: 100%;
@@ -88,6 +88,7 @@
             var row = 0
             var skipThe = false
             function mainFunc(){
+                onResize()
                 var main = document.getElementById( 'main' )
                 var head = document.getElementById( 'head' )
                 var tr
@@ -291,6 +292,14 @@
                     else                 A.parentElement.parentElement.nextSibling.querySelector( '[placeholder=' + B + ']' ).focus()
                     }
                 }
+            function onResize(){
+                var A = document.querySelectorAll( 'input.head' )
+                var B = ( innerWidth / A.length ).F()
+                document.querySelector( '#head' ).style.width       = B * A.length
+                document.querySelector( '#head' ).style.marginLeft  = ( innerWidth - ( B * A.length ) ) / 2
+                document.querySelector( '#head' ).style.marginRight = ( innerWidth - ( B * A.length ) ) / 2
+                for( var i = 0 ; i < A.length ; i++ ) A[ i ].style.width = B - 24 + 'px'
+                }
             function saveLocal(){
                 alphabetize()
                 var trs = document.getElementsByTagName( 'tr' )
@@ -345,7 +354,7 @@
                 }
             </script>
         </head>
-    <body onload="mainFunc()">
+    <body onload="mainFunc()" onresize="onResize()">
         <div id="head">
             <input type="button" value="Alphabetize" class="head" onclick="alphabetize()" />
             <input type="button" value="Delete Row"  class="head" onclick="deleteRow()" />
