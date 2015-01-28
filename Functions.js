@@ -9,7 +9,7 @@ Array.prototype.last = function(){
     return ( this[ this.length -1 ] )
     }
 Array.prototype.random = function(){
-    return this[ Math.floor( Math.random() * this.length ) ]
+    return this[ Math.F( Math.random() * this.length ) ]
     }
 Math.average = function(){
     var Total = 0
@@ -85,22 +85,23 @@ String.prototype.toTitleCase = function(){
     }
 function BackgroundShapes( Canvas , Count , Radius , Variety , RC , Rotation , Main ){
     for( var i = 0 ; i < Count ; i++ ){
-        var A = { X: Math.floor( Math.random() * ( Canvas.W + Radius * .5 ) ), Y: Math.floor( Math.random() * ( Canvas.H + Radius * .5 ) ) }
-        var B = Math.floor( Math.random() * ( 1 + Variety.Max - Variety.Min ) + Variety.Min )
-        var C = [ Math.floor( Math.random() * B + 1 ) , Math.floor( Math.random() * B + 1 ) ]
-        var D = [ [] , [] ]
-        for( var j = 0 ; j < C[ 0 ] ; j++ ) D[ 0 ].push( RandomColor( 'HSL' , RC ) )
-        for( var j = 0 ; j < C[ 1 ] ; j++ ) D[ 1 ].push( RandomColor( 'HSL' , RC ) )
-        var E = { Color: D[ 0 ] , ColorCircle: D[ 0 ] , ColorLine: D[ 1 ] , Width: 1 }
-        var F = Rotation ? Math.floor( Math.random() * 360 ) : 0
-        RotateItem( Canvas.E , { X: Canvas.X , Y: Canvas.Y } , F , function(){ Main( Canvas.E , A , Radius , B , E ) } )
+        var A = Random( Radius.Min , Radius.Max )
+        var B = { X: Random( ( -A * .25 ) , Canvas.W + ( A * .25 ) ) , Y: Random( ( -A * .25 ) , Canvas.H + ( A * .25 ) ) }
+        var C = Random( Variety.Min , Variety.Max )
+        var D = [ Random( 1 , C ) , Random( 1 , C ) ]
+        var E = [ [] , [] ]
+        for( var j = 0 ; j < D[ 0 ] ; j++ ) E[ 0 ].push( RandomColor( 'HSL' , RC ) )
+        for( var j = 0 ; j < D[ 1 ] ; j++ ) E[ 1 ].push( RandomColor( 'HSL' , RC ) )
+        var F = { Color: E[ 0 ] , ColorCircle: E[ 0 ] , ColorLine: E[ 1 ] , Width: 1 }
+        var G = Rotation ? Random( 1 , 360 ) : 0
+        RotateItem( Canvas.E , { X: Canvas.X , Y: Canvas.Y } , G , function(){ Main( Canvas.E , B , A , C , F ) } )
         }
     }
 function BackgroundEven( Canvas , Radius , Variety , RC , Rotation , Main ){
-    var A = Math.floor( innerWidth  / Radius / 2 )
-    var B = Math.floor( innerHeight / Radius / 2 )
-    var C = Math.floor( innerWidth  / A )
-    var D = Math.floor( innerHeight / B )
+    var A = Math.F( innerWidth  / Radius / 2 )
+    var B = Math.F( innerHeight / Radius / 2 )
+    var C = Math.F( innerWidth  / A )
+    var D = Math.F( innerHeight / B )
     var E = ( innerWidth  - ( A * C ) ) / 2
     var F = ( innerHeight - ( B * D ) ) / 2
     var G = []
@@ -110,9 +111,9 @@ function BackgroundEven( Canvas , Radius , Variety , RC , Rotation , Main ){
             }
         }
     for( var i = 0 ; i < G.length ; i++ ){
-        var H = Rotation ? Math.floor( Math.random() * 360 ) : 0
-        var I = Math.floor( Math.random() * ( 1 + Variety.Max - Variety.Min ) + Variety.Min )
-        var J = [ Math.floor( Math.random() * I + 1 ) , Math.floor( Math.random() * I + 1 ) ]
+        var H = Rotation ? Math.F( Math.random() * 360 ) : 0
+        var I = Math.F( Math.random() * ( 1 + Variety.Max - Variety.Min ) + Variety.Min )
+        var J = [ Math.F( Math.random() * I + 1 ) , Math.F( Math.random() * I + 1 ) ]
         var K = [ [] , [] ]
         for( var j = 0 ; j < J[ 0 ] ; j++ ) K[ 0 ].push( RandomColor( 'HSL' , RC ) )
         for( var j = 0 ; j < J[ 1 ] ; j++ ) K[ 1 ].push( RandomColor( 'HSL' , RC ) )
@@ -409,13 +410,13 @@ function DrawStar( Canvas , Center , Radius , Split , Style ){
     Canvas.beginPath()
     var ColorCounter = 0
     var ColorPalette = typeof Style.ColorLine == 'string' ? [ Style.ColorLine ] : Style.ColorLine
-    var a = Math.ceil( Split / 2 )
+    var a = Math.C( Split / 2 )
     while( !coprime( a , Split ) && a > 2 ) a--
     for( var i = 0 ; i < Split ; i++ ){
-        var X1 = Math.round( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * ( i  + 0 ) / Split ) ) )
-        var Y1 = Math.round( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * ( i  + 0 ) / Split ) ) )
-        var X2 = Math.round( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * ( i  + a ) / Split ) ) )
-        var Y2 = Math.round( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * ( i  + a ) / Split ) ) )
+        var X1 = Math.R( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * ( i  + 0 ) / Split ) ) )
+        var Y1 = Math.R( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * ( i  + 0 ) / Split ) ) )
+        var X2 = Math.R( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * ( i  + a ) / Split ) ) )
+        var Y2 = Math.R( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * ( i  + a ) / Split ) ) )
         DrawLineSingle( Canvas , { X:X1 , Y:Y1 } , { X:X2 , Y:Y2 } , { Color:ColorPalette[ ColorCounter ]  , Width:Style.WidthLine } )
         ColorCounter = ColorPalette.length == ColorCounter + 1 ? 0 : ColorCounter + 1
         }
@@ -432,8 +433,8 @@ function DrawWheel( Canvas , Center , Radius , Split , Style ){
     var ColorCounter = 0
     var ColorPalette = typeof Style.ColorLine == 'string' ? [ Style.ColorLine ] : Style.ColorLine
     for( var i = 0 ; i < Split ; i++ ){
-        var X1 = Math.round( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * i / Split + 0 ) ) )
-        var Y1 = Math.round( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * i / Split + 0 ) ) )
+        var X1 = Math.R( Center.X + ( Radius - Style.WidthCircle / 2 ) * Math.cos( Math.PI * ( 2 * i / Split + 0 ) ) )
+        var Y1 = Math.R( Center.Y + ( Radius - Style.WidthCircle / 2 ) * Math.sin( Math.PI * ( 2 * i / Split + 0 ) ) )
         DrawLineSingle( Canvas , { X:X1 , Y:Y1 } , { X:Center.X , Y:Center.Y } , { Color:ColorPalette[ ColorCounter ] , Width:Style.WidthLine } )
         ColorCounter = ColorPalette.length == ColorCounter + 1 ? 0 : ColorCounter + 1
         }
@@ -470,14 +471,14 @@ function FillPolygon( Canvas , Center , Radius , Sides , Style ){
 function OnClickShapes( Canvas , Radius , Variety , RC , Rotation , Main ){
     window.onclick = function(){
         var A = { X:event.x , Y:event.y }
-        var B = Math.floor( Math.random() * ( 1 + Variety.Max - Variety.Min ) + Variety.Min )
-        var C = [ Math.floor( Math.random() * B + 1 ) , Math.floor( Math.random() * B + 1 ) ]
+        var B = Math.F( Math.random() * ( 1 + Variety.Max - Variety.Min ) + Variety.Min )
+        var C = [ Math.F( Math.random() * B + 1 ) , Math.F( Math.random() * B + 1 ) ]
         var D = [ [] , [] ]
         for( var i = 0 ; i < C[ 0 ] ; i++ ) D[ 0 ].push( RandomColor( 'HSL' , RC ) )
         for( var i = 0 ; i < C[ 1 ] ; i++ ) D[ 1 ].push( RandomColor( 'HSL' , RC ) )
         console.log( D )
         var E = { Color:D[ 0 ] , ColorCircle:D[ 0 ] , ColorLine:D[ 1 ] , Width:1 }
-        var F = Rotation ? Math.floor( Math.random() * 360 ) : 0
+        var F = Rotation ? Math.F( Math.random() * 360 ) : 0
         RotateItem( Canvas.E , A , F , function(){ Main( Canvas.E , A , Radius , B , E ) } )
         }
     }
@@ -486,39 +487,38 @@ function PreventActions( Event ){
     var SelectAll = Event.which == 65 && Event.ctrlKey
     if( Alphabet || SelectAll ) Event.preventDefault()
     }
-function RandomColorRGB( Exceptions ){
-    if( !Exceptions ) var Exceptions = {}
-    if( !Exceptions.Min ) Exceptions.Min = 0
-    if( !Exceptions.Max ) Exceptions.Max = 256
-    if( !Exceptions.GrayScale ) Exceptions.GrayScale = false
-    if( !Exceptions.ColorScale ) Exceptions.ColorScale = false
-    var LoopCheck = true , R , G , B , Range = ( Exceptions.Max - Exceptions.Min ) * .5  
+function Random( Min , Max ){
+    Min = Math.R( Min ) , Max = Math.R( Max )
+    return Math.F( Math.random() * ( 1 + Max - Min ) + Min )
+    }
+function RandomColorRGB( Limit ){
+    if( !Limit ) var Limit = {}
+    if( !Limit.Min ) Limit.Min = 0
+    if( !Limit.Max ) Limit.Max = 255
+    if( !Limit.GrayScale ) Limit.GrayScale = false
+    if( !Limit.ColorScale ) Limit.ColorScale = false
+    var LoopCheck = true , R , G , B , Range = ( Limit.Max - Limit.Min ) * .5  
     while( LoopCheck ){
         LoopCheck = false
-        R = Math.min( Math.floor( Math.random() * ( 256 - Exceptions.Min - ( 256 - Exceptions.Max ) ) + Exceptions.Min ) , 255 )
-        G = Math.min( Math.floor( Math.random() * ( 256 - Exceptions.Min - ( 256 - Exceptions.Max ) ) + Exceptions.Min ) , 255 )
-        B = Math.min( Math.floor( Math.random() * ( 256 - Exceptions.Min - ( 256 - Exceptions.Max ) ) + Exceptions.Min ) , 255 )
-        if( Exceptions.GrayScale ) R = G = B = Math.floor( Math.random() * ( 256 - Exceptions.Min - ( 256 - Exceptions.Max ) ) + Exceptions.Min )
-        if( Exceptions.ColorScale && Math.max( R , G , B ) - Math.min( R , G , B ) < Range ) LoopCheck = true
+        R = Random( Limit.Min , Limit.Max )
+        G = Random( Limit.Min , Limit.Max )
+        B = Random( Limit.Min , Limit.Max )
+        if( Limit.GrayScale ) R = G = B = Random( Limit.Min , Limit.Max )
+        if( Limit.ColorScale && Math.max( R , G , B ) - Math.min( R , G , B ) < Range ) LoopCheck = true
         }
     return 'rgb( ' + R + ' , ' + G + ' , ' + B + ' )'
     }
-function RandomColor( Mode , Exceptions ){
-    if( !Exceptions ) var Exceptions = {}
-    var C = Mode == 'HSL' ? RandomColorHSL( Exceptions ) : RandomColorRGB( Exceptions )
+function RandomColor( Mode , Limit ){
+    if( !Limit ) var Limit = {}
+    var C = Mode == 'HSL' ? RandomColorHSL( Limit ) : RandomColorRGB( Limit )
     return C
     }
-function RandomColorHSL( Exceptions ){
-    if( Exceptions ){
-        if( typeof Exceptions.H != 'number' ) var H = Math.floor( Math.random() * ( Exceptions.H[ 1 ] - Exceptions.H[ 0 ] + 1 ) + Exceptions.H[ 0 ] ) ; else var H = Exceptions.H
-        if( typeof Exceptions.S != 'number' ) var S = Math.floor( Math.random() * ( Exceptions.S[ 1 ] - Exceptions.S[ 0 ] + 1 ) + Exceptions.S[ 0 ] ) ; else var S = Exceptions.S
-        if( typeof Exceptions.L != 'number' ) var L = Math.floor( Math.random() * ( Exceptions.L[ 1 ] - Exceptions.L[ 0 ] + 1 ) + Exceptions.L[ 0 ] ) ; else var L = Exceptions.L
-        }
-    else{
-        var H = Exceptions.H || Math.floor( Math.random() * 360 )
-        var S = Exceptions.S || Math.floor( Math.random() * 101 )
-        var L = Exceptions.L || Math.floor( Math.random() * 101 )
-        }
+function RandomColorHSL( Limit ){
+    var H , S , L
+    if( !Limit ) var Limit = {}
+    if( Limit.H != undefined ) H = typeof Limit.H != 'number' ? Random( Limit.H[ 0 ] , Limit.H[ 1 ] ) : Limit.H ; else H = Random( 1 , 360 )
+    if( Limit.S != undefined ) S = typeof Limit.S != 'number' ? Random( Limit.S[ 0 ] , Limit.S[ 1 ] ) : Limit.S ; else S = Random( 0 , 100 )
+    if( Limit.L != undefined ) L = typeof Limit.L != 'number' ? Random( Limit.L[ 0 ] , Limit.L[ 1 ] ) : Limit.L ; else L = Random( 0 , 100 )
     return 'hsl( ' + H + ' , ' + S + '% , ' + L + '% )'
     }
 function removeChildNodes( element ){
@@ -591,24 +591,23 @@ function TestParabola(){
     C.E.stroke()
     C.E.closePath()
     }
-function testRandom( items , tests ){
-    var counter = []
-    counter.length = items
-    for( var i = 0 ; i < counter.length ; i++ ){
+function testRandom( min , max , tests ){
+    var counter = {} , min = Math.R( min ) , max = Math.R( max )
+    for( var i = min ; i <= max ; i++ ){
         counter[ i ] = 0
         }
     for( var i = 0 ; i < tests ; i++ ){
-        var r = Math.floor( Math.random() * counter.length )
+        var r = Random( min , max )
         counter[ r ]++
         }
-    for( var i = 0 ; i < counter.length ; i++ ){
+    for( var i = min ; i <= max ; i++ ){
         var a = counter[ i ] / tests
-        var b = 1 / counter.length
-        var c = a - b
-        var d = ( c * 100 )
+        // var b = 1 / ( max - min + 1 )
+        // var c = a - b
+        var d = ( a * 100 )
         var e = d.toFixed( 2 )
         var f = e.padL( 6 )
-        var g = ( items - 1 ).toString().length
+        var g = max.toString().length
         cc( i.pad( g , ' ' ) + ': ' + f + '%' )
         }
     return counter
