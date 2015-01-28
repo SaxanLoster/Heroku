@@ -6,7 +6,6 @@
     font-family: "Palatino Linotype";
     font-size: 0;
     margin: 0px;
-    /*white-space: nowrap;*/
     }
 input{
     background-color: #333;
@@ -55,8 +54,9 @@ show:hover{
 .randomLinks{
     cursor: pointer;
     font-size: 24px;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    /*margin-bottom: 5px;*/
+    /*margin-top: 5px;*/
+    margin: auto;
     white-space: pre;
     width: auto;
     }
