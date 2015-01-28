@@ -159,11 +159,11 @@
     function ShowLinks( Show ){
         var T = Show.id
         var M = '<div style="align-items: center; justify-content: center; display: flex; flex-direction: row; height: 100%;" >\
-            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 0; right: 33%; margin: auto;" >\
+            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 50%; right: 16%; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
                 </div>\
-            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 33%; right: 0; margin: auto;" >\
+            <div style="text-align: center; height: 84px; position: absolute; top: 0; bottom: 0; left: 16%; right: 50%; margin: auto;" >\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
                 <div class="randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
                 </div>\
@@ -273,7 +273,6 @@
             StyleElements()
         }
     function OnShowClick(){
-        console.log(event.button)
         switch( localStorage.User ){
             case 'Advanced' :
                 switch( event.button ){
