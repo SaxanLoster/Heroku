@@ -3,30 +3,30 @@
         A: 1,
         B: 2,
         }
-    Booleans  = {
+    Booleans    = {
         LeftToRight: !true,
         MinimunSize: !true,
         }
-    ClickInfo = {
+    ClickInfo   = {
         Elem1: null,
         Elem2: null,
         Time1: null,
         Time2: null,
         }
-    ColsInfo  = {
+    ColsInfo    = {
         Count: 0,
         Max: 0,
         }
-    RowsInfo  = {
+    RowsInfo    = {
         Count: 0,
         Max: 0,
         }
-    MainInfo  = {
+    MainInfo    = {
         ButtonsHeight: 0,
         ShowsHeight: 0,
         ShowsWidth: 0,
         }
-    ShowInfo  = {
+    ShowInfo    = {
         All: document.getElementsByTagName( 'Show' ),
         BaseHeight: 60,
         BaseWidth: 320,
@@ -109,7 +109,7 @@
                 var CM = ColsInfo.Max
                 var Rm = Math.C( ShowInfo.Display.length / ColsInfo.Max )
                 var RM = RowsInfo.Max
-                if( Math.abs( Math.R( CM / S ) - CM/S ) < .4 ){
+                if( Math.abs( Math.R( CM / S ) - CM/S ) < .495 ){
                     ColsInfo.Count = Math.max( Math.R( CM / S ) , Math.C( ShowInfo.Display.length / RM ) )
                     RowsInfo.Count = Math.C( ShowInfo.Display.length / ColsInfo.Count )
                     }
@@ -118,30 +118,39 @@
                     var c2 = Math.C( CM / S )
                     var r1 = Math.C( ShowInfo.Display.length / c1 )
                     var r2 = Math.C( ShowInfo.Display.length / c2 )
+                    console.log( ShowInfo.Display.length + ': ' + c1 + ' x ' +  r1 + ' , ' + c2 + ' x ' + r2 )
                     switch( true ){
-                        case ( c2 > CM || r2 > RM ) :
-                            ColsInfo.Count = c1
-                            RowsInfo.Count = r1
-                            break
                         case ( c1 < Cm || r1 < Rm ) :
                             ColsInfo.Count = c2
                             RowsInfo.Count = r2
                             break
-                        case ( c1 * r1 < c2 * r2 ) && false:
+                        case ( c2 > CM || r2 > RM ) :
                             ColsInfo.Count = c1
                             RowsInfo.Count = r1
                             break
-                        case ( c1 * r1 > c2 * r2 ) && false:
+                        case ( c1 * r1 <  c2 * r2 ) && !true :
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
+                            break
+                        case ( c1 * r1 >  c2 * r2 ) && !true :
                             ColsInfo.Count = c2
                             RowsInfo.Count = r2
                             break
-                        case ( c1 * r1 == c2 * r2 ) && false:
+                        case ( c1 * r1 == c2 * r2 ) && !true :
                             ColsInfo.Count = c1
                             RowsInfo.Count = r1
+                            break
+                        case !true :
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
+                            break
+                        case !true :
+                            ColsInfo.Count = c2
+                            RowsInfo.Count = r2
                             break
                         default :
-                            ColsInfo.Count = c2
-                            RowsInfo.Count = r2
+                            ColsInfo.Count = c1
+                            RowsInfo.Count = r1
                             break
                         }
                     }

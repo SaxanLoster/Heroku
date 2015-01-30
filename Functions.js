@@ -137,7 +137,7 @@ function ccss( theClass , attribute , value , sheet ){
     var a = attribute
     var c = theClass.toLowerCase()
     var d = document.styleSheets[ sheet ]
-    var r = d.rules || d.cssRules
+    var r = d.cssRules || d.rules
     var s = ''
     var b = false
     var v = ( typeof value == 'number' ) ? value.toString() : value
@@ -146,14 +146,15 @@ function ccss( theClass , attribute , value , sheet ){
         if( c == s ){
             b = true
             r[ i ].style[ a ] = v
+            return
             }
         }
     if( !b ){
         try{
-            d.addRule( c , '' , r.length )
+            d.insertRule( c + '{  }' , r.length )
             }
         catch( err ){
-            d.insertRule( c + '{  }' , r.length )
+            d.addRule( c , '' , r.length )
             }
         r[ r.length - 1 ].selectorText = c
         r[ r.length - 1 ].style[ a ]   = v
@@ -240,7 +241,7 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
         AlertHeader.style.flexDirection   = 'column'
         AlertHeader.style.fontSize        = '36px'
         AlertHeader.style.height          = '25%'
-        AlertHeader.style.justifyContent  = 'space-around'
+        AlertHeader.style.justifyContent  = 'center'
         AlertHeader.style.overflow        = 'hidden'
         AlertHeader.style.position        = 'relative'
         AlertHeader.style.textAlign       = 'center'
@@ -254,7 +255,7 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
         AlertCenter.style.display         = 'flex'
         AlertCenter.style.flexDirection   = 'column'
         AlertCenter.style.height          = '45%'
-        AlertCenter.style.justifyContent  = 'space-around'
+        AlertCenter.style.justifyContent  = 'center'
         AlertCenter.style.overflow        = 'hidden'
         AlertCenter.style.position        = 'relative'
         AlertCenter.style.textAlign       = 'center'
