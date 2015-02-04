@@ -54,6 +54,8 @@ show:hover{
 .randomLinks{
   cursor: pointer;
   font-size: 24px;
+  font-variant: small-caps;
+  letter-spacing: 2px;
   margin: auto;
   white-space: pre;
   width: auto;
