@@ -322,7 +322,6 @@
           s += 'newShow.n = "' + trs[ i ].children[ 5 ].firstChild.value + '"\n'
           s += 'newShow.s = "' + trs[ i ].children[ 6 ].firstChild.value + '"\n'
           }
-        // console.log(s)
         localStorage.ShowListing = s
         }
       function saveFile(){
@@ -330,26 +329,25 @@
         var trs = document.getElementsByTagName( 'tr' )
         var s = ''
         s = s + 'ShowList = []\nfunction Show( Title ){\n    this.t = Title\n'
-        s = s + '    this.l = \'\'\n'
-        s = s + '    this.i = \'\'\n'
-        s = s + '    this.w = \'\'\n'
-        s = s + '    this.n = \'\'\n'
-        s = s + '    this.s = \'\'\n'
-        s = s + '    ShowList.push( this )\n    }\n'
+        s = s + '  this.l = \'\'\n'
+        s = s + '  this.i = \'\'\n'
+        s = s + '  this.w = \'\'\n'
+        s = s + '  this.n = \'\'\n'
+        s = s + '  this.s = \'\'\n'
+        s = s + '  ShowList.push( this )\n    }\n'
         s = s + 'template = [\n'
         for( var i = 0 ; i < template.length ; i++ ){
-          s = s + '    \'' + template[ i ] + '\',\n'
+          s = s + '  \'' + template[ i ] + '\',\n'
           }
-        s = s + '    ]\n'
+        s = s + '  ]\n'
         for( var i = 1 ; i < trs.length ; i++ ){
-          s = s + 'newShow  = new Show( \'' + ( trs[ i ].children[ 1 ].firstChild.value.replace( /'/g , "\\'" ) + '\'' ).padR( 32 ) + ')\n'
-          s = s + '    newShow.l = \'' + trs[ i ].children[ 2 ].firstChild.value + '\'\n'
-          s = s + '    newShow.i = \'' + trs[ i ].children[ 3 ].firstChild.value + '\'\n'
-          s = s + '    newShow.w = \'' + trs[ i ].children[ 4 ].firstChild.value + '\'\n'
-          s = s + '    newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
-          s = s + '    newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
+          s = s + 'newShow  = new Show( \'' + ( trs[ i ].children[ 1 ].firstChild.value.replace( /'/g , "\\'" ) + '\'' ) + ' )\n'
+          s = s + '  newShow.l = \'' + trs[ i ].children[ 2 ].firstChild.value + '\'\n'
+          s = s + '  newShow.i = \'' + trs[ i ].children[ 3 ].firstChild.value + '\'\n'
+          s = s + '  newShow.w = \'' + trs[ i ].children[ 4 ].firstChild.value + '\'\n'
+          s = s + '  newShow.n = \'' + trs[ i ].children[ 5 ].firstChild.value + '\'\n'
+          s = s + '  newShow.s = \'' + trs[ i ].children[ 6 ].firstChild.value + '\'\n'
         window.open( 'data:text/js,' + encodeURI( s ) , 'Show.js' )
-        // require('fs').writeFile( 'MyShows.js' , s )
           }
         }
       </script>

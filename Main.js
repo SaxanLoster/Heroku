@@ -166,7 +166,7 @@
       }
     }
   function ShowLinks( Show ){
-    var T = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.replace( / /g , '+' ) + '\' )" >' + Show.id + '</div>'
+    var T = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.replace( / /g , '+' ).toHyperLink() + '\' )" >' + Show.id + '</div>'
     var M = '\
       <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
       <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
