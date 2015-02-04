@@ -104,14 +104,16 @@
         RowsInfo.Count = RowsInfo.Max
         break
       case  A && !B :
-        var S = Math.sqrt( ShowInfo.Max / ShowInfo.Display.length )
-        var Cm = Math.C( ShowInfo.Display.length / RowsInfo.Max )
-        var CM = ColsInfo.Max
-        var Rm = Math.C( ShowInfo.Display.length / ColsInfo.Max )
-        var RM = RowsInfo.Max
-        if( Math.abs( Math.R( CM / S ) - CM/S ) < .495 ){
-          ColsInfo.Count = Math.max( Math.R( CM / S ) , Math.C( ShowInfo.Display.length / RM ) )
-          RowsInfo.Count = Math.C( ShowInfo.Display.length / ColsInfo.Count )
+        // var S = Math.sqrt( ShowInfo.Max / ShowInfo.Display.length )
+        // var Cm = Math.C( ShowInfo.Display.length / RowsInfo.Max )
+        // var CM = ColsInfo.Max
+        // var Rm = Math.C( ShowInfo.Display.length / ColsInfo.Max )
+        // var RM = RowsInfo.Max
+        if( /*Math.abs( Math.R( CM / S ) - CM/S ) < .495*/ true ){
+          // ColsInfo.Count = Math.max( Math.R( CM / S ) , Math.C( ShowInfo.Display.length / RM ) )
+          // RowsInfo.Count = Math.C( ShowInfo.Display.length / ColsInfo.Count )
+          ColsInfo.Count = Math.ceil( ShowInfo.Display.length / RowsInfo.Max )
+          RowsInfo.Count = Math.ceil( ShowInfo.Display.length / ColsInfo.Count )
           }
         else{
           var c1 = Math.F( CM / S )
