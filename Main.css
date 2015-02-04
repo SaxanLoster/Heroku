@@ -63,6 +63,11 @@ show:hover{
 .randomLinks:hover{
   color: #FFAFAF;
   }
+.Title{
+  cursor: pointer;
+  font-size: 36px;
+  margin: auto;
+  }
 show.hide{
   display: none;
   }
