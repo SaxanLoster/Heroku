@@ -302,6 +302,7 @@ Saxan = {
         catch( e ){
           localStorage.Failure = localStorage.ShowListing
           localStorage.ShowListing = localStorage.Backup
+          Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
           }
         for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ) if( !Saxan.Globals.ShowInfo.Levels.has( 'level' + Saxan.Globals.ShowList[ a ].Level ) ) Saxan.Globals.ShowInfo.Levels.push( 'level' + Saxan.Globals.ShowList[ a ].Level )
         Saxan.Globals.ShowInfo.Levels.sort()

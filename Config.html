@@ -107,6 +107,7 @@
             catch( e ){
               localStorage.Failure = localStorage.ShowListing
               localStorage.ShowListing = localStorage.Backup
+              Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
               }
             },
           CheckNumbers: function(){
