@@ -16,9 +16,7 @@ Math.average = function(){
   for( var i = 0 ; i < arguments.length ; i++ ) Total += arguments[ i ]
   return Total / arguments.length
   }
-Math.C = Math.ceil
-Math.F = Math.floor
-Math.R = Math.round
+Math.C = Math.ceil , Math.F = Math.floor , Math.R = Math.round
 Number.prototype.pad = function( size , text ){
   var i = 0
   var n = this < 0
@@ -34,6 +32,18 @@ Number.prototype.pad = function( size , text ){
     ? s.slice( 0 , z - Math.abs( this ).toString().length ) + Math.abs( this )
     : s.slice( 0 , z - this.toString().length ) + this
   return s
+  }
+Number.prototype.C = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.C( this * S ) / S
+  }
+Number.prototype.F = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.F( this * S ) / S
+  }
+Number.prototype.R = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.R( this * S ) / S
   }
 String.prototype.has = function( string ){
   return ( this.match( string ) != null )
@@ -467,6 +477,14 @@ function FillPolygon( Canvas , Center , Radius , Sides , Style ){
   Canvas.translate( -Center.X , -Center.Y )
   Canvas.fill()
   Canvas.closePath()
+  }
+function GetProperties( MyObject , MyString ){
+  for( var a in MyObject ){
+    var A = MyString ? MyString + '.' + a : a
+    if( typeof MyObject[ a ] == 'object' ) GetProperties( MyObject[ a ] , A )
+    else if( typeof MyObject[ a ] == 'function' ) continue
+    else console.log( A )
+    }
   }
 function OnClickShapes( Canvas , Radius , Variety , RC , Rotation , Main ){
   window.onclick = function(){
