@@ -107,14 +107,18 @@ Saxan = {
             Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
             Saxan.Globals.RowsInfo.Count = Saxan.Globals.RowsInfo.Max
             break
-          case  A && !B &&  C :
-            Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
-            Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Count )
-            break
-          case  A && !B && !C :
+          case  A && !B :
             Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
             Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Count )
             break
+          // case  A && !B &&  C :
+          //   Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
+          //   Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Count )
+          //   break
+          // case  A && !B && !C :
+          //   Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
+          //   Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Count )
+          //   break
           case !A &&  C :
             Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
             Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
