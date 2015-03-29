@@ -132,11 +132,11 @@ Saxan = {
       ShowLinks: function( Show ){
         var T = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.toHyperLink() + '\' )" >' + Show.id + '</div>'
         var M = '\
-          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.a + '\' )" >Amazon Prime</div>\
-          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.i + '\' )" >IMDB</div>\
-          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.n + '\' )" >Netflix</div>\
-          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.s + '\' )" >Watch Series</div>\
-          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.w + '\' )" >Wikipedia</div>\
+          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Amazon      + '\' )" >Amazon Prime</div>\
+          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.IMDB        + '\' )" >IMDB</div>\
+          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Netflix     + '\' )" >Netflix</div>\
+          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.WatchSeries + '\' )" >Watch Series</div>\
+          <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Wikipedia   + '\' )" >Wikipedia</div>\
           '
         var B = 'Exit'
         var C = 0
