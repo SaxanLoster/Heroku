@@ -1,9 +1,5 @@
 Saxan = {
   Globals: {
-    StyleSheets: {
-      A: 1,
-      B: 2,
-      },
     Booleans: {
       LeftToRight: !true,
       MinimunSize: !true,
@@ -18,14 +14,14 @@ Saxan = {
       Count: 0,
       Max: 0,
       },
-    RowsInfo: {
-      Count: 0,
-      Max: 0,
-      },
     MainInfo: {
       ButtonsHeight: 0,
       ShowsHeight: 0,
       ShowsWidth: 0,
+      },
+    RowsInfo: {
+      Count: 0,
+      Max: 0,
       },
     ShowInfo: {
       All: document.getElementsByTagName( 'Show' ),
@@ -39,6 +35,10 @@ Saxan = {
       Permanent: [],
       Visible: [],
       Width: 0,
+      },
+    StyleSheets: {
+      A: 1,
+      B: 2,
       },
     },
   Functions: {
@@ -299,6 +299,7 @@ Saxan = {
         if( !localStorage.Backup ) localStorage.Backup = '{}'
         if( !localStorage.Permanent ) localStorage.Permanent = ''
         if( !localStorage.User ) localStorage.User = 'Basic'
+        if( !localStorage.WatchSeries ) localStorage.WatchSeries = 'watch-tv-series.to'
         try{
           Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
           localStorage.Backup = localStorage.ShowListing
@@ -347,13 +348,13 @@ Saxan = {
             }
           }
         var AmazonLink = ''
-        var AmazonSearch = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE'
+        var AmazonSearch = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE+TV'
         var IMDBLink = 'http://www.imdb.com/title/REPLACE'
         var IMDBSearch = 'http://www.imdb.com/find?q=REPLACE%20TV&s=tt'
         var NetflixLink = 'http://www.netflix.com/WiMovie/REPLACE'
         var NetflixSearch = 'http://www.netflix.com/search/REPLACE'
-        var WatchSeriesLink = 'http://watch-tv-series.to/serie/REPLACE'
-        var WatchSeriesSearch = 'http://watch-tv-series.to/search/REPLACE'
+        var WatchSeriesLink = 'http://' + localStorage.WatchSeries + '/serie/REPLACE'
+        var WatchSeriesSearch = 'http://' + localStorage.WatchSeries + '/search/REPLACE'
         var WikipediaLink = 'http://en.wikipedia.org/wiki/REPLACE'
         var WikipediaSearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
         for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ){
