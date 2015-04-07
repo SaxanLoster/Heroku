@@ -3,6 +3,7 @@ Saxan = {
     Booleans: {
       LeftToRight: !true,
       MinimunSize: !true,
+      Permanent: true,
       },
     ClickInfo: {
       Elem1: null,
@@ -219,7 +220,7 @@ Saxan = {
         case 0 :
           this.classList.toggle( 'active' )
           if( this.classList.contains( 'active' ) ){
-            ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
+            if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
             ccss( '.' + this.id , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
             }
           else{
@@ -231,13 +232,13 @@ Saxan = {
         case 1 :
           Saxan.Functions.HideAllShows()
           this.classList.add( 'active' )
-          ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
+          if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
           ccss( '.' + this.id , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
           Saxan.Functions.MainDisplayFunctions()
           break
         case 2 :
           Saxan.Functions.HideAllShows()
-          ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+          if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
           Saxan.Functions.MainDisplayFunctions()
           break
         }
