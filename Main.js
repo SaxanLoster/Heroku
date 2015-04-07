@@ -26,7 +26,7 @@ Saxan = {
     ShowInfo: {
       All: document.getElementsByTagName( 'Show' ),
       BaseHeight: 80,
-      BaseWidth: 320,
+      BaseWidth: 300,
       Display: [],
       Height: 0,
       Hidden: [],
