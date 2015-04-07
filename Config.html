@@ -70,32 +70,6 @@
           Skip: false,
           },
         Functions: {
-          Alphabatize: function(){
-            var A = document.getElementById( 'main' )
-            var B = document.querySelectorAll( 'tr' )
-            var C = A.cloneNode( true )
-            var D = document.createElement( 'body' )
-            C.removeChild( C.firstElementChild )
-            var E = C.children
-            var F = 0
-            while( E.length > 0 ){
-              var a = 0
-              for( var b = 0 ; b < E.length ; b++ ){
-                var c = E[ a ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
-                var d = E[ b ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
-                if( Saxan.Globals.Skip ){
-                  c = c.replace( /^(the | a )/ , '' )
-                  d = d.replace( /^(the | a )/ , '' )
-                  }
-                if( c < d ) c = d
-                }
-              D.appendChild( E[ a ] )
-              F++
-              }
-            while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
-            while( D.childElementCount > 0 ) A.appendChild( D.firstElementChild )
-            Saxan.Functions.CheckNumbers()
-            },
           CheckLocalStorage: function(){
             if( !localStorage.Backup ) localStorage.Backup = '{}'
             if( !localStorage.Permanent ) localStorage.Permanent = ''
@@ -188,28 +162,6 @@
             else A.appendChild( C )
             Saxan.Functions.CheckNumbers()
             scroll( 0 , 0 )
-            },
-          LevelSort: function(){
-            var A = document.getElementById( 'main' )
-            var B = document.querySelectorAll( 'tr' )
-            var C = A.cloneNode( true )
-            var D = document.createElement( 'tbody' )
-            C.removeChild( C.firstElementChild )
-            var E = C.children
-            var F = 0
-            while( E.length > 0 ){
-              var a = 0
-              for( var b = 0 ; b < E.length ; b++ ){
-                var c = list[ a ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
-                var d = list[ b ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
-                if( c < d ) c = d
-                }
-              D.appendChild( E[ a ] )
-              F++
-              }
-            while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
-            while( D.childElementCount > 0 ) A.appendChild( D.firstChildElement )
-            Saxan.Functions.CheckNumbers()
             },
           LoadFromFile: function(){
 
@@ -342,18 +294,66 @@
             var A = Saxan.Functions.SaveData()
             localStorage.ShowListing = A
             },
+          SortByLevel: function(){
+            var A = document.getElementById( 'main' )
+            var B = document.querySelectorAll( 'tr' )
+            var C = A.cloneNode( true )
+            var D = document.createElement( 'tbody' )
+            C.removeChild( C.firstElementChild )
+            var E = C.children
+            var F = 0
+            while( E.length > 0 ){
+              var a = 0
+              for( var b = 0 ; b < E.length ; b++ ){
+                var c = E[ a ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+                var d = E[ b ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+                if( c > d ) a = b
+                }
+              D.appendChild( E[ a ] )
+              F++
+              }
+            while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
+            while( D.childElementCount > 0 ) A.appendChild( D.firstElementChild )
+            Saxan.Functions.CheckNumbers()
+            },
+          SortByTitle: function(){
+            var A = document.getElementById( 'main' )
+            var B = document.querySelectorAll( 'tr' )
+            var C = A.cloneNode( true )
+            var D = document.createElement( 'tbody' )
+            C.removeChild( C.firstElementChild )
+            var E = C.children
+            var F = 0
+            while( E.length > 0 ){
+              var a = 0
+              for( var b = 0 ; b < E.length ; b++ ){
+                var c = E[ a ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+                var d = E[ b ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+                if( Saxan.Globals.Skip ){
+                  c = c.replace( /^(the | a )/ , '' )
+                  d = d.replace( /^(the | a )/ , '' )
+                  }
+                if( c > d ) a = b
+                }
+              D.appendChild( E[ a ] )
+              F++
+              }
+            while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
+            while( D.childElementCount > 0 ) A.appendChild( D.firstElementChild )
+            Saxan.Functions.CheckNumbers()
+            },
           },
         }
       </script>
     </head>
   <body onload="Saxan.Functions.CheckLocalStorage();Saxan.Functions.Main()" onresize="">
     <div id="head">
-      <input type="button" class="head" value="Alphabetize" onclick="Saxan.Functions.Alphabatize()" />
-      <input type="button" class="head" value="Delete Row"  onclick="Saxan.Functions.DeleteRow()" />
-      <input type="button" class="head" value="Insert Row"  onclick="Saxan.Functions.InsertRow()" />
-      <input type="button" class="head" value="Level Sort"  onclick="Saxan.Functions.LevelSort()" />
-      <input type="button" class="head" value="Save Local"  onclick="Saxan.Functions.SaveLocal()" />
-      <input type="button" class="head" value="Save File"   onclick="Saxan.Functions.SaveFile()" />
+      <input type="button" class="head" value="Delete Row"    onclick="Saxan.Functions.DeleteRow()" />
+      <input type="button" class="head" value="Insert Row"    onclick="Saxan.Functions.InsertRow()" />
+      <input type="button" class="head" value="Save File"     onclick="Saxan.Functions.SaveFile()" />
+      <input type="button" class="head" value="Save Local"    onclick="Saxan.Functions.SaveLocal()" />
+      <input type="button" class="head" value="Sort By Level" onclick="Saxan.Functions.SortByLevel()" />
+      <input type="button" class="head" value="Sort By Title" onclick="Saxan.Functions.SortByTitle()" />
       </div>
     <table id="tableMain">
       <tbody id="main"></tbody>
