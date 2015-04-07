@@ -143,8 +143,13 @@ Saxan = {
         if( localStorage.Permanent != '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
         for( var i = 0 ; i < Saxan.Globals.ShowInfo.Permanent.length ; i++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
         }
-      if( localStorage.Permanent == '' ) ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
-      else                               ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+      if( localStorage.Permanent == '' ){
+        document.querySelector( '#level1' ).classList.add( 'active' )
+        ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+        }
+      else{
+        ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+        }
       },
     DeclareStyleSheet: function(){
       document.styleSheets[ Saxan.Globals.StyleSheets.A ].addRule( 'Body' )
