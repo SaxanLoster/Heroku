@@ -47,7 +47,7 @@ Saxan = {
       if( !localStorage.Backup ) localStorage.Backup = '{}'
       if( !localStorage.Permanent ) localStorage.Permanent = ''
       if( !localStorage.User ) localStorage.User = 'Basic'
-      if( !localStorage.WatchSeries ) localStorage.WatchSeries = 'watchseriestv.to'
+      if( !localStorage.WatchSeries ) localStorage.WatchSeries = 'watch-series-tv.to'
       try{
         Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
         localStorage.Backup = localStorage.ShowListing
@@ -144,9 +144,11 @@ Saxan = {
         if( localStorage.Permanent != '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
         for( var i = 0 ; i < Saxan.Globals.ShowInfo.Permanent.length ; i++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
         }
-      document.querySelector( '#level1' ).classList.add( 'active' )
-      ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
-      ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+      try{
+        document.querySelector( '#level1' ).classList.add( 'active' )
+        ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+        ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+        } catch( Error ){}
       },
     DeclareStyleSheet: function(){
       document.styleSheets[ Saxan.Globals.StyleSheets.A ].addRule( 'Body' )
@@ -185,6 +187,7 @@ Saxan = {
     OnChange: function(){
       scrollTo( 0 , 0 )
       var I = document.getElementsByTagName( 'input' ).length
+      console.log( I )
       Saxan.Globals.MainInfo.ButtonsHeight = I && 50 || Math.ceil( innerWidth / ( I * 5 ) )
       Saxan.Globals.MainInfo.ShowsHeight   = innerHeight - Saxan.Globals.MainInfo.ButtonsHeight
       Saxan.Globals.MainInfo.ShowsWidth    = innerWidth
