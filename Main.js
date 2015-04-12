@@ -141,11 +141,11 @@ Saxan = {
         if( document.querySelector( '#level1' ) ) document.querySelector( '#level1' ).classList.add( 'active' )
         }
       else{
+        ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
         if( localStorage.Permanent != '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
-        for( var i = 0 ; i < Saxan.Globals.ShowInfo.Permanent.length ; i++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ i ] ].classList.add( 'perm' )
+        for( var a = 0 ; a < Saxan.Globals.ShowInfo.Permanent.length ; a++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ a ] ].classList.add( 'perm' )
+        for( var a = 0 ; a < document.querySelectorAll( '.level1' ).length ; a++ ) document.querySelectorAll( '.level1' )[ a ].classList.add( 'perm' )
         }
-      for( var a = 0 ; a < document.querySelectorAll( '.level1' ).length ; a++ ) document.querySelectorAll( '.level1' )[ a ].classList.add( 'perm' )
-      ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
       },
     DeclareStyleSheet: function(){
       document.styleSheets[ Saxan.Globals.StyleSheets.A ].addRule( 'Body' )
