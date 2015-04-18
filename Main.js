@@ -144,7 +144,7 @@ Saxan = {
         ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
         if( localStorage.Permanent != '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
         for( var a = 0 ; a < Saxan.Globals.ShowInfo.Permanent.length ; a++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ a ] ].classList.add( 'perm' )
-        for( var a = 0 ; a < document.querySelectorAll( '.level1' ).length ; a++ ) document.querySelectorAll( '.level1' )[ a ].classList.add( 'perm' )
+        // for( var a = 0 ; a < document.querySelectorAll( '.level1' ).length ; a++ ) document.querySelectorAll( '.level1' )[ a ].classList.add( 'perm' )
         }
       },
     DeclareStyleSheet: function(){
