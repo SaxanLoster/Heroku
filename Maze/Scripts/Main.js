@@ -164,10 +164,9 @@ var States = {
       CreatePlayer()
       },
     preload: function(){
-      Game.load.image( 'Maze' , 'Maze.png' )
-      Game.load.image( 'Player' , 'Player.png' )
-      Game.load.image( 'Test' , 'Test.png' )
-      Game.load.spritesheet( 'Items' , 'Items.png' , 40 , 40 , 4 )
+      Game.load.image( 'Maze' , 'Images/Maze.png' )
+      Game.load.image( 'Player' , 'Images/Player.png' )
+      Game.load.spritesheet( 'Items' , 'Images/Items.png' , 40 , 40 , 4 )
       },
     render: function(){
       if( Debug ){
