@@ -11,8 +11,8 @@
   var Player2 = []
 
 function preload(){
-  Game.load.spritesheet( 'Cards' , 'Cards.png' , 71 , 96 , 52 , 1 , 2 )
-  Game.load.image( 'Back' , 'Back.png' )
+  Game.load.spritesheet( 'Cards' , 'Images/Cards.png' , 71 , 96 , 52 , 1 , 2 )
+  Game.load.image( 'Back' , 'Images/Back.png' )
   }
 
 function create(){
