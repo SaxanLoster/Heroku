@@ -15,12 +15,6 @@ var States = {
 
 States.Title.prototype = {
   variables: {},
-  create: function(){
-    this.variables.text = Game.add.text( Game.world.centerX , Game.world.centerY , 'Click To Play' , Globals.font )
-    this.variables.text.anchor.setTo( .5 )
-    this.variables.text.inputEnabled = true
-    this.variables.text.input.useHandCursor = true
-    this.variables.text.events.onInputDown.add( function(){ Game.state.start( 'Mode' ) } , this ) },
   init: function(){
     Game.scale.scaleMode = 2
     Globals.font = {
@@ -32,16 +26,24 @@ States.Title.prototype = {
       wordWrapWidth: Game.width,
       }
     },
-  paused: function(){},
   preload: function(){},
+  create: function(){
+    this.variables.text = Game.add.text( Game.world.centerX , Game.world.centerY , 'Click To Play' , Globals.font )
+    this.variables.text.anchor.setTo( .5 )
+    this.variables.text.inputEnabled = true
+    this.variables.text.input.useHandCursor = true
+    this.variables.text.events.onInputDown.add( function(){ Game.state.start( 'Mode' ) } , this ) },
+  update: function(){},
   render: function(){},
+  paused: function(){},
   resize: function(){},
   shutdown: function(){},
-  update: function(){},
   }
 
 States.Mode.prototype = {
   variables: {},
+  init: function(){},
+  preload: function(){},
   create: function(){
     var A = ( Game.height - 160 ) / 5
     this.variables.D1 = Game.add.text( Game.world.centerX , A , 'Easy' , Globals.font )
@@ -73,17 +75,39 @@ States.Mode.prototype = {
         Game.state.start( 'Game' , true , false , 5 , true )
         } , this )
     },
-  init: function(){},
-  paused: function(){},
-  preload: function(){},
+  update: function(){},
   render: function(){},
+  paused: function(){},
   resize: function(){},
   shutdown: function(){},
-  update: function(){},
   }
 
 States.Game.prototype = {
   variables: {},
+  init: function( size , infinite ){
+    this.time.reset()
+
+    this.variables.size = size
+
+    this.variables.infinite = infinite
+
+    this.variables.timer = {
+      pause: 0,
+      resume: true,
+      start: Math.max( Math.pow( this.variables.size , 2 ) * .5 , infinite ? 0 : 60 ),
+      }
+
+    this.variables.x = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetWidth  / 80 ) , this.variables.size )
+    this.variables.y = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetHeight / 80 ) , this.variables.size + 1 )
+
+    this.variables.ox = Math.floor( ( this.variables.x - this.variables.size ) / 2 )
+    this.variables.oy = Math.floor( ( this.variables.y - this.variables.size ) / 2 ) || 1
+    },
+  preload: function(){
+    Game.load.image( 'Maze' , 'Images/Maze.png' )
+    Game.load.image( 'Player' , 'Images/Player.png' )
+    Game.load.spritesheet( 'Items' , 'Images/Items.png' , 40 , 40 , 4 )
+    },
   create: function(){
     var that = this
     function CreateBase(){
@@ -199,42 +223,6 @@ States.Game.prototype = {
     CreatePlayer()
     if( this.variables.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
     },
-  init: function( size , infinite ){
-    this.time.reset()
-
-    this.variables.size = size
-
-    this.variables.infinite = true
-
-    this.variables.timer = {
-      pause: 0,
-      resume: true,
-      start: Math.max( Math.pow( this.variables.size , 2 ) * .5 , infinite ? 0 : 60 ),
-      }
-
-    this.variables.x = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetWidth  / 80 ) , this.variables.size )
-    this.variables.y = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetHeight / 80 ) , this.variables.size + 1 )
-
-    this.variables.ox = Math.floor( ( this.variables.x - this.variables.size ) / 2 )
-    this.variables.oy = Math.floor( ( this.variables.y - this.variables.size ) / 2 ) || 1
-    },
-  paused: function(){
-    this.variables.timer.resume = false
-    },
-  preload: function(){
-    Game.load.image( 'Maze' , 'Images/Maze.png' )
-    Game.load.image( 'Player' , 'Images/Player.png' )
-    Game.load.spritesheet( 'Items' , 'Images/Items.png' , 40 , 40 , 4 )
-    },
-  render: function(){
-    if( Debug ){
-      Game.debug.body( this.variables.player )
-      Game.debug.bodyInfo( this.variables.player )
-      for( var a = 0 ; a < this.variables.items.children.length ; a++ ) Game.debug.body( this.variables.items.children[ a ] )
-      }
-    },
-  resize: function(){},
-  shutdown: function(){},
   update: function(){
     if( !this.variables.timer.resume ){
       this.variables.timer.resume = true
@@ -243,6 +231,7 @@ States.Game.prototype = {
     var A = Math.ceil( this.variables.timer.start - this.time.totalElapsedSeconds() + this.variables.timer.pause )
     this.variables.time.setText( Math.floor( A / 60 ) + ':' + ( '00' + A % 60 ).slice( -2 ) )
     if( A <= 0 ) Game.state.start( 'End' , true , false , false , this.variables.infinite , this.variables.size )
+
     Game.physics.arcade.collide( this.variables.player , this.variables.mazelayer )
     Game.physics.arcade.overlap( this.variables.player , this.variables.items , function( player , item ){
       item.body.enable = false
@@ -261,33 +250,41 @@ States.Game.prototype = {
     var Angle = []
 
 
-    if( this.variables.cursors.right.isDown ) this.variables.player.body.velocity.x += +Speed
-    if( this.variables.cursors.down .isDown ) this.variables.player.body.velocity.y += +Speed
-    if( this.variables.cursors.left .isDown ) this.variables.player.body.velocity.x += -Speed
-    if( this.variables.cursors.up   .isDown ) this.variables.player.body.velocity.y += -Speed
+    if( !true && Game.input.mousePointer.isDown ){
+      console.log( 'this' )
+      Game.physics.arcade.moveToPointer( this.variables.player , 200 )
+      console.log( this.variables.player.body.rotation )
+      }
+    else{
+      if( this.variables.cursors.right.isDown ) this.variables.player.body.velocity.x += +Speed
+      if( this.variables.cursors.down .isDown ) this.variables.player.body.velocity.y += +Speed
+      if( this.variables.cursors.left .isDown ) this.variables.player.body.velocity.x += -Speed
+      if( this.variables.cursors.up   .isDown ) this.variables.player.body.velocity.y += -Speed
 
-    if( this.variables.cursors.right.isDown ) Angle.push( 0.5 )
-    if( this.variables.cursors.down .isDown ) Angle.push( 1.0 )
-    if( this.variables.cursors.left .isDown ) Angle.push( 1.5 )
-    if( this.variables.cursors.up   .isDown ) Angle.push( 2.0 )
-    this.variables.angle = Math.PI * ( eval( Angle.join( '+' ) ) / Angle.length ) || this.variables.angle || 0
-    this.variables.player.rotation = this.variables.angle
+      if( this.variables.cursors.right.isDown ) Angle.push( 0.5 )
+      if( this.variables.cursors.down .isDown ) Angle.push( 1.0 )
+      if( this.variables.cursors.left .isDown ) Angle.push( 1.5 )
+      if( this.variables.cursors.up   .isDown ) Angle.push( 2.0 )
+      this.variables.angle = Math.PI * ( eval( Angle.join( '+' ) ) / Angle.length ) || this.variables.angle || 0
+      this.variables.player.rotation = this.variables.angle
+      }
     },
+  render: function(){
+    if( Debug ){
+      Game.debug.body( this.variables.player )
+      Game.debug.bodyInfo( this.variables.player )
+      for( var a = 0 ; a < this.variables.items.children.length ; a++ ) Game.debug.body( this.variables.items.children[ a ] )
+      }
+    },
+  paused: function(){
+    this.variables.timer.resume = false
+    },
+  resize: function(){},
+  shutdown: function(){},
   }
 
 States.End.prototype = {
   variables: {},
-  create: function(){
-    this.variables.text = Game.add.text( Game.world.centerX , Game.world.centerY , this.variables.text , Globals.font )
-    this.variables.text.anchor.setTo( .5 )
-    this.variables.text.inputEnabled = true
-    this.variables.text.input.useHandCursor = true
-    this.variables.text.events.onInputDown.add( function(){
-      console.log( this.variables )
-      if( this.variables.win && this.variables.infinite ) Game.state.start( 'Game' , true , false , this.variables.size , true )
-      else Game.state.start( 'Title' )
-      } , this )
-    },
   init: function( win , infinite , size ){
     Game.world.setBounds( 0 , 0 , Game.width , Game.height )
     this.variables.win = win || false
@@ -300,24 +297,35 @@ States.End.prototype = {
       this.variables.text = win ? 'You win.' : 'You have FAILED this city!'
       }
     },
-  paused: function(){},
   preload: function(){},
+  create: function(){
+    this.variables.text = Game.add.text( Game.world.centerX , Game.world.centerY , this.variables.text , Globals.font )
+    this.variables.text.anchor.setTo( .5 )
+    this.variables.text.inputEnabled = true
+    this.variables.text.input.useHandCursor = true
+    this.variables.text.events.onInputDown.add( function(){
+      console.log( this.variables )
+      if( this.variables.win && this.variables.infinite ) Game.state.start( 'Game' , true , false , this.variables.size , true )
+      else Game.state.start( 'Title' )
+      } , this )
+    },
+  update: function(){},
   render: function(){},
+  paused: function(){},
   resize: function(){},
   shutdown: function(){},
-  update: function(){},
   }
 
 States.New.prototype = {
   variables: {},
-  create: function(){},
   init: function(){},
-  paused: function(){},
   preload: function(){},
-  resize: function(){},
-  render: function(){},
-  shutdown: function(){},
+  create: function(){},
   update: function(){},
+  render: function(){},
+  paused: function(){},
+  resize: function(){},
+  shutdown: function(){},
   }
 
 Game.state.add( 'Title' , States.Title )
