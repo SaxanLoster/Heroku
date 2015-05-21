@@ -163,7 +163,7 @@ States.Game.prototype = {
       item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
       Game.make.tween( item ).to( { x: this.infobar.children[ item.frame + 1 ].x , y: this.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
         this.infobar.add( item )
-        if( this.items.children.length == 0 ) Game.state.start( 'Over' , true , false , this.font , true , this.infinite , this.size )
+        if( this.items.children.length == 0 ) Game.state.start( 'Over' , true , false , this.font , true , this.infinite , this.size , this.type )
         } , this )
       } , null , this  )
 
