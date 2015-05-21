@@ -2,7 +2,12 @@
   <Head>
     <Title>Maze Game</Title>
     <Script src="../phaser.js"></Script>
-    <Script src="Scripts/Maze.js"></Script>
+    <Script src="Scripts/Main.js"></Script>
+    <Script src="Scripts/State-Boot.js"></Script>
+    <Script src="Scripts/State-Main.js"></Script>
+    <Script src="Scripts/State-Mode.js"></Script>
+    <Script src="Scripts/State-Game.js"></Script>
+    <Script src="Scripts/State-Over.js"></Script>
     <Style>
       * {
         margin: 0;
@@ -20,6 +25,15 @@
     </Style>
   </Head>
   <Body bgcolor="#202020">
-    <Script src="Scripts/Main.js"></Script>
+    <Script>
+      var Game = new Phaser.Game( Math.max( 200 , document.body.offsetWidth / 2 ) , Math.max( 200 , document.body.offsetHeight / 2 ) , Phaser.CANVAS )
+      Game.state.add( 'Template' , States.Template )
+      Game.state.add( 'Boot' , States.Boot )
+      Game.state.add( 'Main' , States.Main )
+      Game.state.add( 'Mode' , States.Mode )
+      Game.state.add( 'Game' , States.Game )
+      Game.state.add( 'Over' , States.Over )
+      Game.state.start( 'Boot' )
+      </Script>
     </Body>
 </HTML>
