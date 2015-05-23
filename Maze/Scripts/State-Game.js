@@ -10,7 +10,7 @@ States.Game.prototype = {
 
     this.infinite = infinite
 
-    this.maze = this.type ? new Maze2( this.size ) : new Maze( this.size , this.size )
+    this.maze = this.type ? new MazeExpanded( this.size ) : new MazeCompact( this.size , this.size )
 
     this.pausetime = 0
     
@@ -23,11 +23,6 @@ States.Game.prototype = {
 
     this.ox = Math.floor( ( this.x - this.size ) / 2 )
     this.oy = Math.floor( ( this.y - this.size ) / 2 ) || 1
-    },
-  preload: function(){
-    Game.load.image( 'Maze' , 'Images/Maze.png' )
-    Game.load.image( 'Player' , 'Images/Player.png' )
-    Game.load.spritesheet( 'Items' , 'Images/Items.png' , 40 , 40 , 4 )
     },
   create: function(){
     function GetRandomX( that ){
@@ -149,6 +144,11 @@ States.Game.prototype = {
       this.player.body.collideWorldBounds = true
       Game.camera.follow( this.player )
 
+    this.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
+      this.joystick.inputEnable()
+      this.joystick.settings.singleDirection = false
+      this.joystick.settings.maxDistanceInPixels = 20
+
     if( this.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
     },
   update: function(){
@@ -171,12 +171,11 @@ States.Game.prototype = {
     this.player.body.velocity.y = 0
 
     var Speed = 150
-    var Angle = []
 
-    if( !true && Game.input.mousePointer.isDown ){
-      console.log( 'this' )
-      Game.physics.arcade.moveToPointer( this.player , 200 )
-      console.log( this.player.body.rotation )
+    if( true && Game.input.mousePointer.isDown ){
+      this.player.body.velocity.x = Speed * this.joystick.speed.x * -.01
+      this.player.body.velocity.y = Speed * this.joystick.speed.y * -.01
+      // this.game.physics.arcade.moveToPointer( this.player , Speed )
       }
     else{
       if( this.cursors.right.isDown ) this.player.body.velocity.x += +Speed
@@ -184,12 +183,32 @@ States.Game.prototype = {
       if( this.cursors.left .isDown ) this.player.body.velocity.x += -Speed
       if( this.cursors.up   .isDown ) this.player.body.velocity.y += -Speed
 
-      if( this.cursors.right.isDown ) Angle.push( 0.5 )
-      if( this.cursors.down .isDown ) Angle.push( 1.0 )
-      if( this.cursors.left .isDown ) Angle.push( 1.5 )
-      if( this.cursors.up   .isDown ) Angle.push( 2.0 )
-      this.angle = Math.PI * ( eval( Angle.join( '+' ) ) / Angle.length ) || this.angle || 0
-      this.player.rotation = this.angle
+      switch( true ){
+        case this.cursors.up   .isDown && this.cursors.right.isDown :
+          this.player.rotation = Math.PI * 0.25
+          break
+        case this.cursors.right.isDown && this.cursors.down .isDown :
+          this.player.rotation = Math.PI * 0.75
+          break
+        case this.cursors.down .isDown && this.cursors.left .isDown :
+          this.player.rotation = Math.PI * 1.25
+          break
+        case this.cursors.left .isDown && this.cursors.up   .isDown :
+          this.player.rotation = Math.PI * 1.75
+          break
+        case this.cursors.up   .isDown :
+          this.player.rotation = Math.PI * 0.00
+          break
+        case this.cursors.right.isDown :
+          this.player.rotation = Math.PI * 0.50
+          break
+        case this.cursors.down .isDown :
+          this.player.rotation = Math.PI * 1.00
+          break
+        case this.cursors.left .isDown :
+          this.player.rotation = Math.PI * 1.50
+          break
+        }
       }
     },
   resumed: function(){

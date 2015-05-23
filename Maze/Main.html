@@ -2,10 +2,12 @@
   <Head>
     <Title>Maze Game</Title>
     <Script src="../phaser.js"></Script>
+    <Script src="../phaser-touch-control.js"></Script>
     <Script src="Scripts/Main.js"></Script>
     <Script src="Scripts/State-Boot.js"></Script>
     <Script src="Scripts/State-Main.js"></Script>
     <Script src="Scripts/State-Mode.js"></Script>
+    <Script src="Scripts/State-Wait.js"></Script>
     <Script src="Scripts/State-Game.js"></Script>
     <Script src="Scripts/State-Over.js"></Script>
     <Style>
@@ -31,6 +33,7 @@
       Game.state.add( 'Boot' , States.Boot )
       Game.state.add( 'Main' , States.Main )
       Game.state.add( 'Mode' , States.Mode )
+      Game.state.add( 'Wait' , States.Mode )
       Game.state.add( 'Game' , States.Game )
       Game.state.add( 'Over' , States.Over )
       Game.state.start( 'Boot' )

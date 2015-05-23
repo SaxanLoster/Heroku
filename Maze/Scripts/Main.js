@@ -3,6 +3,7 @@ var States = {
   Boot: function(){},
   Main: function(){},
   Mode: function(){},
+  Wait: function(){},
   Game: function(){},
   Over: function(){},
   }
@@ -19,7 +20,7 @@ States.Template.prototype = {
   shutdown: function(){},
   }
 
-function Maze( W , H ){
+function MazeCompact( W , H ){
 
   function Cell( X , Y ){
     this.X = X
@@ -118,7 +119,7 @@ function Maze( W , H ){
   return Convert()
   }
 
-function Maze2( Size ){
+function MazeExpanded( Size ){
 
   function Cell( x , y ){
     this.x = x
