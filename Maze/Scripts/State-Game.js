@@ -15,7 +15,7 @@ States.Game.prototype = {
     this.pausetime = 0
     
     var A = this.type ? .5 : 1
-    var B = this.device.desktop ? 1 : 2
+    var B = this.game.device.desktop ? 1 : 2
 
     this.starttime = Math.max( Math.pow( ( this.size * A * B ) , 2 ) * .5 , infinite ? 0 : 60 )
 
