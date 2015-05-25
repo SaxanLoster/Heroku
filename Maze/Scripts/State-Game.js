@@ -14,9 +14,10 @@ States.Game.prototype = {
 
     this.pausetime = 0
     
-    var A = this.type ? 2 : 1
+    var A = this.type ? .5 : 1
+    var B = this.device.desktop ? 1 : 2
 
-    this.starttime = Math.max( Math.pow( ( this.size / A ) , 2 ) * .5 , infinite ? 0 : 60 )
+    this.starttime = Math.max( Math.pow( ( this.size * A * B ) , 2 ) * .5 , infinite ? 0 : 60 )
 
     this.x = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetWidth  / 80 ) , this.size )
     this.y = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetHeight / 80 ) , this.size + 1 )
@@ -48,7 +49,7 @@ States.Game.prototype = {
     this.cursors = Game.input.keyboard.createCursorKeys()
 
     this.map = Game.add.tilemap( null , 40 , 40 , this.x , this.y )
-      this.map.addTilesetImage( 'Maze' )
+      this.map.addTilesetImage( 'Maze' , 'Maze' , 40 , 40 , 0 , 1 )
 
     this.mazelayer = this.map.create( 'Maze Layer' , this.x , this.y , 40 , 40 )
       this.mazelayer.resizeWorld()
@@ -172,10 +173,9 @@ States.Game.prototype = {
 
     var Speed = 150
 
-    if( true && Game.input.mousePointer.isDown ){
+    if( true && Game.input.activePointer.isDown ){
       this.player.body.velocity.x = Speed * this.joystick.speed.x * -.01
       this.player.body.velocity.y = Speed * this.joystick.speed.y * -.01
-      // this.game.physics.arcade.moveToPointer( this.player , Speed )
       }
     else{
       if( this.cursors.right.isDown ) this.player.body.velocity.x += +Speed
