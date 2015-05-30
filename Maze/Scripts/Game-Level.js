@@ -36,6 +36,7 @@ function GetLevelData1( Level ){
   }
 function GetLevelData( Level ){
   var Data = {}
+  var Level = 1
   if( Level >= 45 ){
     Data.gems = 4
     Data.size = 51
@@ -64,32 +65,32 @@ function GetLevelData( Level ){
   else if( Level >= 6 ){
     Data.gems = 3
     Data.size = 19
-    Data.time = 120
+    Data.time = 50
     }
   else if( Level >= 5 ){
     Data.gems = 3
     Data.size = 15
-    Data.time = 90
+    Data.time = 40
     }
   else if( Level >= 4 ){
     Data.gems = 2
     Data.size = 15
-    Data.time = 60
+    Data.time = 30
     }
   else if( Level >= 3 ){
     Data.gems = 2
     Data.size = 11
-    Data.time = 40
+    Data.time = 20
     }
   else if( Level >= 2 ){
     Data.gems = 1
     Data.size = 11
-    Data.time = 20
+    Data.time = 10
     }
   else {
-    Data.gems = 1
-    Data.size = 7
-    Data.time = 10
+    Data.gems = 8
+    Data.size = 21
+    Data.time = 120
     }
   return Data
   }

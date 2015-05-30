@@ -17,3 +17,13 @@ States.Template.prototype = {
   resize: function(){},
   shutdown: function(){},
   }
+
+// add flags
+// cycles
+// more gems
+// show gem on loss
+// end screen info
+// player animation
+// early gem stacking
+// timer length
+// keyboard continue

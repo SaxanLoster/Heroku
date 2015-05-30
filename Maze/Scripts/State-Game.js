@@ -5,7 +5,10 @@ States.Game.prototype = {
     this.time.reset()
 
     this.level = arguments[ 0 ]
+
     this.settings = GetLevelData( this.level )
+
+    this.win = this.settings.gems
 
     this.maze = new MazeExpanded( this.settings.size )
 
@@ -91,7 +94,7 @@ States.Game.prototype = {
   update: function(){
     var Time = Math.ceil( this.settings.time - this.time.totalElapsedSeconds() + this.pausetime )
     this.infobar.children[ this.settings.gems + 1 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
-    if( Time <= 0 && this.items.children.length > 0 ) Game.state.start( 'Over' , true , false , false , this.level )
+    if( Time <= 0 && this.items.children.length > 0 && this.win > 0 ) Game.state.start( 'Over' , true , false , false , this.level )
 
     Game.physics.arcade.collide( this.player , this.mazelayer )
     Game.physics.arcade.overlap( this.player , this.items , function( player , item ){
@@ -99,8 +102,8 @@ States.Game.prototype = {
       this.infobar.add( item )
       item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
       Game.make.tween( item ).to( { x: this.infobar.children[ item.frame + 1 ].x , y: this.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
-        this.infobar.add( item )
-        if( this.items.children.length == 0 ) Game.state.start( 'Over' , true , false , true , this.level )
+        this.win--
+        if( this.win == 0 && this.items.children.length == 0 ) setTimeout( function( level ){ Game.state.start( 'Over' , true , false , true , level ) } , 250 , this.level )
         } , this )
       } , null , this  )
 
