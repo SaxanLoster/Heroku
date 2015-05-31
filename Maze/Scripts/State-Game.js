@@ -57,7 +57,7 @@ States.Game.prototype = {
           this.map.putTile( this.maze[ a ][ b ] , a + this.ox , b + this.oy , this.mazelayer )
           }
         }
-```
+
     this.items = Game.add.group( Game.world , 'Items' , false , true )
       for( var a = 0 ; a < this.settings.gems ; a++ ){
         this.items.create( GetRandomX( this ) , GetRandomY( this ) , 'Items' , a )
