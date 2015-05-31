@@ -24,6 +24,7 @@ States.Template.prototype = {
 // show gem on loss
 // end screen info
 // player animation
+// life system
 // early gem stacking
 // timer length
 // keyboard continue
