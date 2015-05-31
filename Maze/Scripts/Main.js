@@ -20,11 +20,11 @@ States.Template.prototype = {
 
 // add flags
 // cycles
-// more gems
 // show gem on loss
 // end screen info
 // player animation
-// life system
 // early gem stacking
-// timer length
 // keyboard continue
+// phone dimensions
+// maize maze
+// gemhunter
