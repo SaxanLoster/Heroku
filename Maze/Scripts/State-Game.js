@@ -14,7 +14,7 @@ States.Game.prototype = {
 
     this.playing = true
 
-    this.maze = new MazeExpanded( this.settings.size )
+    this.maze = new Maze( this.settings.size )
 
     this.pausetime = 0
     
@@ -129,48 +129,49 @@ States.Game.prototype = {
         } , this )
       } , null , this  )
 
-    this.player.body.velocity.x = 0
-    this.player.body.velocity.y = 0
+    // Player Movement
+      this.player.body.velocity.x = 0
+      this.player.body.velocity.y = 0
 
-    var Speed = 100
+      var Speed = 100
 
-    if( true && Game.input.activePointer.isDown ){
-      this.player.body.velocity.x = Speed * this.joystick.speed.x * -.01
-      this.player.body.velocity.y = Speed * this.joystick.speed.y * -.01
-      }
-    else{
-      if( this.cursors.right.isDown || this.wasd.right.isDown ) this.player.body.velocity.x += +Speed
-      if( this.cursors.down .isDown || this.wasd.down .isDown ) this.player.body.velocity.y += +Speed
-      if( this.cursors.left .isDown || this.wasd.left .isDown ) this.player.body.velocity.x += -Speed
-      if( this.cursors.up   .isDown || this.wasd.up   .isDown ) this.player.body.velocity.y += -Speed
-
-      switch( true ){
-        case ( this.cursors.up   .isDown && this.cursors.right.isDown ) || ( this.wasd.up   .isDown && this.wasd.right.isDown ) :
-          this.player.rotation = Math.PI * 0.25
-          break
-        case ( this.cursors.right.isDown && this.cursors.down .isDown ) || ( this.wasd.right.isDown && this.wasd.down .isDown ) :
-          this.player.rotation = Math.PI * 0.75
-          break
-        case ( this.cursors.down .isDown && this.cursors.left .isDown ) || ( this.wasd.down .isDown && this.wasd.left .isDown ) :
-          this.player.rotation = Math.PI * 1.25
-          break
-        case ( this.cursors.left .isDown && this.cursors.up   .isDown ) || ( this.wasd.left .isDown && this.wasd.up   .isDown ) :
-          this.player.rotation = Math.PI * 1.75
-          break
-        case this.cursors.up   .isDown || this.wasd.up   .isDown :
-          this.player.rotation = Math.PI * 0.00
-          break
-        case this.cursors.right.isDown || this.wasd.right.isDown :
-          this.player.rotation = Math.PI * 0.50
-          break
-        case this.cursors.down .isDown || this.wasd.down .isDown :
-          this.player.rotation = Math.PI * 1.00
-          break
-        case this.cursors.left .isDown || this.wasd.left .isDown :
-          this.player.rotation = Math.PI * 1.50
-          break
+      if( true && Game.input.activePointer.isDown ){
+        this.player.body.velocity.x = Speed * this.joystick.speed.x * -.01 * 1.17
+        this.player.body.velocity.y = Speed * this.joystick.speed.y * -.01 * 1.17
         }
-      }
+      else{
+        if( this.cursors.right.isDown || this.wasd.right.isDown ) this.player.body.velocity.x += +Speed
+        if( this.cursors.down .isDown || this.wasd.down .isDown ) this.player.body.velocity.y += +Speed
+        if( this.cursors.left .isDown || this.wasd.left .isDown ) this.player.body.velocity.x += -Speed
+        if( this.cursors.up   .isDown || this.wasd.up   .isDown ) this.player.body.velocity.y += -Speed
+
+        switch( true ){
+          case ( this.cursors.up   .isDown && this.cursors.right.isDown ) || ( this.wasd.up   .isDown && this.wasd.right.isDown ) :
+            this.player.rotation = Math.PI * 0.25
+            break
+          case ( this.cursors.right.isDown && this.cursors.down .isDown ) || ( this.wasd.right.isDown && this.wasd.down .isDown ) :
+            this.player.rotation = Math.PI * 0.75
+            break
+          case ( this.cursors.down .isDown && this.cursors.left .isDown ) || ( this.wasd.down .isDown && this.wasd.left .isDown ) :
+            this.player.rotation = Math.PI * 1.25
+            break
+          case ( this.cursors.left .isDown && this.cursors.up   .isDown ) || ( this.wasd.left .isDown && this.wasd.up   .isDown ) :
+            this.player.rotation = Math.PI * 1.75
+            break
+          case this.cursors.up   .isDown || this.wasd.up   .isDown :
+            this.player.rotation = Math.PI * 0.00
+            break
+          case this.cursors.right.isDown || this.wasd.right.isDown :
+            this.player.rotation = Math.PI * 0.50
+            break
+          case this.cursors.down .isDown || this.wasd.down .isDown :
+            this.player.rotation = Math.PI * 1.00
+            break
+          case this.cursors.left .isDown || this.wasd.left .isDown :
+            this.player.rotation = Math.PI * 1.50
+            break
+          }
+        }
     },
   resumed: function(){
     this.pausetime += this.time.pauseDuration * .001

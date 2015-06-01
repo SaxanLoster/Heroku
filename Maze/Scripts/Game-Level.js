@@ -4,8 +4,8 @@ function GetLevelData( Level ){
     // case  1 :
     //   Data.gems = 2
     //   Data.flag = 0
-    //   Data.size = 41
-    //   Data.time = 2
+    //   Data.size = 15
+    //   Data.time = 200
     //   break
     case  1 :
       Data.gems = 1
@@ -130,7 +130,7 @@ function GetLevelData( Level ){
     default :
       Data.gems = 8
       Data.flag = 4
-      Data.size = 51
+      Data.size = 49
       Data.time = 360 - ( Level - 20 ) * 30
       break
     }
