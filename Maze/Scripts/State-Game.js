@@ -7,11 +7,12 @@ States.Game.prototype = {
     this.level = arguments[ 0 ]
 
     this.lives = arguments[ 1 ] || 5
-    console.log( this.lives )
 
     this.settings = GetLevelData( this.level )
 
     this.win = this.settings.gems
+
+    this.playing = true
 
     this.maze = new MazeExpanded( this.settings.size )
 
@@ -95,18 +96,36 @@ States.Game.prototype = {
     if( this.settings.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
     },
   update: function(){
-    var Time = Math.ceil( this.settings.time - this.time.totalElapsedSeconds() + this.pausetime )
+    var Time = Math.max( Math.ceil( this.settings.time - this.time.totalElapsedSeconds() + this.pausetime ) , 0 )
     this.infobar.children[ this.settings.gems + 1 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
-    if( Time <= 0 && this.items.children.length > 0 && this.win > 0 ) Game.state.start( 'Over' , true , false , false , this.level , this.lives )
+    if( this.playing && Time <= 0 && this.items.children.length > 0 && this.win > 0 ){
+      this.playing = false
+      this.player.body.enable = false
+      Game.camera.unfollow( this.player )
+      var tweens = Game.make.tween( this.camera )
+      tweens.onComplete.add( function(){ Game.state.start( 'Over' , true , false , false , this.level , this.lives ) } , this )
+      for( var a = 0 ; a < this.items.children.length ; a++ ){
+        if( !this.items.children[ a ].inCamera ){
+          tweens.to( { 'x': this.items.children[ a ].x - 320 , 'y': this.items.children[ a ].y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 500 )
+          tweens.to( { 'x': this.player.x - 320 , 'y': this.player.y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 2000 )
+          }
+        }
+      if( tweens.timeline.length == 0 ) Game.state.start( 'Over' , true , false , false , this.level , this.lives )
+      tweens.start()
+      }
 
     Game.physics.arcade.collide( this.player , this.mazelayer )
     Game.physics.arcade.overlap( this.player , this.items , function( player , item ){
+      this.pausetime += 5
       item.body.enable = false
       this.infobar.add( item )
       item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
       Game.make.tween( item ).to( { x: this.infobar.children[ item.frame + 1 ].x , y: this.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
         this.win--
-        if( this.win == 0 && this.items.children.length == 0 ) setTimeout( function( level , lives ){ Game.state.start( 'Over' , true , false , true , level , lives ) } , 250 , this.level , this.lives )
+        if( this.win == 0 && this.items.children.length == 0 ){
+          this.playing = false
+          setTimeout( function( level , lives ){ Game.state.start( 'Over' , true , false , true , level , lives ) } , 250 , this.level , this.lives )
+          }
         } , this )
       } , null , this  )
 

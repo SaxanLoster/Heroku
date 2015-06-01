@@ -26,5 +26,7 @@ States.Template.prototype = {
 // early gem stacking
 // keyboard continue
 // phone dimensions
+// zoom
+// loading bar
 // maize maze
 // gemhunter

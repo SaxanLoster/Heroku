@@ -1,6 +1,12 @@
 function GetLevelData( Level ){
   var Data = {}
   switch( Level ){
+    // case  1 :
+    //   Data.gems = 2
+    //   Data.flag = 0
+    //   Data.size = 41
+    //   Data.time = 2
+    //   break
     case  1 :
       Data.gems = 1
       Data.flag = 0
