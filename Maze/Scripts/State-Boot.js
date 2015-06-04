@@ -1,4 +1,4 @@
-States.Boot.prototype = {
+States.boot.prototype = {
   preload: function(){
     this.load.image( 'Maze' , 'Images/Maze-Test.png' )
     this.load.image( 'Player' , 'Images/Player.png' )
@@ -10,6 +10,6 @@ States.Boot.prototype = {
   create: function(){
     Game.scale.scaleMode = 2
 
-    Game.state.start( 'Main' )
+    Game.state.start( 'title' )
     },
   }

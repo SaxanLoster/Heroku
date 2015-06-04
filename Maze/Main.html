@@ -7,7 +7,8 @@
     <Script src="Scripts/Game-Level.js"></Script>
     <Script src="Scripts/Game-Maze.js"></Script>
     <Script src="Scripts/State-Boot.js"></Script>
-    <Script src="Scripts/State-Main.js"></Script>
+    <Script src="Scripts/State-Title.js"></Script>
+    <Script src="Scripts/State-Pregame.js"></Script>
     <Script src="Scripts/State-Game.js"></Script>
     <Script src="Scripts/State-Over.js"></Script>
     <Style>
@@ -29,12 +30,13 @@
   <Body bgcolor="#202020">
     <Script>
       var Game = new Phaser.Game( Math.max( 200 , document.body.offsetWidth / 2 ) , Math.max( 200 , document.body.offsetHeight / 2 ) , Phaser.CANVAS )
-        Game.state.add( 'Template' , States.Template )
-        Game.state.add( 'Boot' , States.Boot )
-        Game.state.add( 'Main' , States.Main )
-        Game.state.add( 'Game' , States.Game )
-        Game.state.add( 'Over' , States.Over )
-        Game.state.start( 'Boot' )
+        Game.state.add( 'template' , States.template )
+        Game.state.add( 'boot' , States.boot )
+        Game.state.add( 'title' , States.title )
+        Game.state.add( 'pregame' , States.pregame )
+        Game.state.add( 'game' , States.game )
+        Game.state.add( 'over' , States.over )
+        Game.state.start( 'boot' )
       </Script>
     </Body>
 </HTML>

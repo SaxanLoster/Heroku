@@ -1,12 +1,13 @@
 var States = {
-  Template: function(){},
-  Boot: function(){},
-  Main: function(){},
-  Game: function(){},
-  Over: function(){},
+  template: function(){},
+  boot: function(){},
+  title: function(){},
+  pregame: function(){},
+  game: function(){},
+  over: function(){},
   }
 
-States.Template.prototype = {
+States.template.prototype = {
   init: function(){},
   preload: function(){},
   create: function(){},
@@ -19,10 +20,9 @@ States.Template.prototype = {
   }
 
 // add flags
-// cycles
 // end screen info
 // player animation
-// early gem stacking
+// rotate maze types
 // keyboard continue
 // phone dimensions
 // zoom
@@ -34,3 +34,5 @@ States.Template.prototype = {
 // gemhunter
 // diff find gem time
 // eary game zoom
+// gem pointer
+// rollover time

@@ -1,4 +1,4 @@
-States.Over.prototype = {
+States.over.prototype = {
   init: function(){
     Game.world.setBounds( 0 , 0 , Game.width , Game.height )
     this.win = arguments[ 0 ]
@@ -13,8 +13,8 @@ States.Over.prototype = {
     this.text.input.useHandCursor = true
     this.text.events.onInputDown.add( function(){
       var Level = this.win ? this.level + 1 : this.level
-      if( this.lives > 0 ) Game.state.start( 'Game' , true , false , Level  , this.lives )
-      else Game.state.start( 'Main' )
+      if( this.lives > 0 ) Game.state.start( 'pregame' , true , false , Level  , this.lives )
+      else Game.state.start( 'title' )
       } , this )
     },
   }

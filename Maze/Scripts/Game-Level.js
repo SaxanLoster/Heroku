@@ -2,10 +2,10 @@ function GetLevelData( Level ){
   var Data = {}
   switch( Level ){
     // case  1 :
-    //   Data.gems = 2
+    //   Data.gems = 8
     //   Data.flag = 0
-    //   Data.size = 15
-    //   Data.time = 200
+    //   Data.size = 31
+    //   Data.time = 300
     //   break
     case  1 :
       Data.gems = 1

@@ -1,179 +1,115 @@
-States.Game.prototype = {
+States.game.prototype = {
   init: function(){
-    Game.time.desiredFps = 30
-
     this.time.reset()
+    this.that = arguments[ 0 ]
 
-    this.level = arguments[ 0 ]
-
-    this.lives = arguments[ 1 ] || 5
-
-    this.settings = GetLevelData( this.level )
-
-    this.win = this.settings.gems
-
-    this.playing = true
-
-    this.maze = new Maze( this.settings.size )
-
-    this.pausetime = 0
-    
-    this.x = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetWidth  / 80 ) , this.settings.size )
-    this.y = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetHeight / 80 ) , this.settings.size + 1 )
-
-    this.ox = Math.floor( ( this.x - this.settings.size ) / 2 )
-    this.oy = Math.floor( ( this.y - this.settings.size ) / 2 ) || 1
+    Game.camera.follow( this.that.player )
+    Game.physics.enable( this.that.player , Phaser.Physics.ARCADE )
+    this.that.player.body.collideWorldBounds = true
     },
   create: function(){
-    function GetRandomX( that ){
-      do var Number = Game.rnd.between( that.ox , that.ox + that.settings.size - 1 )
-      while( ( Number - that.ox ) % 2 == 0 )
-      return Number * 40 + 20
-      }
-    function GetRandomY( that ){
-      do var Number = Game.rnd.between( that.oy , that.oy + that.settings.size - 1 )
-      while( ( Number - that.oy ) % 2 == 0 )
-      return Number * 40 + 20
-      }
-
-    Game.physics.startSystem( Phaser.Physics.ARCADE )
-    Game.stage.backgroundColor = '#000000'
-
-    this.cursors = Game.input.keyboard.createCursorKeys()
-    this.wasd = {
-      up:    Game.input.keyboard.addKey( Phaser.Keyboard.W ),
-      down:  Game.input.keyboard.addKey( Phaser.Keyboard.S ),
-      left:  Game.input.keyboard.addKey( Phaser.Keyboard.A ),
-      right: Game.input.keyboard.addKey( Phaser.Keyboard.D ),
-      }
-
-    this.map = Game.add.tilemap( null , 40 , 40 , this.x , this.y )
-      this.map.addTilesetImage( 'Maze' , 'Maze' , 40 , 40 , 0 , 1 )
-      this.map.setCollisionByIndex( 0 , true )
-
-    this.mazelayer = this.map.create( 'Maze Layer' , this.x , this.y , 40 , 40 )
-      this.mazelayer.resizeWorld()
-      for( var a = 0 ; a < this.settings.size ; a++ ){
-        for( var b = 0 ; b < this.settings.size ; b++ ){
-          this.map.putTile( this.maze[ a ][ b ] , a + this.ox , b + this.oy , this.mazelayer )
-          }
-        }
-
-    this.items = Game.add.group( Game.world , 'Items' , false , true )
-      for( var a = 0 ; a < this.settings.gems ; a++ ){
-        this.items.create( GetRandomX( this ) , GetRandomY( this ) , 'Items' , a )
-          this.items.children[ a ].anchor.set( .5 )
-          this.items.children[ a ].scale.set( .5 )
-        }
-
-    this.infobar = Game.add.group()
-      Game.add.graphics( 0 , 0 , this.infobar )
-        this.infobar.children[ 0 ].beginFill( 0xFFFFFF , 1 )
-        this.infobar.children[ 0 ].drawRect( 0 , 0 , Game.width , 40 )
-        this.infobar.children[ 0 ].endFill()
-      for( var a = 0 ; a < this.settings.gems ; a++ ){
-        Game.add.sprite( Game.width * ( ( a + 1 ) * .02 ) + ( 10 + ( a * 20 ) ) , 20 , 'Items' , a , this.infobar )
-          this.infobar.children[ a + 1 ].anchor.set( .5 )
-          this.infobar.children[ a + 1 ].scale.set( .5 )
-          this.infobar.children[ a + 1 ].tint = 0x000000
-        }
-      Game.add.text( this.infobar.width - 5 , 20 , 'Timer' , { font: '20px Arial' , fill: '#000' } , this.infobar )
-        this.infobar.children[ this.settings.gems + 1 ].anchor.set( 1 , .5 )
-      this.infobar.fixedToCamera = true
-
-    this.player = Game.add.sprite( GetRandomX( this ) , GetRandomY( this ) , 'Player' )
-      this.player.anchor.setTo( .5 )
-      this.player.scale.setTo( .75 )
-      Game.physics.enable( this.player , Phaser.Physics.ARCADE )
-      this.player.body.collideWorldBounds = true
-      Game.camera.follow( this.player )
-
-    this.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
-      this.joystick.inputEnable()
-      this.joystick.settings.singleDirection = false
-      this.joystick.settings.maxDistanceInPixels = 20
-
-    if( this.settings.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
+    this.that.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
+      this.that.joystick.inputEnable()
+      this.that.joystick.settings.singleDirection = false
+      this.that.joystick.settings.maxDistanceInPixels = 20
     },
   update: function(){
-    var Time = Math.max( Math.ceil( this.settings.time - this.time.totalElapsedSeconds() + this.pausetime ) , 0 )
-    this.infobar.children[ this.settings.gems + 1 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
-    if( this.playing && Time <= 0 && this.items.children.length > 0 && this.win > 0 ){
-      this.playing = false
-      this.player.body.enable = false
-      Game.camera.unfollow( this.player )
-      var tweens = Game.make.tween( this.camera )
-      tweens.onComplete.add( function(){ Game.state.start( 'Over' , true , false , false , this.level , this.lives ) } , this )
-      for( var a = 0 ; a < this.items.children.length ; a++ ){
-        if( !this.items.children[ a ].inCamera ){
-          tweens.to( { 'x': this.items.children[ a ].x - 320 , 'y': this.items.children[ a ].y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 500 )
-          tweens.to( { 'x': this.player.x - 320 , 'y': this.player.y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 2000 )
-          }
-        }
-      if( tweens.timeline.length == 0 ) Game.state.start( 'Over' , true , false , false , this.level , this.lives )
-      tweens.start()
-      }
+    var Time = Math.max( Math.ceil( this.that.settings.time - this.time.totalElapsedSeconds() + this.that.pausetime ) , 0 )
+    this.that.infobar.children[ this.that.settings.gems + 1 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
+    Game.physics.arcade.collide( this.that.player , this.that.mazelayer )
 
-    Game.physics.arcade.collide( this.player , this.mazelayer )
-    Game.physics.arcade.overlap( this.player , this.items , function( player , item ){
-      this.pausetime += 5
-      item.body.enable = false
-      this.infobar.add( item )
-      item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
-      Game.make.tween( item ).to( { x: this.infobar.children[ item.frame + 1 ].x , y: this.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
-        this.win--
-        if( this.win == 0 && this.items.children.length == 0 ){
-          this.playing = false
-          setTimeout( function( level , lives ){ Game.state.start( 'Over' , true , false , true , level , lives ) } , 250 , this.level , this.lives )
+    // this.that.items.forEach( function( item ){
+    //   var x = item.x - Game.camera.position.x
+    //   var y = item.y - Game.camera.position.y
+
+    //   // this.that.pointers.children[ item.frame ].position.set()
+    //   // this.that.pointers.children[ item.frame + this.that.settings.gems ].position.set()
+    //   if( item.inCamera ){
+    //     this.that.pointers.children[ item.frame ].alpha = 0
+    //     this.that.pointers.children[ item.frame + this.that.settings.gems ].alpha = 0
+    //     }
+    //   else{
+    //     this.that.pointers.children[ item.frame ].alpha = 1
+    //     this.that.pointers.children[ item.frame + this.that.settings.gems ].alpha = 1
+    //     }
+    //   } , this )
+
+    // Win/Lose
+      if( this.that.playing && Time <= 0 && this.that.items.children.length > 0 && this.that.win > 0 ){
+        this.that.playing = false
+        this.that.player.body.enable = false
+        Game.camera.unfollow( this.that.player )
+        var tweens = Game.make.tween( this.that.camera )
+        tweens.onComplete.add( function(){ Game.state.start( 'Over' , true , false , false , this.that.level , this.that.lives ) } , this )
+        for( var a = 0 ; a < this.that.items.children.length ; a++ ){
+          if( !this.that.items.children[ a ].inCamera ){
+            tweens.to( { 'x': this.that.items.children[ a ].x - 320 , 'y': this.that.items.children[ a ].y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 500 )
+            tweens.to( { 'x': this.that.player.x - 320 , 'y': this.that.player.y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 2000 )
+            }
           }
-        } , this )
-      } , null , this  )
+        if( tweens.timeline.length == 0 ) Game.state.start( 'over' , true , false , false , this.that.level , this.that.lives )
+        tweens.start()
+        }
+
+      Game.physics.arcade.overlap( this.that.player , this.that.items , function( player , item ){
+        this.that.pausetime += 5
+        item.body.enable = false
+        this.that.infobar.add( item )
+        item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
+        Game.make.tween( item ).to( { x: this.that.infobar.children[ item.frame + 1 ].x , y: this.that.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
+          this.that.win--
+          if( this.that.win == 0 && this.that.items.children.length == 0 ){
+            this.that.playing = false
+            setTimeout( function( level , lives ){ Game.state.start( 'over' , true , false , true , level , lives ) } , 250 , this.that.level , this.that.lives )
+            }
+          } , this )
+        } , null , this  )
 
     // Player Movement
-      this.player.body.velocity.x = 0
-      this.player.body.velocity.y = 0
+      this.that.player.body.velocity.x = 0
+      this.that.player.body.velocity.y = 0
 
       var Speed = 100
 
       if( true && Game.input.activePointer.isDown ){
-        this.player.body.velocity.x = Speed * this.joystick.speed.x * -.01 * 1.17
-        this.player.body.velocity.y = Speed * this.joystick.speed.y * -.01 * 1.17
+        this.that.player.body.velocity.x = Speed * this.that.joystick.speed.x * -.01 * 1.17
+        this.that.player.body.velocity.y = Speed * this.that.joystick.speed.y * -.01 * 1.17
         }
       else{
-        if( this.cursors.right.isDown || this.wasd.right.isDown ) this.player.body.velocity.x += +Speed
-        if( this.cursors.down .isDown || this.wasd.down .isDown ) this.player.body.velocity.y += +Speed
-        if( this.cursors.left .isDown || this.wasd.left .isDown ) this.player.body.velocity.x += -Speed
-        if( this.cursors.up   .isDown || this.wasd.up   .isDown ) this.player.body.velocity.y += -Speed
+        if( this.that.cursors.right.isDown || this.that.wasd.right.isDown ) this.that.player.body.velocity.x += +Speed
+        if( this.that.cursors.down .isDown || this.that.wasd.down .isDown ) this.that.player.body.velocity.y += +Speed
+        if( this.that.cursors.left .isDown || this.that.wasd.left .isDown ) this.that.player.body.velocity.x += -Speed
+        if( this.that.cursors.up   .isDown || this.that.wasd.up   .isDown ) this.that.player.body.velocity.y += -Speed
 
         switch( true ){
-          case ( this.cursors.up   .isDown && this.cursors.right.isDown ) || ( this.wasd.up   .isDown && this.wasd.right.isDown ) :
-            this.player.rotation = Math.PI * 0.25
+          case ( this.that.cursors.up   .isDown && this.that.cursors.right.isDown ) || ( this.that.wasd.up   .isDown && this.that.wasd.right.isDown ) :
+            this.that.player.rotation = Math.PI * 0.25
             break
-          case ( this.cursors.right.isDown && this.cursors.down .isDown ) || ( this.wasd.right.isDown && this.wasd.down .isDown ) :
-            this.player.rotation = Math.PI * 0.75
+          case ( this.that.cursors.right.isDown && this.that.cursors.down .isDown ) || ( this.that.wasd.right.isDown && this.that.wasd.down .isDown ) :
+            this.that.player.rotation = Math.PI * 0.75
             break
-          case ( this.cursors.down .isDown && this.cursors.left .isDown ) || ( this.wasd.down .isDown && this.wasd.left .isDown ) :
-            this.player.rotation = Math.PI * 1.25
+          case ( this.that.cursors.down .isDown && this.that.cursors.left .isDown ) || ( this.that.wasd.down .isDown && this.that.wasd.left .isDown ) :
+            this.that.player.rotation = Math.PI * 1.25
             break
-          case ( this.cursors.left .isDown && this.cursors.up   .isDown ) || ( this.wasd.left .isDown && this.wasd.up   .isDown ) :
-            this.player.rotation = Math.PI * 1.75
+          case ( this.that.cursors.left .isDown && this.that.cursors.up   .isDown ) || ( this.that.wasd.left .isDown && this.that.wasd.up   .isDown ) :
+            this.that.player.rotation = Math.PI * 1.75
             break
-          case this.cursors.up   .isDown || this.wasd.up   .isDown :
-            this.player.rotation = Math.PI * 0.00
+          case this.that.cursors.up   .isDown || this.that.wasd.up   .isDown :
+            this.that.player.rotation = Math.PI * 0.00
             break
-          case this.cursors.right.isDown || this.wasd.right.isDown :
-            this.player.rotation = Math.PI * 0.50
+          case this.that.cursors.right.isDown || this.that.wasd.right.isDown :
+            this.that.player.rotation = Math.PI * 0.50
             break
-          case this.cursors.down .isDown || this.wasd.down .isDown :
-            this.player.rotation = Math.PI * 1.00
+          case this.that.cursors.down .isDown || this.that.wasd.down .isDown :
+            this.that.player.rotation = Math.PI * 1.00
             break
-          case this.cursors.left .isDown || this.wasd.left .isDown :
-            this.player.rotation = Math.PI * 1.50
+          case this.that.cursors.left .isDown || this.that.wasd.left .isDown :
+            this.that.player.rotation = Math.PI * 1.50
             break
           }
         }
     },
   resumed: function(){
-    this.pausetime += this.time.pauseDuration * .001
+    this.that.pausetime += this.that.time.pauseDuration * .001
     },
   }
