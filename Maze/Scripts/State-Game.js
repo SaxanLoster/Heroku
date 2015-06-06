@@ -40,7 +40,7 @@ States.game.prototype = {
         this.that.player.body.enable = false
         Game.camera.unfollow( this.that.player )
         var tweens = Game.make.tween( this.that.camera )
-        tweens.onComplete.add( function(){ Game.state.start( 'Over' , true , false , false , this.that.level , this.that.lives ) } , this )
+        tweens.onComplete.add( function(){ Game.state.start( 'over' , true , false , false , this.that.level , this.that.lives ) } , this )
         for( var a = 0 ; a < this.that.items.children.length ; a++ ){
           if( !this.that.items.children[ a ].inCamera ){
             tweens.to( { 'x': this.that.items.children[ a ].x - 320 , 'y': this.that.items.children[ a ].y - 230.75 } , 2000 , Phaser.Easing.Linear.None , false , 500 )

@@ -18,11 +18,11 @@ States.pregame.prototype = {
 
     this.pausetime = 0
     
-    this.x = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetWidth  / 80 ) , this.settings.size )
-    this.y = Math.max( Math.ceil( document.querySelector( 'Canvas' ).offsetHeight / 80 ) , this.settings.size + 1 )
+    this.x = Math.max( Math.ceil( Game.width  / 40 ) , this.settings.size )
+    this.y = Math.max( Math.ceil( Game.height / 40 ) , this.settings.size )
 
     this.ox = Math.floor( ( this.x - this.settings.size ) / 2 )
-    this.oy = Math.floor( ( this.y - this.settings.size ) / 2 ) || 1
+    this.oy = Math.floor( ( this.y - this.settings.size ) / 2 )
     },
   create: function(){
     function GetRandomPosition( that , object ){
@@ -105,7 +105,11 @@ States.pregame.prototype = {
       Game.camera.follow( this.player )
 
     if( this.settings.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
-    this.input.keyboard.onDownCallback = function( that ){ Game.state.start( 'game' , false , false , that ) }( this )
+    this.input.keyboard.callbackContext = this
+    this.input.keyboard.onDownCallback = function(){
+      Game.state.start( 'game' , false , false , this )
+      this.input.keyboard.onDownCallback = function(){}
+      }
     this.input.onDown.addOnce( function(){ Game.state.start( 'game' , false , false , this ) } , this )
     },
   }

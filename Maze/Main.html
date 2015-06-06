@@ -29,7 +29,7 @@
   </Head>
   <Body bgcolor="#202020">
     <Script>
-      var Game = new Phaser.Game( Math.max( 200 , document.body.offsetWidth / 2 ) , Math.max( 200 , document.body.offsetHeight / 2 ) , Phaser.CANVAS )
+      var Game = new Phaser.Game( 600 , 600 , Phaser.CANVAS )
         Game.state.add( 'template' , States.template )
         Game.state.add( 'boot' , States.boot )
         Game.state.add( 'title' , States.title )
