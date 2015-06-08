@@ -78,7 +78,7 @@ enhancements{
 enhancements.Video{
   useFullHeight:false;
   maxWidth:false;
-  displayclick:false;
+  displayClick:true;
   }
 enhancements.ControlBar{
   useAutoHide:false;
@@ -96,8 +96,8 @@ enhancements.ControlBar.seek{
   mouse:true;
   keyboard:true;
   keyRatio:2;
-  stepSeekTime:.2;
-  onlySectionCached:true;
+  stepSeekTime:5;
+  onlySectionCached:false;
   realTime:true;
   }
 enhancements.Player{
@@ -154,7 +154,7 @@ ui.video.display{
   disableBufferView:true;
   removeBackgroundFill:true;
   floodFill:false;
-  displayClick:false;
+  displayClick:true;
   }
 ui.skin{
   file:/younoob_v2_skin_prev4.swf;
