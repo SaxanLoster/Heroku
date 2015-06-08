@@ -3,7 +3,7 @@ main{
   flvMask:http://[domain]/flvs/content/[id].flv;
   currentDomain:;
   useSecure:false;
-  autoPlay:true;
+  autoPlay:false;
   bufferTime:0;
   siteCallback:true;
   domains:site.com;
@@ -154,10 +154,11 @@ ui.video.display{
   disableBufferView:true;
   removeBackgroundFill:true;
   floodFill:false;
-  displayClick:true;
+  displayClick:false;
   }
 ui.skin{
-  file:/younoob_v2_skin_prev4.swf;   useColors:false;
+  file:/younoob_v2_skin_prev4.swf;
+  useColors:false;
   }
 modules.BitrateSwitcher{
   enabled: false;
