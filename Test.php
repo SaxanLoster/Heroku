@@ -10,7 +10,7 @@ main{
   defaultVideo:;
   seekingParamater:?fs=;
   storeSettings:true;
-  windowFocus:true;
+  windowFocus:false;
   allowStoreSettings:false;
   }
 rtmp{
@@ -52,9 +52,9 @@ modules.ChapterPreview{
   width:146;
   height:110;
   preload:true;
-  step:19;
+  step:30;
   showBackground:true;
-  showTimeCode:false;
+  showTimeCode:true;
   fadeDuration:0;
   enabled:1;
   }
