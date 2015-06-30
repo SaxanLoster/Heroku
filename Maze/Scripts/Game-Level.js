@@ -6,7 +6,7 @@ function GetLevelData( Level ){
       Data.flag = 0
       Data.size = 31
       Data.time = 300
-      // break
+      break
     case  1 :
       Data.gems = 1
       Data.flag = 0
