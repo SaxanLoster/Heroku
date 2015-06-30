@@ -8,31 +8,12 @@ States.game.prototype = {
     this.that.player.body.collideWorldBounds = true
     },
   create: function(){
-    this.that.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
-      this.that.joystick.inputEnable()
-      this.that.joystick.settings.singleDirection = false
-      this.that.joystick.settings.maxDistanceInPixels = 20
+    this.that.joystick.inputEnable()
     },
   update: function(){
     var Time = Math.max( Math.ceil( this.that.settings.time - this.time.totalElapsedSeconds() + this.that.pausetime ) , 0 )
-    this.that.infobar.children[ this.that.settings.gems + 1 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
+    this.that.infobar1.children[ 3 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
     Game.physics.arcade.collide( this.that.player , this.that.mazelayer )
-
-    // this.that.items.forEach( function( item ){
-    //   var x = item.x - Game.camera.position.x
-    //   var y = item.y - Game.camera.position.y
-
-    //   // this.that.pointers.children[ item.frame ].position.set()
-    //   // this.that.pointers.children[ item.frame + this.that.settings.gems ].position.set()
-    //   if( item.inCamera ){
-    //     this.that.pointers.children[ item.frame ].alpha = 0
-    //     this.that.pointers.children[ item.frame + this.that.settings.gems ].alpha = 0
-    //     }
-    //   else{
-    //     this.that.pointers.children[ item.frame ].alpha = 1
-    //     this.that.pointers.children[ item.frame + this.that.settings.gems ].alpha = 1
-    //     }
-    //   } , this )
 
     // Win/Lose
       if( this.that.playing && Time <= 0 && this.that.items.children.length > 0 && this.that.win > 0 ){
@@ -54,9 +35,9 @@ States.game.prototype = {
       Game.physics.arcade.overlap( this.that.player , this.that.items , function( player , item ){
         this.that.pausetime += 5
         item.body.enable = false
-        this.that.infobar.add( item )
+        this.that.infobar2.add( item )
         item.position.set( item.x - Game.camera.x , item.y - Game.camera.y )
-        Game.make.tween( item ).to( { x: this.that.infobar.children[ item.frame + 1 ].x , y: this.that.infobar.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
+        Game.make.tween( item ).to( { x: this.that.infobar2.children[ item.frame + 1 ].x , y: this.that.infobar2.children[ item.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
           this.that.win--
           if( this.that.win == 0 && this.that.items.children.length == 0 ){
             this.that.playing = false

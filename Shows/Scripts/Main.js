@@ -62,47 +62,46 @@ Saxan = {
       },
     CountDisplay: function(){
       Saxan.Globals.ShowInfo.Display = []
-      for( var i = 0 ; i < Saxan.Globals.ShowInfo.All.length ; i++ ){
-        var A = Saxan.Globals.ShowInfo.All[ i ].offsetWidth  > 0
-        var B = Saxan.Globals.ShowInfo.All[ i ].offsetHeight > 0
-        if( A && B ) Saxan.Globals.ShowInfo.Display.push( Saxan.Globals.ShowInfo.All[ i ] )
+      for( var a = 0 ; a < Saxan.Globals.ShowInfo.All.length ; a++ ){
+        var A = Saxan.Globals.ShowInfo.All[ a ].offsetWidth > 0
+        var B = Saxan.Globals.ShowInfo.All[ a ].offsetHeight > 0
+        if( A && B ) Saxan.Globals.ShowInfo.Display.push( Saxan.Globals.ShowInfo.All[ a ] )
         }
       },
     CountVisible: function(){
       Saxan.Globals.ShowInfo.Visible = []
-      for( var i = 0 ; i < Saxan.Globals.ShowInfo.Display.length ; i++ ){
-        var A = Saxan.Globals.ShowInfo.Display[ i ].offsetLeft >= window.scrollX
-        var B = Saxan.Globals.ShowInfo.Display[ i ].offsetTop  >= window.scrollY
-        var C = Saxan.Globals.ShowInfo.Display[ i ].offsetLeft <= window.scrollX + Saxan.Globals.MainInfo.ShowsWidth
-        var D = Saxan.Globals.ShowInfo.Display[ i ].offsetTop  <= window.scrollY + Saxan.Globals.MainInfo.ShowsHeight
-        if( A && B && C && D ) Saxan.Globals.ShowInfo.Visible.push( Saxan.Globals.ShowInfo.Display[ i ] )
+      for( var a = 0 ; a < Saxan.Globals.ShowInfo.Display.length ; a++ ){
+        var A = Saxan.Globals.ShowInfo.Display[ a ].offsetLeft >= window.scrollX
+        var B = Saxan.Globals.ShowInfo.Display[ a ].offsetTop >= window.scrollY
+        var C = Saxan.Globals.ShowInfo.Display[ a ].offsetLeft <= window.scrollX + Saxan.Globals.MainInfo.ShowsWidth
+        var D = Saxan.Globals.ShowInfo.Display[ a ].offsetTop <= window.scrollY + Saxan.Globals.MainInfo.ShowsHeight
+        if( A && B && C && D ) Saxan.Globals.ShowInfo.Visible.push( Saxan.Globals.ShowInfo.Display[ a ] )
         }
       },
     CreateInputs: function(){
-      var A = document.getElementById( 'Buttons' )
+      var A = document.querySelector( '#Buttons' )
       removeChildNodes( A )
-      var B
-        B             = document.createElement( 'Input' )
-        B.id          = 'level0'
-        B.type        = 'button'
-        B.value       = localStorage.User == 'Basic' ? 'Configure' : ''
+      var B = document.createElement( 'Input' )
+        B.id = 'level0'
         B.onmousedown = Saxan.Functions.OnConfigureClick
-        A.appendChild( B )
-      for( var i = 0 ; i < Saxan.Globals.ShowInfo.Levels.length && Saxan.Globals.ShowInfo.Levels.length > 1 ; i++ ){
-        B             = document.createElement( 'Input' )
-        B.id          = Saxan.Globals.ShowInfo.Levels[ i ]
-        B.type        = 'button'
-        B.value       = localStorage.User == 'Basic' ? 'Level ' + ( i + 1 ) : ''
-        B.onmousedown = Saxan.Functions.OnLevelClick
+        B.type = 'button'
+        B.value = localStorage.User == 'Basic' ? 'Configure' : ''
+      A.appendChild( B )
+      for( var a = 0 ; a < Saxan.Globals.ShowInfo.Levels.length && Saxan.Globals.ShowInfo.Levels.length > 1 ; a++ ){
+        var B = document.createElement( 'Input' )
+          B.id = Saxan.Globals.ShowInfo.Levels[ a ]
+          B.onmousedown = Saxan.Functions.OnLevelClick
+          B.type = 'button'
+          B.value = localStorage.User == 'Basic' ? 'Level ' + ( a + 1 ) : ''
         A.appendChild( B )
         }
       },
     CreateShowList: function(){
-      var A = document.getElementById( 'Shows' )
+      var A = document.querySelector( '#Shows' )
       removeChildNodes( A )
       function AddData( Title , Data , Link , Search ){
         if( Data ){
-          if( Data.match( /^http/ ) != null ){
+          if( Data.has( /^http/ ) ){
             return Data
             }
           else{
@@ -125,26 +124,25 @@ Saxan = {
       var WikipediaSearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
       for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ){
         var Show = document.createElement( 'Show' )
-        Show.id                  = Saxan.Globals.ShowList[ a ].Title
-        Show.dataset.Amazon      = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Amazon      , AmazonLink      , AmazonSearch )
-        Show.dataset.IMDB        = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].IMDB        , IMDBLink        , IMDBSearch )
-        Show.dataset.Netflix     = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Netflix     , NetflixLink     , NetflixSearch )
-        Show.dataset.WatchSeries = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].WatchSeries , WatchSeriesLink , WatchSeriesSearch )
-        Show.dataset.Wikipedia   = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Wikipedia   , WikipediaLink   , WikipediaSearch )
-        Show.onmousedown         = Saxan.Functions.OnShowClick
-        Show.textContent         = Saxan.Globals.ShowList[ a ].Title
-        Show.classList.add( 'level' + Saxan.Globals.ShowList[ a ].Level )
+          Show.id = Saxan.Globals.ShowList[ a ].Title
+          Show.dataset.Amazon = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Amazon      , AmazonLink      , AmazonSearch )
+          Show.dataset.IMDB = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].IMDB        , IMDBLink        , IMDBSearch )
+          Show.dataset.Netflix = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Netflix     , NetflixLink     , NetflixSearch )
+          Show.dataset.WatchSeries = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].WatchSeries , WatchSeriesLink , WatchSeriesSearch )
+          Show.dataset.Wikipedia = AddData( Saxan.Globals.ShowList[ a ].Title , Saxan.Globals.ShowList[ a ].Wikipedia   , WikipediaLink   , WikipediaSearch )
+          Show.onmousedown = Saxan.Functions.OnShowClick
+          Show.textContent = Saxan.Globals.ShowList[ a ].Title
+          Show.classList.add( 'level' + Saxan.Globals.ShowList[ a ].Level )
         A.appendChild( Show )
         }
-      if( localStorage.User == 'Basic' || Saxan.Globals.ShowInfo.Levels.Length == 1 ){
+      if( localStorage.User === 'Basic' || Saxan.Globals.ShowInfo.Levels.Length === 1 ){
         ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
         if( document.querySelector( '#level1' ) ) document.querySelector( '#level1' ).classList.add( 'active' )
         }
       else{
-        ccss( '.perm'   , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
-        if( localStorage.Permanent != '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
+        ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+        if( localStorage.Permanent !== '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
         for( var a = 0 ; a < Saxan.Globals.ShowInfo.Permanent.length ; a++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ a ] ].classList.add( 'perm' )
-        // for( var a = 0 ; a < document.querySelectorAll( '.level1' ).length ; a++ ) document.querySelectorAll( '.level1' )[ a ].classList.add( 'perm' )
         }
       },
     DeclareStyleSheet: function(){
@@ -154,26 +152,26 @@ Saxan = {
       document.styleSheets[ Saxan.Globals.StyleSheets.A ].addRule( '#Buttons' )
       document.styleSheets[ Saxan.Globals.StyleSheets.A ].addRule( '#Shows' )
 
-      for( var i = 0 ; i < Saxan.Globals.ShowInfo.Levels.length ; i++ ) document.styleSheets[ Saxan.Globals.StyleSheets.B ].addRule( '.' + Saxan.Globals.ShowInfo.Levels[ i ] )
+      for( var a = 0 ; a < Saxan.Globals.ShowInfo.Levels.length ; a++ ) document.styleSheets[ Saxan.Globals.StyleSheets.B ].addRule( '.' + Saxan.Globals.ShowInfo.Levels[ a ] )
 
       document.styleSheets[ Saxan.Globals.StyleSheets.B ].addRule( '.perm' )
       document.styleSheets[ Saxan.Globals.StyleSheets.B ].addRule( '.hide' )
       },
     GetCR: function(){
-      var CC = Saxan.Globals.ColsInfo.Count.pad( 2 , ' ' )
-      var RC = Saxan.Globals.RowsInfo.Count.pad( 2 , ' ' )
-      var CM = Saxan.Globals.ColsInfo.Max.pad( 2 , ' ' )
-      var RM = Saxan.Globals.RowsInfo.Max.pad( 2 , ' ' )
-      console.log( '\tCount:\t%s x %s\n\tMax:\t%s x %s' , CC , RC , CM , RM )
+      var A = Saxan.Globals.ColsInfo.Count.pad( 2 , ' ' )
+      var B = Saxan.Globals.RowsInfo.Count.pad( 2 , ' ' )
+      var C = Saxan.Globals.ColsInfo.Max.pad( 2 , ' ' )
+      var D = Saxan.Globals.RowsInfo.Max.pad( 2 , ' ' )
+      console.log( '\tCount:\t%s x %s\n\tMax:\t%s x %s' , A , B , C , D )
       },
     HideAllShows: function(){
-      var I = document.getElementsByTagName( 'input' )
-      var L = Saxan.Globals.ShowInfo.Levels
-      for( var i = 0 ; i < I.length ; i++ ) I[ i ].classList.remove( 'active' )
-      for( var i = 0 ; i < L.length ; i++ ) ccss( '.' + L[ i ] , 'display' , '' , Saxan.Globals.StyleSheets.B )
+      var A = document.getElementsByTagName( 'input' )
+      var B = Saxan.Globals.ShowInfo.Levels
+      for( var a = 0 ; a < A.length ; a++ ) A[ a ].classList.remove( 'active' )
+      for( var a = 0 ; a < B.length ; a++ ) ccss( '.' + B[ a ] , 'display' , '' , Saxan.Globals.StyleSheets.B )
       },
     MainDisplayFunctions: function(){
-      Saxan.Globals.ColsInfo.Max = Math.floor( Saxan.Globals.MainInfo.ShowsWidth  / Saxan.Globals.ShowInfo.BaseWidth )
+      Saxan.Globals.ColsInfo.Max = Math.floor( Saxan.Globals.MainInfo.ShowsWidth / Saxan.Globals.ShowInfo.BaseWidth )
       Saxan.Globals.RowsInfo.Max = Math.floor( Saxan.Globals.MainInfo.ShowsHeight / Saxan.Globals.ShowInfo.BaseHeight )
       Saxan.Globals.ShowInfo.Max = Saxan.Globals.ColsInfo.Max * Saxan.Globals.RowsInfo.Max
       Saxan.Functions.CountDisplay()
@@ -183,13 +181,12 @@ Saxan = {
       },
     OnChange: function(){
       scrollTo( 0 , 0 )
-      var I = document.getElementsByTagName( 'input' ).length
-      console.log( I )
-      Saxan.Globals.MainInfo.ButtonsHeight = I && 50 || Math.ceil( innerWidth / ( I * 5 ) )
-      Saxan.Globals.MainInfo.ShowsHeight   = innerHeight - Saxan.Globals.MainInfo.ButtonsHeight
-      Saxan.Globals.MainInfo.ShowsWidth    = innerWidth
+      var A = document.getElementsByTagName( 'input' ).length
+      Saxan.Globals.MainInfo.ButtonsHeight = A && 50 || Math.ceil( innerWidth / ( A * 5 ) )
+      Saxan.Globals.MainInfo.ShowsHeight = innerHeight - Saxan.Globals.MainInfo.ButtonsHeight
+      Saxan.Globals.MainInfo.ShowsWidth = innerWidth
       ccss( '#Buttons' , 'height' , Saxan.Globals.MainInfo.ButtonsHeight + 'px' , Saxan.Globals.StyleSheets.A )
-      ccss( 'input'    , 'width'  , innerWidth / I                       + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( 'input' , 'width' , innerWidth / A + 'px' , Saxan.Globals.StyleSheets.A )
       Saxan.Functions.MainDisplayFunctions()
       },
     OnConfigureClick: function(){
@@ -220,19 +217,19 @@ Saxan = {
         case 0 :
           this.classList.toggle( 'active' )
           if( this.classList.contains( 'active' ) ){
-            if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
+            if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm' , 'display' , '' , Saxan.Globals.StyleSheets.B )
             ccss( '.' + this.id , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
             }
           else{
             ccss( '.' + this.id , 'display' , '' , Saxan.Globals.StyleSheets.B )
-            if( document.getElementsByClassName( 'active' ).length == 0 ) ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
+            if( document.getElementsByClassName( 'active' ).length === 0 ) ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
             }
           Saxan.Functions.MainDisplayFunctions()
           break
         case 1 :
           Saxan.Functions.HideAllShows()
           this.classList.add( 'active' )
-          if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm'       , 'display' , ''      , Saxan.Globals.StyleSheets.B )
+          if( !Saxan.Globals.Booleans.Permanent ) ccss( '.perm' , 'display' , '' , Saxan.Globals.StyleSheets.B )
           ccss( '.' + this.id , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
           Saxan.Functions.MainDisplayFunctions()
           break
@@ -246,12 +243,12 @@ Saxan = {
     OnScroll: function(){
       if( !event.ctrlKey ){
         event.preventDefault()
-        var D = event.deltaY > 0 ? 1 : -1
+        var A = event.deltaY > 0 ? 1 : -1
         if( Saxan.Globals.Booleans.LeftToRight ){
-          scrollBy( 0 , D * Saxan.Globals.ShowInfo.Height )
+          scrollBy( 0 , A * Saxan.Globals.ShowInfo.Height )
           }
         else{
-          scrollBy( D * Saxan.Globals.ShowInfo.Width , 0 )
+          scrollBy( A * Saxan.Globals.ShowInfo.Width , 0 )
           }
         }
         Saxan.Functions.StyleElements()
@@ -308,34 +305,26 @@ Saxan = {
       },
     PermanentItemToggle: function( ShowTitle ){
       switch( Saxan.Globals.ShowInfo.Permanent.has( ShowTitle ) ){
-        case  true : Saxan.Globals.ShowInfo.Permanent.splice( Saxan.Globals.ShowInfo.Permanent.indexOf( ShowTitle ) , 1 ) ; break
+        case true : Saxan.Globals.ShowInfo.Permanent.splice( Saxan.Globals.ShowInfo.Permanent.indexOf( ShowTitle ) , 1 ) ; break
         case !true : Saxan.Globals.ShowInfo.Permanent.push( ShowTitle ) ; break
         }
       Saxan.Globals.ShowInfo.Permanent.sort()
       localStorage.Permanent = Saxan.Globals.ShowInfo.Permanent.join( '|' )
       },
     RowsAndColumns: function(){
-      var A = Saxan.Globals.ShowInfo.Display.length <= Saxan.Globals.ShowInfo.Max,
-        B = Saxan.Globals.Booleans.MinimunSize,
-        C = Saxan.Globals.Booleans.LeftToRight
+      var A = Saxan.Globals.ShowInfo.Display.length <= Saxan.Globals.ShowInfo.Max
+      var B = Saxan.Globals.Booleans.MinimunSize
+      var C = Saxan.Globals.Booleans.LeftToRight
       switch( true ){
-        case  A &&  B :
+        case A && B :
           Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
           Saxan.Globals.RowsInfo.Count = Saxan.Globals.RowsInfo.Max
           break
-        case  A && !B :
+        case A && !B :
           Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
           Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Count )
           break
-        // case  A && !B &&  C :
-        //   Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
-        //   Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Count )
-        //   break
-        // case  A && !B && !C :
-        //   Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
-        //   Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Count )
-        //   break
-        case !A &&  C :
+        case !A && C :
           Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
           Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
           break
@@ -351,42 +340,46 @@ Saxan = {
       Saxan.Functions.StyleElements()
       },
     ShowLinks: function( Show ){
-      var T = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.toHyperLink() + '\' )" >' + Show.id + '</div>'
-      var M = '\
-        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Amazon      + '\' )" >Amazon Prime</div>\
-        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.IMDB        + '\' )" >IMDB</div>\
-        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Netflix     + '\' )" >Netflix</div>\
+      var A = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.toHyperLink() + '\' )" >' + Show.id + '</div>'
+      var B = '\
+        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Amazon + '\' )" >Amazon Prime</div>\
+        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.IMDB + '\' )" >IMDB</div>\
+        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Netflix + '\' )" >Netflix</div>\
         <div class="randomLinks" onclick="window.open( \'' + Show.dataset.WatchSeries + '\' )" >Watch Series</div>\
-        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Wikipedia   + '\' )" >Wikipedia</div>\
+        <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Wikipedia + '\' )" >Wikipedia</div>\
         '
-      var B = 'Exit'
-      var C = 0
-      customAlert( T , M , B , C )
+      var C = 'Exit'
+      var D = 0
+      customAlert( A , B , C , D )
       },
     StyleElements: function(){
       Saxan.Globals.ShowInfo.Height = Math.floor( Saxan.Globals.MainInfo.ShowsHeight / Math.min( Saxan.Globals.RowsInfo.Count , Saxan.Globals.RowsInfo.Max ) )
-      Saxan.Globals.ShowInfo.Width  = Math.floor( Saxan.Globals.MainInfo.ShowsWidth  / Math.min( Saxan.Globals.ColsInfo.Count , Saxan.Globals.ColsInfo.Max ) )
+      Saxan.Globals.ShowInfo.Width = Math.floor( Saxan.Globals.MainInfo.ShowsWidth / Math.min( Saxan.Globals.ColsInfo.Count , Saxan.Globals.ColsInfo.Max ) )
 
-      var M = ( Saxan.Globals.MainInfo.ShowsHeight - Saxan.Globals.ShowInfo.Height * Math.min( Saxan.Globals.RowsInfo.Count , Saxan.Globals.RowsInfo.Max ) ) / 2
+      var A = ( Saxan.Globals.MainInfo.ShowsHeight - Saxan.Globals.ShowInfo.Height * Math.min( Saxan.Globals.RowsInfo.Count , Saxan.Globals.RowsInfo.Max ) ) / 2
 
-      ccss( 'show' , 'height'     , Saxan.Globals.ShowInfo.Height + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( 'show' , 'height' , Saxan.Globals.ShowInfo.Height + 'px' , Saxan.Globals.StyleSheets.A )
       ccss( 'show' , 'lineHeight' , Saxan.Globals.ShowInfo.Height + 'px' , Saxan.Globals.StyleSheets.A )
-      ccss( 'show' , 'width'      , Saxan.Globals.ShowInfo.Width  + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( 'show' , 'width' , Saxan.Globals.ShowInfo.Width  + 'px' , Saxan.Globals.StyleSheets.A )
 
-      ccss( '#Shows' , 'height'       , Saxan.Globals.ShowInfo.Height * Saxan.Globals.RowsInfo.Count + 'px' , Saxan.Globals.StyleSheets.A )
-      ccss( '#Shows' , 'marginBottom' , M + Saxan.Globals.MainInfo.ButtonsHeight                     + 'px' , Saxan.Globals.StyleSheets.A )
-      ccss( '#Shows' , 'marginTop'    , M                                                            + 'px' , Saxan.Globals.StyleSheets.A )
-      ccss( '#Shows' , 'width'        , Saxan.Globals.ShowInfo.Width  * Saxan.Globals.ColsInfo.Count + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( '#Shows' , 'height' , Saxan.Globals.ShowInfo.Height * Saxan.Globals.RowsInfo.Count + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( '#Shows' , 'marginBottom' , A + Saxan.Globals.MainInfo.ButtonsHeight + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( '#Shows' , 'marginTop' , A + 'px' , Saxan.Globals.StyleSheets.A )
+      ccss( '#Shows' , 'width' , Saxan.Globals.ShowInfo.Width  * Saxan.Globals.ColsInfo.Count + 'px' , Saxan.Globals.StyleSheets.A )
 
       Saxan.Globals.Booleans.LeftToRight ? ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.Globals.StyleSheets.A ) : ccss( '#Shows' , 'webkitColumnCount' , Saxan.Globals.ColsInfo.Count , Saxan.Globals.StyleSheets.A )
 
       Saxan.Functions.CountVisible()
 
-      var A = [] , B = Math.min( Saxan.Globals.ColsInfo.Count , Saxan.Globals.ColsInfo.Max ) , C = ( B - 1 ) / 2 , D = true , V = Saxan.Globals.ShowInfo.Visible
+      var A = []
+      var B = Math.min( Saxan.Globals.ColsInfo.Count , Saxan.Globals.ColsInfo.Max )
+      var C = ( B - 1 ) / 2
+      var D = true
+      var E = Saxan.Globals.ShowInfo.Visible
 
       for( var i = 0 ; i < B ; i++ ){ if( i == C ){ A.push( 'center' ) } else{ D ? A.push( 'left' ) : A.push( 'right' ) ; D = !D } }
-      if(  Saxan.Globals.Booleans.LeftToRight ) for( var i = 0 ; i < V.length ; i++ ) V[ i ].style.textAlign = A[ i % Saxan.Globals.ColsInfo.Count ]
-      if( !Saxan.Globals.Booleans.LeftToRight ) for( var i = 0 ; i < V.length ; i++ ) V[ i ].style.textAlign = A[ Math.floor( i / Saxan.Globals.RowsInfo.Count ) ]
+      if( Saxan.Globals.Booleans.LeftToRight ) for( var i = 0 ; i < E.length ; i++ ) E[ i ].style.textAlign = A[ i % Saxan.Globals.ColsInfo.Count ]
+      if( !Saxan.Globals.Booleans.LeftToRight ) for( var i = 0 ; i < E.length ; i++ ) E[ i ].style.textAlign = A[ Math.floor( i / Saxan.Globals.RowsInfo.Count ) ]
       },
     },
   }

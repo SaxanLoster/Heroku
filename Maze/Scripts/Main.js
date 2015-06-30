@@ -34,5 +34,4 @@ States.template.prototype = {
 // gemhunter
 // diff find gem time
 // eary game zoom
-// gem pointer
 // rollover time

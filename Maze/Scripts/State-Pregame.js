@@ -17,9 +17,11 @@ States.pregame.prototype = {
     this.maze = new Maze( this.settings.size )
 
     this.pausetime = 0
+
+    this.tilesize = 40
     
-    this.x = Math.max( Math.ceil( Game.width  / 40 ) , this.settings.size )
-    this.y = Math.max( Math.ceil( Game.height / 40 ) , this.settings.size )
+    this.x = Math.max( Math.ceil( Game.width  / this.tilesize ) , this.settings.size )
+    this.y = Math.max( Math.ceil( Game.height / this.tilesize ) , this.settings.size )
 
     this.ox = Math.floor( ( this.x - this.settings.size ) / 2 )
     this.oy = Math.floor( ( this.y - this.settings.size ) / 2 )
@@ -32,7 +34,7 @@ States.pregame.prototype = {
         }
       while( that.maze[ x ][ y ] == 0 || that.taken.indexOf( x + 'x' + y ) != -1 )
       that.taken.push( x + 'x' + y )
-      object.position.set( ( x + that.ox ) * 40 + 20 , ( y + that.oy ) * 40 + 20 )
+      object.position.set( ( x + that.ox ) * that.tilesize + 20 , ( y + that.oy ) * that.tilesize + 20 )
       }
 
     Game.physics.startSystem( Phaser.Physics.ARCADE )
@@ -46,11 +48,11 @@ States.pregame.prototype = {
       right: Game.input.keyboard.addKey( Phaser.Keyboard.D ),
       }
 
-    this.map = Game.add.tilemap( null , 40 , 40 , this.x , this.y )
+    this.map = Game.add.tilemap( null , this.tilesize , this.tilesize , this.x , this.y )
       this.map.addTilesetImage( 'Maze' , 'Maze' , 40 , 40 , 0 , 1 )
       this.map.setCollisionByIndex( 0 , true )
 
-    this.mazelayer = this.map.create( 'Maze Layer' , this.x , this.y , 40 , 40 )
+    this.mazelayer = this.map.create( 'Maze Layer' , this.x , this.y , this.tilesize , this.tilesize )
       this.mazelayer.resizeWorld()
       for( var a = 0 ; a < this.settings.size ; a++ ){
         for( var b = 0 ; b < this.settings.size ; b++ ){
@@ -66,37 +68,33 @@ States.pregame.prototype = {
           this.items.children[ a ].scale.set( .5 )
         }
 
-    this.infobar = Game.add.group()
-      Game.add.graphics( 0 , 0 , this.infobar )
-        this.infobar.children[ 0 ].beginFill( 0xFFFFFF , 1 )
-        this.infobar.children[ 0 ].drawRect( 0 , 0 , Game.width , 40 )
-        this.infobar.children[ 0 ].endFill()
-      for( var a = 0 ; a < this.settings.gems ; a++ ){
-        Game.add.sprite( Game.width * ( ( a + 1 ) * .02 ) + ( 10 + ( a * 20 ) ) , 20 , 'Items' , a , this.infobar )
-          this.infobar.children[ a + 1 ].anchor.set( .5 )
-          this.infobar.children[ a + 1 ].scale.set( .5 )
-          this.infobar.children[ a + 1 ].tint = 0x000000
-        }
+    this.infobar1  = Game.add.group()
+      Game.add.graphics( 0 , 0 , this.infobar1 )
+      console.log( this.infobar1.children )
+        this.infobar1.children[ 0 ].beginFill( 0xFFFFFF , 1 )
+        this.infobar1.children[ 0 ].drawRect( 0 , 0 , Game.width , 40 )
+        this.infobar1.children[ 0 ].endFill()
+      Game.add.text( 5 , 20 , 'Level: ' + this.level , { font: '20px Arial' , fill: '#000' } , this.infobar1 )
+        this.infobar1.children[ 1 ].anchor.set( 0 , .5 )
+      Game.add.text( Game.width / 2 , 20 , 'Lives: ' + this.lives , { font: '20px Arial' , fill: '#000' } , this.infobar1 )
+        this.infobar1.children[ 2 ].anchor.set( .5 , .5 )
       var Time = Math.max( Math.ceil( this.settings.time - this.time.totalElapsedSeconds() + this.pausetime ) , 0 )
-      Game.add.text( this.infobar.width - 5 , 20 , Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000' } , this.infobar )
-        this.infobar.children[ this.settings.gems + 1 ].anchor.set( 1 , .5 )
-      this.infobar.fixedToCamera = true
+      Game.add.text( this.infobar1.width - 5 , 20 , Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000' } , this.infobar1 )
+        this.infobar1.children[ 3 ].anchor.set( 1 , .5 )
+      this.infobar1.fixedToCamera = true
 
-    this.pointers = Game.add.group( Game.world , 'Pointers' )
+    this.infobar2 = Game.add.group()
+      Game.add.graphics( 0 , Game.height - 40 , this.infobar2 )
+        this.infobar2.children[ 0 ].beginFill( 0xFFFFFF , 1 )
+        this.infobar2.children[ 0 ].drawRect( 0 , 0 , Game.width , 40 )
+        this.infobar2.children[ 0 ].endFill()
       for( var a = 0 ; a < this.settings.gems ; a++ ){
-        Game.add.graphics( 100 + 40 * a , 100 , this.pointers )
-          this.pointers.children[ a ].beginFill( 0xFFFFFF , 1 )
-          this.pointers.children[ a ].drawCircle( 0 , 0 , 20 )
-          this.pointers.children[ a ].endFill()
-          this.pointers.children[ a ].alpha = 0
+        Game.add.sprite( Game.width * ( ( a + 1 ) * .02 ) + ( 10 + ( a * 20 ) ) , Game.height - 20 , 'Items' , a , this.infobar2 )
+          this.infobar2.children[ a + 1 ].anchor.set( .5 )
+          this.infobar2.children[ a + 1 ].scale.set( .5 )
+          this.infobar2.children[ a + 1 ].tint = 0x000000
         }
-      for( var a = 0 ; a < this.settings.gems ; a++ ){
-        this.pointers.create( 100 + 40 * a , 100 , 'Items' , a )
-          this.pointers.children[ this.settings.gems + a ].anchor.set( .5 )
-          this.pointers.children[ this.settings.gems + a ].scale.set( .25 )
-          this.pointers.children[ this.settings.gems + a ].alpha = 0
-        }
-      this.pointers.fixedToCamera = true
+      this.infobar2.fixedToCamera = true
 
     this.player = Game.add.sprite( 0 , 0 , 'Player' )
       GetRandomPosition( this , this.player )
@@ -104,7 +102,12 @@ States.pregame.prototype = {
       this.player.scale.setTo( .75 )
       Game.camera.follow( this.player )
 
-    if( this.settings.size * 40 + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
+    this.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
+      // this.joystick.inputEnable()
+      this.joystick.settings.numDirections = 8
+      this.joystick.settings.maxDistanceInPixels = 20
+
+    if( this.settings.size * this.tilesize + 40 < Game.height ) Game.camera.bounds.setTo( 0, 0, Game.world.width , Game.height )
     this.input.keyboard.callbackContext = this
     this.input.keyboard.onDownCallback = function(){
       Game.state.start( 'game' , false , false , this )

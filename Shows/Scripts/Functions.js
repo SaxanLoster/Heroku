@@ -46,7 +46,7 @@ Number.prototype.R = function( Size ){
   return Math.R( this * S ) / S
   }
 String.prototype.has = function( string ){
-  return ( this.match( string ) != null )
+  return ( this.match( string ) !== null )
   }
 String.prototype.padB = function( size , text ){
   text = text == 'enum' ? '1234567890' : text
