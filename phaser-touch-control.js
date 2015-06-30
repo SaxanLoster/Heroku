@@ -122,16 +122,16 @@
         this.input.activePointer.position.x = initialPoint.x
         }
       else{
-        // deltaX = deltaX > 0 ? ( d * Math.sqrt( 2 ) / 2 ) : ( d * Math.sqrt( 2 ) / -2 )
-        // deltaY = deltaY > 0 ? ( d * Math.sqrt( 2 ) / 2 ) : ( d * Math.sqrt( 2 ) / -2 )
-        // this.input.activePointer.position.x = initialPoint.x + deltaX
-        // this.input.activePointer.position.y = initialPoint.y + deltaY
+        deltaX = deltaX > 0 ? ( d * Math.sqrt( 2 ) / 2 ) : ( d * Math.sqrt( 2 ) / -2 )
+        deltaY = deltaY > 0 ? ( d * Math.sqrt( 2 ) / 2 ) : ( d * Math.sqrt( 2 ) / -2 )
+        this.input.activePointer.position.x = initialPoint.x + deltaX
+        this.input.activePointer.position.y = initialPoint.y + deltaY
         }
       }
     var angle = initialPoint.angle( this.input.activePointer.position );
     if( d > maxDistanceInPixels ){
-      deltaX = Math.cos( angle ) * maxDistanceInPixels;
-      deltaY = Math.sin( angle ) * maxDistanceInPixels;
+      deltaX = deltaX ? Math.cos( angle ) * maxDistanceInPixels : 0;
+      deltaY = deltaY ? Math.sin( angle ) * maxDistanceInPixels : 0;
       }
     this.speed.x = parseInt( ( deltaX / maxDistanceInPixels ) * 100 * -1 , 10 );
     this.speed.y = parseInt( ( deltaY / maxDistanceInPixels ) * 100 * -1 , 10 );

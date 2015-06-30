@@ -54,8 +54,39 @@ States.game.prototype = {
       var Speed = 100
 
       if( true && Game.input.activePointer.isDown ){
-        this.that.player.body.velocity.x = Speed * this.that.joystick.speed.x * -.01 * 1.17
-        this.that.player.body.velocity.y = Speed * this.that.joystick.speed.y * -.01 * 1.17
+        // this.that.player.body.velocity.x = Speed * this.that.joystick.speed.x * -.01 * 1.17
+        // this.that.player.body.velocity.y = Speed * this.that.joystick.speed.y * -.01 * 1.17
+        if( this.that.joystick.cursors.right ) this.that.player.body.velocity.x += +Speed
+        if( this.that.joystick.cursors.down ) this.that.player.body.velocity.y += +Speed
+        if( this.that.joystick.cursors.left ) this.that.player.body.velocity.x += -Speed
+        if( this.that.joystick.cursors.up ) this.that.player.body.velocity.y += -Speed
+
+        switch( true ){
+          case this.that.joystick.cursors.up && this.that.joystick.cursors.right :
+            this.that.player.rotation = Math.PI * 0.25
+            break
+          case this.that.joystick.cursors.right && this.that.joystick.cursors.down :
+            this.that.player.rotation = Math.PI * 0.75
+            break
+          case this.that.joystick.cursors.down && this.that.joystick.cursors.left :
+            this.that.player.rotation = Math.PI * 1.25
+            break
+          case this.that.joystick.cursors.left && this.that.joystick.cursors.up :
+            this.that.player.rotation = Math.PI * 1.75
+            break
+          case this.that.joystick.cursors.up :
+            this.that.player.rotation = Math.PI * 0.00
+            break
+          case this.that.joystick.cursors.right :
+            this.that.player.rotation = Math.PI * 0.50
+            break
+          case this.that.joystick.cursors.down :
+            this.that.player.rotation = Math.PI * 1.00
+            break
+          case this.that.joystick.cursors.left :
+            this.that.player.rotation = Math.PI * 1.50
+            break
+          }
         }
       else{
         if( this.that.cursors.right.isDown || this.that.wasd.right.isDown ) this.that.player.body.velocity.x += +Speed
