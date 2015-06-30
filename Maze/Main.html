@@ -29,6 +29,7 @@
   </Head>
   <Body bgcolor="#202020">
     <Script>
+      alert( navigator.userAgent )
       if( /Mobi/i.test( navigator.userAgent ) ) var Game = new Phaser.Game( 320 , 320 , Phaser.CANVAS )
       else var Game = new Phaser.Game( 600 , 600 , Phaser.CANVAS )
       Game.state.add( 'template' , States.template )
