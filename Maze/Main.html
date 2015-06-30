@@ -30,7 +30,7 @@
   </Head>
   <Body bgcolor="#202020">
     <Script>
-      if( /Mobi/i.test( navigator.userAgent ) ) var Game = new Phaser.Game( 320 , 400 , Phaser.CANVAS )
+      if( /Mobi/i.test( navigator.userAgent ) ) var Game = new Phaser.Game( 280 , 360 , Phaser.CANVAS )
       else var Game = new Phaser.Game( 600 , 680 , Phaser.CANVAS )
       Game.state.add( 'template' , States.template )
       Game.state.add( 'boot' , States.boot )
