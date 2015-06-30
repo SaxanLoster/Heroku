@@ -15,7 +15,7 @@ States.game.prototype = {
     this.that.infobar1.children[ 3 ].setText( Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) )
     Game.physics.arcade.collide( this.that.player , this.that.mazelayer )
 
-    /* Win/Lose /
+    /* Win/Lose */
       if( this.that.playing && Time <= 0 && this.that.items.children.length > 0 && this.that.win > 0 ){
         this.that.playing = false
         this.that.player.body.enable = false
@@ -47,7 +47,7 @@ States.game.prototype = {
         } , null , this  )
       /**/
 
-    // Player Movement
+    /* Player Movement */
       this.that.player.body.velocity.x = 0
       this.that.player.body.velocity.y = 0
 
@@ -90,6 +90,7 @@ States.game.prototype = {
             break
           }
         }
+      /**/
     },
   resumed: function(){
     this.that.pausetime += this.that.time.pauseDuration * .001
