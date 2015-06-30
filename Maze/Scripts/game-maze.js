@@ -383,7 +383,7 @@ function BraidedGrowingTree( Size ){
   Cells.push( Paths[ Math.floor( Math.random() * Paths.length ) ] )
   Cells[ 0 ].v = 1
   while( Cells.length > 0 ){
-    var Cell = GetCell( Cells , [ 2 , 3 , 3 ,  4 ] )
+    var Cell = GetCell( Cells , [ 2 , 3 , 3 , 4 ] )
     var Neighbors = GetNeighbors( Cell )
     if( Neighbors.length == 0 ) Cells.splice( Cells.indexOf( Cell ) , 1 )
     else CarvePath( Cell , Neighbors[ Math.floor( Math.random() * Neighbors.length ) ] )
