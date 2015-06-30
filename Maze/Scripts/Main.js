@@ -1,13 +1,14 @@
-var States = {
+var states = {
   template: function(){},
   boot: function(){},
   title: function(){},
   pregame: function(){},
   game: function(){},
+  postgame: function(){},
   over: function(){},
   }
 
-States.template.prototype = {
+states.template.prototype = {
   init: function(){},
   preload: function(){},
   create: function(){},

@@ -1,138 +1,138 @@
-function GetLevelData( Level ){
-  var Data = {}
-  switch( Level ){
+function GetLevelData( level ){
+  var data = {}
+  switch( level ){
     case  1 :
-      Data.gems = 8
-      Data.flag = 0
-      Data.size = 31
-      Data.time = 300
+      data.gems = 8
+      data.flag = 0
+      data.size = 21
+      data.time = 0
       // break
     case  1 :
-      Data.gems = 1
-      Data.flag = 0
-      Data.size = 7
-      Data.time = 6
+      data.gems = 1
+      data.flag = 0
+      data.size = 7
+      data.time = 10
       break
     case  2 :
-      Data.gems = 1
-      Data.flag = 0
-      Data.size = 11
-      Data.time = 11
+      data.gems = 1
+      data.flag = 0
+      data.size = 11
+      data.time = 15
       break
     case  3 :
-      Data.gems = 2
-      Data.flag = 0
-      Data.size = 11
-      Data.time = 17
+      data.gems = 2
+      data.flag = 0
+      data.size = 11
+      data.time = 20
       break
     case  4 :
-      Data.gems = 2
-      Data.flag = 0
-      Data.size = 15
-      Data.time = 24
+      data.gems = 2
+      data.flag = 0
+      data.size = 15
+      data.time = 27
       break
     case  5 :
-      Data.gems = 3
-      Data.flag = 0
-      Data.size = 15
-      Data.time = 32
+      data.gems = 3
+      data.flag = 0
+      data.size = 15
+      data.time = 35
       break
     case  6 :
-      Data.gems = 3
-      Data.flag = 1
-      Data.size = 19
-      Data.time = 41
+      data.gems = 3
+      data.flag = 1
+      data.size = 19
+      data.time = 43
       break
     case  7 :
-      Data.gems = 4
-      Data.flag = 1
-      Data.size = 19
-      Data.time = 51
+      data.gems = 4
+      data.flag = 1
+      data.size = 19
+      data.time = 54
       break
     case  8 :
-      Data.gems = 4
-      Data.flag = 1
-      Data.size = 23
-      Data.time = 62
+      data.gems = 4
+      data.flag = 1
+      data.size = 23
+      data.time = 65
       break
     case  9 :
-      Data.gems = 5
-      Data.flag = 1
-      Data.size = 23
-      Data.time = 74
+      data.gems = 5
+      data.flag = 1
+      data.size = 23
+      data.time = 74
       break
     case 10 :
-      Data.gems = 5
-      Data.flag = 1
-      Data.size = 27
-      Data.time = 87
+      data.gems = 5
+      data.flag = 1
+      data.size = 27
+      data.time = 87
       break
     case 11 :
-      Data.gems = 6
-      Data.flag = 2
-      Data.size = 27
-      Data.time = 101
+      data.gems = 6
+      data.flag = 2
+      data.size = 27
+      data.time = 101
       break
     case 12 :
-      Data.gems = 6
-      Data.flag = 2
-      Data.size = 31
-      Data.time = 116
+      data.gems = 6
+      data.flag = 2
+      data.size = 31
+      data.time = 116
       break
     case 13 :
-      Data.gems = 7
-      Data.flag = 2
-      Data.size = 31
-      Data.time = 132
+      data.gems = 7
+      data.flag = 2
+      data.size = 31
+      data.time = 132
       break
     case 14 :
-      Data.gems = 7
-      Data.flag = 2
-      Data.size = 35
-      Data.time = 149
+      data.gems = 7
+      data.flag = 2
+      data.size = 35
+      data.time = 149
       break
     case 15 :
-      Data.gems = 8
-      Data.flag = 2
-      Data.size = 35
-      Data.time = 167
+      data.gems = 8
+      data.flag = 2
+      data.size = 35
+      data.time = 167
       break
     case 16 :
-      Data.gems = 8
-      Data.flag = 3
-      Data.size = 39
-      Data.time = 186
+      data.gems = 8
+      data.flag = 3
+      data.size = 39
+      data.time = 186
       break
     case 17 :
-      Data.gems = 8
-      Data.flag = 3
-      Data.size = 43
-      Data.time = 240
+      data.gems = 8
+      data.flag = 3
+      data.size = 43
+      data.time = 240
       break
     case 18 :
-      Data.gems = 8
-      Data.flag = 3
-      Data.size = 45
-      Data.time = 280
+      data.gems = 8
+      data.flag = 3
+      data.size = 45
+      data.time = 280
       break
     case 19 :
-      Data.gems = 8
-      Data.flag = 3
-      Data.size = 47
-      Data.time = 320
+      data.gems = 8
+      data.flag = 3
+      data.size = 47
+      data.time = 320
       break
     case 20 :
-      Data.gems = 8
-      Data.flag = 3
-      Data.size = 49
-      Data.time = 360
+      data.gems = 8
+      data.flag = 3
+      data.size = 49
+      data.time = 360
       break
     default :
-      Data.gems = 8
-      Data.flag = 4
-      Data.size = 49
-      Data.time = 360 - ( Level - 20 ) * 30
+      data.gems = 8
+      data.flag = 4
+      data.size = 49
+      data.time = 360 - ( level - 20 ) * 30
       break
     }
-  return Data
+  return data
   }

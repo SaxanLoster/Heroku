@@ -3,14 +3,15 @@
     <Title>Maze Game</Title>
     <Script src="../phaser.js"></Script>
     <Script src="../phaser-touch-control.js"></Script>
-    <Script src="Scripts/Main.js"></Script>
-    <Script src="Scripts/Game-Level.js"></Script>
-    <Script src="Scripts/Game-Maze.js"></Script>
-    <Script src="Scripts/State-Boot.js"></Script>
-    <Script src="Scripts/State-Title.js"></Script>
-    <Script src="Scripts/State-Pregame.js"></Script>
-    <Script src="Scripts/State-Game.js"></Script>
-    <Script src="Scripts/State-Over.js"></Script>
+    <Script src="Scripts/main.js"></Script>
+    <Script src="Scripts/game-level.js"></Script>
+    <Script src="Scripts/game-maze.js"></Script>
+    <Script src="Scripts/state-boot.js"></Script>
+    <Script src="Scripts/state-title.js"></Script>
+    <Script src="Scripts/state-pregame.js"></Script>
+    <Script src="Scripts/state-game.js"></Script>
+    <Script src="Scripts/state-postgame.js"></Script>
+    <Script src="Scripts/state-over.js"></Script>
     <Style>
       * {
         margin: 0;
@@ -30,15 +31,16 @@
   </Head>
   <Body bgcolor="#202020">
     <Script>
-      if( /Mobi/i.test( navigator.userAgent ) ) var Game = new Phaser.Game( 280 , 360 , Phaser.CANVAS )
-      else var Game = new Phaser.Game( 600 , 680 , Phaser.CANVAS )
-      Game.state.add( 'template' , States.template )
-      Game.state.add( 'boot' , States.boot )
-      Game.state.add( 'title' , States.title )
-      Game.state.add( 'pregame' , States.pregame )
-      Game.state.add( 'game' , States.game )
-      Game.state.add( 'over' , States.over )
-      Game.state.start( 'boot' )
+      if( /Mobi/i.test( navigator.userAgent ) ) var game = new Phaser.Game( 280 , 360 , Phaser.CANVAS )
+      else var game = new Phaser.Game( 600 , 680 , Phaser.CANVAS )
+      game.state.add( 'template' , states.template )
+      game.state.add( 'boot' , states.boot )
+      game.state.add( 'title' , states.title )
+      game.state.add( 'pregame' , states.pregame )
+      game.state.add( 'game' , states.game )
+      game.state.add( 'postgame' , states.postgame )
+      game.state.add( 'over' , states.over )
+      game.state.start( 'boot' )
       </Script>
     </Body>
 </HTML>
