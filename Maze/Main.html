@@ -29,14 +29,15 @@
   </Head>
   <Body bgcolor="#202020">
     <Script>
-      var Game = new Phaser.Game( 600 , 600 , Phaser.CANVAS )
-        Game.state.add( 'template' , States.template )
-        Game.state.add( 'boot' , States.boot )
-        Game.state.add( 'title' , States.title )
-        Game.state.add( 'pregame' , States.pregame )
-        Game.state.add( 'game' , States.game )
-        Game.state.add( 'over' , States.over )
-        Game.state.start( 'boot' )
+      if( /Mobi/i.test( navigator.userAgent ) ) var Game = new Phaser.Game( 320 , 320 , Phaser.CANVAS )
+      else var Game = new Phaser.Game( 600 , 600 , Phaser.CANVAS )
+      Game.state.add( 'template' , States.template )
+      Game.state.add( 'boot' , States.boot )
+      Game.state.add( 'title' , States.title )
+      Game.state.add( 'pregame' , States.pregame )
+      Game.state.add( 'game' , States.game )
+      Game.state.add( 'over' , States.over )
+      Game.state.start( 'boot' )
       </Script>
     </Body>
 </HTML>
