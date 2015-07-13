@@ -6,8 +6,90 @@ Array.prototype.has = function( string ){
     }
   return bool
   }
+Array.prototype.last = function(){
+  return ( this[ this.length -1 ] )
+  }
+Array.prototype.random = function(){
+  return this[ Math.F( Math.random() * this.length ) ]
+  }
+Math.average = function(){
+  var Total = 0
+  for( var i = 0 ; i < arguments.length ; i++ ) Total += arguments[ i ]
+  return Total / arguments.length
+  }
+Math.C = Math.ceil , Math.F = Math.floor , Math.R = Math.round
+Number.prototype.pad = function( size , text ){
+  var i = 0
+  var n = this < 0
+  var s = ''
+  var t = text || '0'
+  var z = Math.max( size , this.toString().length )
+  while( s.length < z - 1 ){
+    s += t[ i ]
+    i = i + 1 == t.length ? 0 : i + 1
+    }
+  s = t == '0' && n ? '-' + s : t + s
+  s = t == '0'
+    ? s.slice( 0 , z - Math.abs( this ).toString().length ) + Math.abs( this )
+    : s.slice( 0 , z - this.toString().length ) + this
+  return s
+  }
+Number.prototype.C = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.C( this * S ) / S
+  }
+Number.prototype.F = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.F( this * S ) / S
+  }
+Number.prototype.R = function( Size ){
+  var S = Math.pow( 10 , Size )
+  return Math.R( this * S ) / S
+  }
 String.prototype.has = function( string ){
   return ( this.match( string ) !== null )
+  }
+String.prototype.padB = function( size , text ){
+  text = text == 'enum' ? '1234567890' : text
+  var i = 0
+  var s = ''
+  var t = text || ' '
+  var z = Math.max( size , this.length )
+  while( s.length < z ){
+    s += t[ i ]
+    i = i + 1 == t.length ? 0 : i + 1
+    }
+  s = s.substr( 0 , ( z - this.length ) / 2 ) + this + s.substr( ( z + this.length ) / 2 , z )
+  return s
+  }
+String.prototype.padL = function( size , text ){
+  text = text == 'enum' ? '1234567890' : text
+  var i = 0
+  var s = ''
+  var t = text || ' '
+  var z = Math.max( size , this.length )
+  while( s.length < z ){
+    s += t[ i ]
+    i = i + 1 == t.length ? 0 : i + 1
+    }
+  return s.slice( 0 , z - this.length ) + this
+  }
+String.prototype.padR = function( size , text ){
+  text = text == 'enum' ? '1234567890' : text
+  var i = 0
+  var s = ''
+  var t = text || ' '
+  var z = Math.max( size , this.length )
+  while( s.length < z ){
+    s += t[ i ]
+    i = i + 1 == t.length ? 0 : i + 1
+    }
+  return this + s.slice( this.length )
+  }
+String.prototype.toTitleCase = function(){
+  return this.replace( /[^\W_][^\s_.()]*/g , function( txt ){ 
+    return txt.charAt( 0 ).toUpperCase() + txt.substr( 1 ).toLowerCase()
+    } )
   }
 String.prototype.toHyperLink = function(){
   return encodeURIComponent( this ).replace( /'/g , '\\\'' )
@@ -168,14 +250,46 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
   window.addEventListener( 'resize' , ButtonSize )
   if( Clock > 0 ) window[ 'timer' ] = setTimeout( Close , Clock )
   }
+function GetProperties( MyObject , MyString ){
+  for( var a in MyObject ){
+    var A = MyString ? MyString + '.' + a : a
+    if( typeof MyObject[ a ] == 'object' ) GetProperties( MyObject[ a ] , A )
+    else if( typeof MyObject[ a ] == 'function' ) continue
+    else console.log( A )
+    }
+  }
 function PreventActions( Event ){
   var Alphabet  = Event.which >= 65 && Event.which <= 90 && !Event.ctrlKey
   var SelectAll = Event.which == 65 && Event.ctrlKey
   if( Alphabet || SelectAll ) Event.preventDefault()
+  }
+function Random( Min , Max ){
+  Min = Math.R( Min ) , Max = Math.R( Max )
+  return Math.F( Math.random() * ( 1 + Max - Min ) + Min )
   }
 function removeChildNodes( element ){
   while( element.childNodes.length > 0 ) element.removeChild( element.firstChild )
   }
 function removeChildren( element ){
   while( element.childElementCount > 0 ) element.removeChild( element.firstElementChild )
+  }
+  var counter = {} , min = Math.R( min ) , max = Math.R( max )
+  for( var i = min ; i <= max ; i++ ){
+    counter[ i ] = 0
+    }
+  for( var i = 0 ; i < tests ; i++ ){
+    var r = Random( min , max )
+    counter[ r ]++
+    }
+  for( var i = min ; i <= max ; i++ ){
+    var a = counter[ i ] / tests
+    // var b = 1 / ( max - min + 1 )
+    // var c = a - b
+    var d = ( a * 100 )
+    var e = d.toFixed( 2 )
+    var f = e.padL( 6 )
+    var g = max.toString().length
+    cc( i.pad( g , ' ' ) + ': ' + f + '%' )
+    }
+  return counter
   }
