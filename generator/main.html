@@ -1,0 +1,296 @@
+<HTML>
+  <Head>
+    <Title>Maze Generator</Title>
+    <Style>
+      * {
+        margin: 0;
+        overflow: hidden;
+        }
+      Body {
+        background-color: #000000;
+        }
+      Canvas {
+        background-color: #7f7f7f;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        }
+      Div#canvas {
+        position: relative;
+        width: 100%;
+        height: calc( 100% - 80px );
+        }
+      Div#knobs {
+        display: flex;
+        display: -webkit-flex;
+        height: 80px;
+        width: 100%;
+        }
+      Div.knob {
+        align-items: center;
+        display: flex;
+        flex: 1 1 auto;
+        -webkit-flex: 1 1 auto;
+        -webkit-flex-flow: column nowrap;
+        justify-content: space-around;
+        margin: 0px 5px;
+        }
+      Input[ type=button ] {
+        flex: 1 1 auto;
+        margin: 5px;
+        white-space: normal;
+        }
+      Input[ type=number ] {
+        display: block;
+        height: 20px;
+        margin: auto;
+        text-align: center;
+        width: calc( 100% - 10px );
+        }
+      Input[ type=number ]::-webkit-inner-spin-button {
+        opacity: 1;
+        }
+      Span {
+        display: block;
+        color: white;
+        height: 20px;
+        line-height: 20px;
+        margin: auto;
+        text-align: center;
+        }
+      </Style>
+  </Head>
+  <Body>
+    <Div id="knobs">
+      <Div class="knob">
+        <Span>Maze Count</Span>
+        <Input type="number" min="1" max="36" value="1" class="MAZECOUNT">
+        </Div>
+      <Div class="knob">
+        <Span>Maze Size</Span>
+        <Input type="number" min="1" max="30" value="1" class="MAZESIZE">
+        </Div>
+      <Div class="knob">
+        <Span>Cell Size</Span>
+        <Input type="number" min="3" max="15" value="3" class="CELLSIZE">
+        </Div>
+      <Div class="knob">
+        <Span>Pixel Size</Span>
+        <Input type="number" min="1" max="25" value="1" class="PIXELSIZE">
+        </Div>
+      <Div class="knob">
+        <Span>A</Span>
+        <Input type="number" min="0" max="10" value="0" class="PATTERN">
+        </Div>
+      <Div class="knob">
+        <Span>B</Span>
+        <Input type="number" min="0" max="10" value="0" class="PATTERN">
+        </Div>
+      <Div class="knob">
+        <Span>C</Span>
+        <Input type="number" min="0" max="10" value="0" class="PATTERN">
+        </Div>
+      <Div class="knob">
+        <Span>D</Span>
+        <Input type="number" min="0" max="10" value="0" class="PATTERN">
+        </Div>
+      <Input type="button" value="Create Mazes" onclick="OnClick()">
+      </Div>
+    <Div id="canvas">
+      <Canvas height="0" width="0">
+      </Div>
+    <Script>
+      function CreateMaze( size , pattern ){
+        function NewCell( x , y ){
+          return {
+            v: !true,
+            w: {
+              n: true,
+              e: true,
+              s: true,
+              w: true,
+              },
+            x: x,
+            y: y,
+            }
+          }
+        function GetCell( pattern ){
+          if( cells.length === 1 ) return cells[ 0 ]
+          var total = pattern.reduce( function( a , b ){ return a + b } , 0 )
+          var random = Math.floor( Math.random() * total )
+          if( random < pattern[ 0 ] )
+            return cells[ 0 ]
+          else if( random < pattern[ 0 ] + pattern[ 1 ] )
+            return cells[ Math.round( ( cells.length - 1 ) / 2 + ( Math.random() -.5 ) ) ]
+          else if( random < pattern[ 0 ] + pattern[ 1 ] + pattern[ 2 ] )
+            return cells[ cells.length - 1 ]
+          else
+            return cells[ Math.floor( Math.random() * cells.length ) ]
+          }
+        function GetNeighbors( cell ){
+          var A = []
+          if( cell.x > 0        && maze[ cell.x - 1 ][ cell.y ].v === !true ) A.push( maze[ cell.x - 1 ][ cell.y ] )
+          if( cell.x < size - 1 && maze[ cell.x + 1 ][ cell.y ].v === !true ) A.push( maze[ cell.x + 1 ][ cell.y ] )
+          if( cell.y > 0        && maze[ cell.x ][ cell.y - 1 ].v === !true ) A.push( maze[ cell.x ][ cell.y - 1 ] )
+          if( cell.y < size - 1 && maze[ cell.x ][ cell.y + 1 ].v === !true ) A.push( maze[ cell.x ][ cell.y + 1 ] )
+          return A
+          }
+        function CarvePath( f , t ){
+          switch( true ){
+            case f.x < t.x :
+              f.w.e = !true
+              t.w.w = !true
+              break
+            case f.x > t.x :
+              f.w.w = !true
+              t.w.e = !true
+              break
+            case f.y < t.y :
+              f.w.s = !true
+              t.w.n = !true
+              break
+            case f.y > t.y :
+              f.w.n = !true
+              t.w.s = !true
+              break
+            }
+          t.v = true
+          cells.push( t )
+          }
+        var maze = []
+        for( var a = 0 ; a < size ; a++ ){
+          maze[ a ] = []
+          for( var b = 0 ; b < size ; b++ ){
+            maze[ a ][ b ] = NewCell( a , b )
+            }
+          }
+        var cells = [ maze[ Math.floor( Math.random() * size ) ][ Math.floor( Math.random() * size ) ] ]
+        cells[ 0 ].v = true
+        var loops = 0
+        while( cells.length > 0 ){
+          if( loops++ === 1000000 ) throw 'Loop Error'
+          var cell = GetCell( pattern )
+          var neighbors = GetNeighbors( cell )
+          if( neighbors.length === 0 ) cells.splice( cells.indexOf( cell ) , 1 )
+          else CarvePath( cell , neighbors[ Math.floor( Math.random() * neighbors.length ) ] )
+          }
+        return maze
+        }
+      function DrawMaze( x , y ){
+        var maze = CreateMaze( MAZESIZE , PATTERN )
+        for( var a = 0 ; a < MAZESIZE ; a++ ){
+          for( var b = 0 ; b < MAZESIZE ; b++ ){
+            for( var c = 0 ; c < CELLSIZE ; c++ ){
+              for( var d = 0 ; d < CELLSIZE ; d++ ){
+                CANVAS.context.putImageData( CANVAS.pixelwhite , x + PIXELSIZE * ( ( a * ( CELLSIZE - 1 ) ) + c ) , y + PIXELSIZE * ( ( b * ( CELLSIZE - 1 ) ) + d ) )
+                }
+              }
+            }
+          }
+        for( var a = 0 ; a < MAZESIZE ; a++ ){
+          for( var b = 0 ; b < MAZESIZE ; b++ ){
+            if( maze[ a ][ b ].w.n ) for( var c = 0 ; c < CELLSIZE ; c++ ) CANVAS.context.putImageData( CANVAS.pixelblack , x + PIXELSIZE * ( ( a * ( CELLSIZE - 1 ) ) + c            ) , y + PIXELSIZE * ( ( b * ( CELLSIZE - 1 ) )                ) )
+            if( maze[ a ][ b ].w.e ) for( var c = 0 ; c < CELLSIZE ; c++ ) CANVAS.context.putImageData( CANVAS.pixelblack , x + PIXELSIZE * ( ( a * ( CELLSIZE - 1 ) ) + CELLSIZE - 1 ) , y + PIXELSIZE * ( ( b * ( CELLSIZE - 1 ) ) + c            ) )
+            if( maze[ a ][ b ].w.s ) for( var c = 0 ; c < CELLSIZE ; c++ ) CANVAS.context.putImageData( CANVAS.pixelblack , x + PIXELSIZE * ( ( a * ( CELLSIZE - 1 ) ) + c            ) , y + PIXELSIZE * ( ( b * ( CELLSIZE - 1 ) ) + CELLSIZE - 1 ) )
+            if( maze[ a ][ b ].w.w ) for( var c = 0 ; c < CELLSIZE ; c++ ) CANVAS.context.putImageData( CANVAS.pixelblack , x + PIXELSIZE * ( ( a * ( CELLSIZE - 1 ) )                ) , y + PIXELSIZE * ( ( b * ( CELLSIZE - 1 ) ) + c            ) )
+            }
+          }
+        }
+      function LocalStorageLoad(){
+        if( localStorage.MazeGenerator ){
+          var A = JSON.parse( localStorage.MazeGenerator )
+          MAZECOUNT = A[ 0 ]
+          MAZESIZE = A[ 1 ]
+          CELLSIZE = A[ 2 ]
+          PIXELSIZE = A[ 3 ]
+          SIZE = PIXELSIZE * ( CELLSIZE * MAZESIZE - ( MAZESIZE - 1 ) )
+          PATTERN = A[ 4 ]
+          document.querySelector( '.MAZECOUNT' ).value = MAZECOUNT
+          document.querySelector( '.MAZESIZE' ).value = MAZESIZE
+          document.querySelector( '.CELLSIZE' ).value = CELLSIZE
+          document.querySelector( '.PIXELSIZE' ).value = PIXELSIZE
+          document.querySelectorAll( '.PATTERN' )[ 0 ].value = PATTERN[ 0 ]
+          document.querySelectorAll( '.PATTERN' )[ 1 ].value = PATTERN[ 1 ]
+          document.querySelectorAll( '.PATTERN' )[ 2 ].value = PATTERN[ 2 ]
+          document.querySelectorAll( '.PATTERN' )[ 3 ].value = PATTERN[ 3 ]
+          }
+        }
+      function LocalStorageSave(){
+        localStorage.setItem( 'MazeGenerator' , JSON.stringify( [ MAZECOUNT , MAZESIZE , CELLSIZE , PIXELSIZE , PATTERN ] ) )
+        }
+      function OnClick(){
+        MAZECOUNT = parseInt( document.querySelector( '.MAZECOUNT' ).value ) || 0
+        MAZESIZE = parseInt( document.querySelector( '.MAZESIZE' ).value ) || 0
+        CELLSIZE = parseInt( document.querySelector( '.CELLSIZE' ).value ) || 0
+        PIXELSIZE = parseInt( document.querySelector( '.PIXELSIZE' ).value ) || 0
+        SIZE = PIXELSIZE * ( CELLSIZE * MAZESIZE - ( MAZESIZE - 1 ) )
+        var A = document.querySelector( '#canvas' )
+        var B = Math.floor( ( A.offsetWidth - PIXELSIZE ) / ( SIZE + PIXELSIZE ) )
+        var C = Math.floor( ( A.offsetHeight - PIXELSIZE ) / ( SIZE + PIXELSIZE ) )
+        var D = B * C
+        while( MAZECOUNT > D ) MAZECOUNT--
+        if( MAZECOUNT === 0 ) MAZECOUNT = 1
+        document.querySelector( '.MAZECOUNT' ).value = MAZECOUNT
+        if( MAZECOUNT === 1 ){
+          var X = 1
+          var Y = 1
+          }
+        else if( D - MAZECOUNT < Math.min( B , C ) ){
+          var X = B
+          var Y = C
+          }
+        else{
+          var E = Math.sqrt( MAZECOUNT / ( Math.max( B , C ) / Math.min( B , C ) ) )
+          if( B < C ){
+            var X = Math.round( E )
+            var Y = Math.ceil( MAZECOUNT / X )
+            }
+          else{
+            var Y = Math.round( E )
+            var X = Math.ceil( MAZECOUNT / Y )
+            }
+          }
+        CANVAS.width = PIXELSIZE + ( SIZE + PIXELSIZE ) * X
+        CANVAS.height = PIXELSIZE + ( SIZE + PIXELSIZE ) * Y
+        CANVAS.center = { x: CANVAS.width / 2 , y: CANVAS.height / 2 }
+        CANVAS.pixelblack = CANVAS.context.createImageData( PIXELSIZE , PIXELSIZE )
+          for( var a = 0 ; a < CANVAS.pixelblack.data.length ; a += 4 ){
+            CANVAS.pixelblack.data[ a + 0 ] = 0
+            CANVAS.pixelblack.data[ a + 1 ] = 0
+            CANVAS.pixelblack.data[ a + 2 ] = 0
+            CANVAS.pixelblack.data[ a + 3 ] = 255
+            }
+        CANVAS.pixelwhite = CANVAS.context.createImageData( PIXELSIZE , PIXELSIZE )
+          for( var a = 0 ; a < CANVAS.pixelwhite.data.length ; a += 4 ){
+            CANVAS.pixelwhite.data[ a + 0 ] = 255
+            CANVAS.pixelwhite.data[ a + 1 ] = 255
+            CANVAS.pixelwhite.data[ a + 2 ] = 255
+            CANVAS.pixelwhite.data[ a + 3 ] = 255
+            }
+        var A = document.querySelectorAll( '.PATTERN' )
+        for( var a = 0 ; a < A.length ; a++ ) PATTERN[ a ] = parseInt( A[ a ].value ) || 0
+        for( var a = 0 , x = y = PIXELSIZE ; a < MAZECOUNT ; a++ ){
+          DrawMaze( x , y )
+          x += SIZE + PIXELSIZE
+          if( x >= CANVAS.width ){
+            x = PIXELSIZE
+            y += SIZE + PIXELSIZE
+            }
+          }
+        LocalStorageSave()
+        }
+      var MAZECOUNT
+      var MAZESIZE
+      var CELLSIZE
+      var PIXELSIZE
+      var SIZE
+      var PATTERN = []
+      var CANVAS = document.querySelector( 'canvas' )
+      CANVAS.context = CANVAS.getContext( '2d' )
+      LocalStorageLoad()
+      </Script>
+    </Body>
+</HTML>

@@ -1,0 +1,15 @@
+{
+  "name": "saxan-shows",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/isaacs/npm.git"
+  },
+  "dependencies": {
+    "st": "0.5.1"
+  },
+  "engines": {
+     "node": "0.10.32",
+     "npm": "1.4.28"
+  }
+}

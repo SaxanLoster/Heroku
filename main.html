@@ -1,0 +1,101 @@
+<HTML>
+  <Head>
+    <Title>Saxan Loster</Title>
+    <Link rel="icon" href="images/favicon.png" type="image/png"/>
+    <Style>
+      * {
+        background: #000;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        color: white;
+        margin: 0;
+        }
+      A {
+        text-decoration: none;
+        }
+      Body {
+        font-size: 0;
+        }
+      HTML {
+        font-size: 100%;
+        }
+      .hide {
+        display: none !important;
+        }
+      #Title {
+        font-size: 4rem;
+        height: 8rem;
+        width: 100%;
+        }
+      #Title > Span {
+        text-align: center;
+        display: block;
+        position: relative;
+        top: 50%;
+        margin: auto;
+        transform: translateY( -50% );
+        -webkit-transform: translateY( -50% );
+        -ms-transform: translateY( -50% );
+        }
+      #Links {
+        align-content: space-around;
+        -webkit-align-content: space-around;
+        align-items: space-around;
+        -webkit-align-items: space-around;
+        display: flex;
+        display: -webkit-flex;
+        flex-flow: row wrap;
+        -webkit-flex-flow: row wrap;
+        height: calc( 100% - 8rem );
+        justify-content: space-around;
+        -webkit-justify-content: space-around;
+        width: 100%;
+        }
+      #Links > A {
+        border: 1px white solid;
+        display: inline-block;
+        height: 45%;
+        overflow-y: auto;
+        padding: 25px;
+        vertical-align: top;
+        width: 45%;
+        }
+      #Links > A > Span {
+        border-bottom: 1px solid white;
+        display: block;
+        font-size: 2.5rem;
+        text-align: center;
+        width: 100%;
+        word-break: break-all;
+        }
+      #Links > A > P {
+        font-size: 1.5rem;
+        padding-top: 15px;
+        word-break: break-word;
+        }
+      </Style>
+    </Head>
+  <Body>
+    <Div id="Title">
+      <Span>Saxan Loster</Span>
+      </Div>
+    <Div id="Links">
+      <A target="_blank" href="cards/main.html" class="">
+        <Span>Card Game</Span>
+        <P>An HTML5 simulation of 5 card draw.</P>
+        </A>
+      <A target="_blank" href="maze/main.html" class="">
+        <Span>Maze Game</Span>
+        <P>An HTML5 game made with phaser. The player traverses through a maze to find gems.</P>
+        </A>
+      <A target="_blank" href="generator/main.html" class="">
+        <Span>Maze Generator</Span>
+        <P>Shows many different types of mazes. Work in Progress.</P>
+        </A>
+      <A target="_blank" href="shows/main.html" class="">
+        <Span>TV Shows</Span>
+        <P>A website that searches for information and episodes of shows based on show name.</P>
+        </A>
+      </Div>
+    </Body>
+  </HTML>
