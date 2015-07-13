@@ -21,14 +21,9 @@ states.template.prototype = {
   }
 
 // add flags
-// end screen info
-// player animation
 // rotate maze types
 // keyboard continue
 // phone dimensions
-// zoom
-// end game tracking
-// end game zoom
 // loading bar
 // local storage
 // maize maze
