@@ -273,23 +273,3 @@ function removeChildNodes( element ){
 function removeChildren( element ){
   while( element.childElementCount > 0 ) element.removeChild( element.firstElementChild )
   }
-  var counter = {} , min = Math.R( min ) , max = Math.R( max )
-  for( var i = min ; i <= max ; i++ ){
-    counter[ i ] = 0
-    }
-  for( var i = 0 ; i < tests ; i++ ){
-    var r = Random( min , max )
-    counter[ r ]++
-    }
-  for( var i = min ; i <= max ; i++ ){
-    var a = counter[ i ] / tests
-    // var b = 1 / ( max - min + 1 )
-    // var c = a - b
-    var d = ( a * 100 )
-    var e = d.toFixed( 2 )
-    var f = e.padL( 6 )
-    var g = max.toString().length
-    cc( i.pad( g , ' ' ) + ': ' + f + '%' )
-    }
-  return counter
-  }
