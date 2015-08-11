@@ -20,7 +20,6 @@ states.template.prototype = {
   shutdown: function(){},
   }
 
-// add flags
 // rotate maze types
 // keyboard continue
 // phone dimensions

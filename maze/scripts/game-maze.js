@@ -274,7 +274,7 @@ function BraidedGrowingTree( Size ){
     for( var a = 0 ; a < Size ; a++ ){
       for( var b = 0 ; b < Size ; b++ ){
         Maze[ a ][ b ].f = null
-        Maze[ a ][ b ].v = false
+        Maze[ a ][ b ].v = !true
         Maze[ a ][ b ].d = 0
         }
       }
@@ -285,25 +285,25 @@ function BraidedGrowingTree( Size ){
     while( Cells.length > 0 ){
       Cell = Cells.shift()
       if( Cell == Goal || Cell.d >= Min ) break
-      if( Cell.x > 0        && Maze[ Cell.x - 1 ][ Cell.y - 0 ].w == 0 && Maze[ Cell.x - 1 ][ Cell.y - 0 ].v == false ){
+      if( Cell.x > 0        && Maze[ Cell.x - 1 ][ Cell.y - 0 ].w == 0 && Maze[ Cell.x - 1 ][ Cell.y - 0 ].v == !true ){
         Cells.push( Maze[ Cell.x - 1 ][ Cell.y - 0 ] )
         Maze[ Cell.x - 1 ][ Cell.y - 0 ].f = Cell
         Maze[ Cell.x - 1 ][ Cell.y - 0 ].v = true
         Maze[ Cell.x - 1 ][ Cell.y - 0 ].d = Cell.d + 1
         }
-      if( Cell.x < Size - 1 && Maze[ Cell.x + 1 ][ Cell.y + 0 ].w == 0 && Maze[ Cell.x + 1 ][ Cell.y + 0 ].v == false ){
+      if( Cell.x < Size - 1 && Maze[ Cell.x + 1 ][ Cell.y + 0 ].w == 0 && Maze[ Cell.x + 1 ][ Cell.y + 0 ].v == !true ){
         Cells.push( Maze[ Cell.x + 1 ][ Cell.y + 0 ] )
         Maze[ Cell.x + 1 ][ Cell.y + 0 ].f = Cell
         Maze[ Cell.x + 1 ][ Cell.y + 0 ].v = true
         Maze[ Cell.x + 1 ][ Cell.y + 0 ].d = Cell.d + 1
         }
-      if( Cell.y > 0        && Maze[ Cell.x - 0 ][ Cell.y - 1 ].w == 0 && Maze[ Cell.x - 0 ][ Cell.y - 1 ].v == false ){
+      if( Cell.y > 0        && Maze[ Cell.x - 0 ][ Cell.y - 1 ].w == 0 && Maze[ Cell.x - 0 ][ Cell.y - 1 ].v == !true ){
         Cells.push( Maze[ Cell.x - 0 ][ Cell.y - 1 ] )
         Maze[ Cell.x - 0 ][ Cell.y - 1 ].f = Cell
         Maze[ Cell.x - 0 ][ Cell.y - 1 ].v = true
         Maze[ Cell.x - 0 ][ Cell.y - 1 ].d = Cell.d + 1
         }
-      if( Cell.y < Size - 1 && Maze[ Cell.x + 0 ][ Cell.y + 1 ].w == 0 && Maze[ Cell.x + 0 ][ Cell.y + 1 ].v == false ){
+      if( Cell.y < Size - 1 && Maze[ Cell.x + 0 ][ Cell.y + 1 ].w == 0 && Maze[ Cell.x + 0 ][ Cell.y + 1 ].v == !true ){
         Cells.push( Maze[ Cell.x + 0 ][ Cell.y + 1 ] )
         Maze[ Cell.x + 0 ][ Cell.y + 1 ].f = Cell
         Maze[ Cell.x + 0 ][ Cell.y + 1 ].v = true
@@ -354,14 +354,14 @@ function BraidedGrowingTree( Size ){
     }
   function GetNeighbors( A ){
     var B = []
-    if( A.x > 2        && Maze[ A.x - 2 ][ A.y ].v == false && Maze[ A.x - 2 ][ A.y ].w == 0 ) B.push( Maze[ A.x - 2 ][ A.y ] )
-    if( A.x < Size - 3 && Maze[ A.x + 2 ][ A.y ].v == false && Maze[ A.x + 2 ][ A.y ].w == 0 ) B.push( Maze[ A.x + 2 ][ A.y ] )
-    if( A.y > 2        && Maze[ A.x ][ A.y - 2 ].v == false && Maze[ A.x ][ A.y - 2 ].w == 0 ) B.push( Maze[ A.x ][ A.y - 2 ] )
-    if( A.y < Size - 3 && Maze[ A.x ][ A.y + 2 ].v == false && Maze[ A.x ][ A.y + 2 ].w == 0 ) B.push( Maze[ A.x ][ A.y + 2 ] )
+    if( A.x > 2        && Maze[ A.x - 2 ][ A.y ].v == !true && Maze[ A.x - 2 ][ A.y ].w == 0 ) B.push( Maze[ A.x - 2 ][ A.y ] )
+    if( A.x < Size - 3 && Maze[ A.x + 2 ][ A.y ].v == !true && Maze[ A.x + 2 ][ A.y ].w == 0 ) B.push( Maze[ A.x + 2 ][ A.y ] )
+    if( A.y > 2        && Maze[ A.x ][ A.y - 2 ].v == !true && Maze[ A.x ][ A.y - 2 ].w == 0 ) B.push( Maze[ A.x ][ A.y - 2 ] )
+    if( A.y < Size - 3 && Maze[ A.x ][ A.y + 2 ].v == !true && Maze[ A.x ][ A.y + 2 ].w == 0 ) B.push( Maze[ A.x ][ A.y + 2 ] )
     return B
     }
   function MakeCell( x , y ){
-    return { x: x , y: y , v: false }
+    return { x: x , y: y , v: !true }
     }
   var Maze = []
   var Paths = []

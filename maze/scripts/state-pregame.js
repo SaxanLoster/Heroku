@@ -1,121 +1,127 @@
 states.pregame.prototype = {
   init: function(){
-    this.that = this
+    game.time.reset()
+    game.time.pausetime = 0
 
-    this.that.time.reset()
+    this.settings = {}
+    this.elements = {}
 
-    this.that.level = arguments[ 0 ]
+    this.settings.mode = arguments[ 0 ]
 
-    this.that.lives = arguments[ 1 ] || 5
+    this.settings.level = arguments[ 1 ] || 1
 
-    this.that.settings = GetLevelData( this.that.level )
+    this.settings.lives = arguments[ 2 ] || 5
 
-    this.that.win = this.that.settings.gems
+    var tempLevelData = GetLevelData( this.settings.level )
 
-    this.that.taken = []
+    this.settings.gems = tempLevelData.gems
+    this.settings.size = tempLevelData.size
+    this.settings.timer = ( this.settings.mode === 1 ) ? ( tempLevelData.time ) : ( arguments[ 3 ] || 300 )
 
-    this.that.playing = true
+    this.settings.gemsleft = this.settings.gems
 
-    this.that.maze = new Maze( this.that.settings.size )
+    this.settings.spacetaken = []
 
-    this.that.pausetime = 0
+    this.settings.playing = true
 
-    this.that.tilesize = 40
+    this.settings.maze = new Maze( this.settings.size )
+
+    this.settings.tilesize = 40
     
-    this.that.x = Math.max( Math.ceil( game.width  / this.that.tilesize ) , this.that.settings.size )
-    this.that.y = Math.max( Math.ceil( game.height / this.that.tilesize ) , this.that.settings.size )
+    this.settings.x = Math.max( Math.ceil( game.width  / this.settings.tilesize ) , this.settings.size )
+    this.settings.y = Math.max( Math.ceil( game.height / this.settings.tilesize ) , this.settings.size )
 
-    this.that.ox = Math.floor( ( this.that.x - this.that.settings.size ) / 2 )
-    this.that.oy = Math.floor( ( this.that.y - this.that.settings.size ) / 2 )
+    this.settings.ox = Math.floor( ( this.settings.x - this.settings.size ) / 2 )
+    this.settings.oy = Math.floor( ( this.settings.y - this.settings.size ) / 2 )
     },
   preload: function(){},
   create: function(){
-    function GetRandomPosition( that , object ){
+    function GetRandomPosition( paraThis , paraObject ){
       do{
-        var x = game.rnd.between( 1 , that.settings.size - 2 )
-        var y = game.rnd.between( 1 , that.settings.size - 2 )
+        var tempX = game.rnd.between( 1 , paraThis.settings.size - 2 )
+        var tempY = game.rnd.between( 1 , paraThis.settings.size - 2 )
         }
-      while( that.maze[ x ][ y ] == 0 || that.taken.indexOf( x + 'x' + y ) != -1 )
-      that.taken.push( x + 'x' + y )
-      object.position.set( ( x + that.ox ) * that.tilesize + 20 , ( y + that.oy ) * that.tilesize + 20 )
+      while( paraThis.settings.maze[ tempX ][ tempY ] === 0 || paraThis.settings.spacetaken.indexOf( tempX + 'x' + tempY ) !== -1 )
+      paraThis.settings.spacetaken.push( tempX + 'x' + tempY )
+      paraObject.position.set( ( tempX + paraThis.settings.ox ) * paraThis.settings.tilesize + 20 , ( tempY + paraThis.settings.oy ) * paraThis.settings.tilesize + 20 )
       }
 
     game.physics.startSystem( Phaser.Physics.ARCADE )
     game.stage.backgroundColor = '#000000'
 
-    this.that.cursors = game.input.keyboard.createCursorKeys()
-    this.that.wasd = {
-      up:    game.input.keyboard.addKey( Phaser.Keyboard.W ),
-      down:  game.input.keyboard.addKey( Phaser.Keyboard.S ),
-      left:  game.input.keyboard.addKey( Phaser.Keyboard.A ),
+    this.settings.cursors = game.input.keyboard.createCursorKeys()
+    this.settings.wasd = {
+      up: game.input.keyboard.addKey( Phaser.Keyboard.W ),
+      down: game.input.keyboard.addKey( Phaser.Keyboard.S ),
+      left: game.input.keyboard.addKey( Phaser.Keyboard.A ),
       right: game.input.keyboard.addKey( Phaser.Keyboard.D ),
       }
 
-    this.that.map = game.add.tilemap( null , this.that.tilesize , this.that.tilesize , this.that.x , this.that.y )
-      this.that.map.addTilesetImage( 'maze' , 'maze' , 40 , 40 , 0 , 1 )
-      this.that.map.setCollisionByIndex( 0 , true )
+    this.elements.map = game.add.tilemap( null , this.settings.tilesize , this.settings.tilesize , this.settings.x , this.settings.y )
+      this.elements.map.addTilesetImage( 'maze' , 'maze' , 40 , 40 , 0 , 1 )
+      this.elements.map.setCollisionByIndex( 0 , true )
 
-    this.that.mazelayer = this.that.map.create( 'maze' , this.that.x , this.that.y , this.that.tilesize , this.that.tilesize )
-      this.that.mazelayer.resizeWorld()
-      for( var a = 0 ; a < this.that.settings.size ; a++ ){
-        for( var b = 0 ; b < this.that.settings.size ; b++ ){
-          this.that.map.putTile( this.that.maze[ a ][ b ] , a + this.that.ox , b + this.that.oy , this.that.mazelayer )
+    this.elements.mazelayer = this.elements.map.create( 'maze' , this.settings.x , this.settings.y , this.settings.tilesize , this.settings.tilesize )
+      this.elements.mazelayer.resizeWorld()
+      for( var iterA = 0 ; iterA < this.settings.size ; iterA++ ){
+        for( var iterB = 0 ; iterB < this.settings.size ; iterB++ ){
+          this.elements.map.putTile( this.settings.maze[ iterA ][ iterB ] , iterA + this.settings.ox , iterB + this.settings.oy , this.elements.mazelayer )
           }
         }
 
-    this.that.items = game.add.group( game.world , 'items' , !true , true )
-      for( var a = 0 ; a < this.that.settings.gems ; a++ ){
-        this.that.items.create( 0 , 0 , 'items' , a )
-          GetRandomPosition( this , this.that.items.children[ a ] )
-          this.that.items.children[ a ].anchor.set( .5 )
-          this.that.items.children[ a ].scale.set( .5 )
+    this.elements.items = game.add.group( game.world , 'items' , !true , true )
+      for( var iterA = 0 ; iterA < this.settings.gems ; iterA++ ){
+        this.elements.items.create( 0 , 0 , 'items' , iterA )
+          GetRandomPosition( this , this.elements.items.children[ iterA ] )
+          this.elements.items.children[ iterA ].anchor.set( .5 )
+          this.elements.items.children[ iterA ].scale.set( .5 )
         }
 
-    this.that.infobar1  = game.add.group()
-      game.add.graphics( 0 , 0 , this.that.infobar1 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].beginFill( 0xFFFFFF , 1 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].endFill()
-      game.add.text( 5 , 20 , 'Level: ' + this.that.level , { font: '20px Arial' , fill: '#000' } , this.that.infobar1 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].anchor.set( 0 , .5 )
-      game.add.text( game.width / 2 , 20 , 'Lives: ' + this.that.lives , { font: '20px Arial' , fill: '#000' } , this.that.infobar1 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].anchor.set( .5 , .5 )
-      var Time = Math.max( Math.ceil( this.that.settings.time - this.that.time.totalElapsedSeconds() + this.that.pausetime ) , 0 )
-      game.add.text( this.that.infobar1.width - 5 , 20 , Math.floor( Time / 60 ) + ':' + ( '00' + Time % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000' } , this.that.infobar1 )
-        this.that.infobar1.children[ this.that.infobar1.total - 1 ].anchor.set( 1 , .5 )
-      this.that.infobar1.fixedToCamera = true
+    this.elements.infobar1  = game.add.group()
+      game.add.graphics( 0 , 0 , this.elements.infobar1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].beginFill( 0xFFFFFF , 1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].endFill()
+      game.add.text( 5 , 20 , 'Level: ' + this.settings.level , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( 0 , .5 )
+      game.add.text( game.width / 2 , 20 , this.settings.mode === 1 ? 'Lives: ' + this.settings.lives : '' , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( .5 , .5 )
+      var tempTime = Math.max( Math.ceil( this.settings.timer - game.time.totalElapsedSeconds() + game.time.pausetime ) , 0 )
+      game.add.text( this.elements.infobar1.width - 5 , 20 , Math.floor( tempTime / 60 ) + ':' + ( '00' + tempTime % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( 1 , .5 )
+      this.elements.infobar1.fixedToCamera = true
 
-    this.that.infobar2 = game.add.group()
-      game.add.graphics( 0 , game.height - 40 , this.that.infobar2 )
-        this.that.infobar2.children[ this.that.infobar2.total - 1 ].beginFill( 0xFFFFFF , 1 )
-        this.that.infobar2.children[ this.that.infobar2.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
-        this.that.infobar2.children[ this.that.infobar2.total - 1 ].endFill()
-      for( var a = 0 ; a < this.that.settings.gems ; a++ ){
-        game.add.sprite( game.width * ( ( a + 1 ) * .02 ) + ( 10 + ( a * 20 ) ) , game.height - 20 , 'items' , a , this.that.infobar2 )
-          this.that.infobar2.children[ this.that.infobar2.total - 1 ].anchor.set( .5 )
-          this.that.infobar2.children[ this.that.infobar2.total - 1 ].scale.set( .5 )
-          this.that.infobar2.children[ this.that.infobar2.total - 1 ].tint = 0x000000
+    this.elements.infobar2 = game.add.group()
+      game.add.graphics( 0 , game.height - 40 , this.elements.infobar2 )
+        this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].beginFill( 0xFFFFFF , 1 )
+        this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
+        this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].endFill()
+      for( var iterA = 0 ; iterA < this.settings.gems ; iterA++ ){
+        game.add.sprite( game.width * ( ( iterA + 1 ) * .02 ) + ( 10 + ( iterA * 20 ) ) , game.height - 20 , 'items' , iterA , this.elements.infobar2 )
+          this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].anchor.set( .5 )
+          this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].scale.set( .5 )
+          this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].tint = 0x000000
         }
-      this.that.infobar2.fixedToCamera = true
+      this.elements.infobar2.fixedToCamera = true
 
-    this.that.player = game.add.sprite( 0 , 0 , 'player' )
-      GetRandomPosition( this , this.that.player )
-      this.that.player.anchor.setTo( .5 )
-      this.that.player.scale.setTo( .75 )
-      game.camera.follow( this.that.player )
+    this.elements.player = game.add.sprite( 0 , 0 , 'player' )
+      GetRandomPosition( this , this.elements.player )
+      this.elements.player.anchor.setTo( .5 )
+      this.elements.player.scale.setTo( .75 )
+      game.camera.follow( this.elements.player )
 
-    this.that.joystick = this.that.game.plugins.add( Phaser.Plugin.TouchControl )
-      // this.that.joystick.inputEnable()
-      this.that.joystick.settings.numDirections = 8
-      this.that.joystick.settings.maxDistanceInPixels = 20
+    this.elements.joystick = this.game.plugins.add( Phaser.Plugin.TouchControl )
+      // this.elements.joystick.inputEnable()
+      this.elements.joystick.settings.numDirections = 8
+      this.elements.joystick.settings.maxDistanceInPixels = 20
 
-    function LoadGame(){
-      this.that.input.keyboard.onDownCallback = null
-      game.state.start( 'game' , !true , !true , this.that )
+    function NextState(){
+      this.input.keyboard.onDownCallback = null
+      game.state.start( 'game' , !true , !true , this )
       }
-    this.that.input.keyboard.callbackContext = this
-    this.that.input.keyboard.onDownCallback = LoadGame
-    this.that.input.onDown.addOnce( LoadGame , this )
+    this.input.keyboard.callbackContext = this
+    this.input.keyboard.onDownCallback = NextState
+    this.input.onDown.addOnce( NextState , this )
     },
   update: function(){},
   render: function(){},

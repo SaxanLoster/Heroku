@@ -1,45 +1,46 @@
 states.postgame.prototype = {
   init: function(){
-    this.that = arguments[ 0 ]
+    this.elements = arguments[ 0 ].elements
+    this.settings = arguments[ 0 ].settings
     },
   preload: function(){},
   create: function(){
     game.camera.unfollow()
-    this.that.spritegroup = game.add.group()
-    for( var a = 0 ; a < this.that.maze.length ; a++ ){
-      for( var b = 0 ; b < this.that.maze.length ; b++ ){
-        this.that.spritegroup.create( ( a + this.that.ox ) * 40 , ( b + this.that.oy ) * 40 , 'maze' , this.that.maze[ a ][ b ] )
+    this.elements.spritegroup = game.add.group()
+    for( var iterA = 0 ; iterA < this.settings.maze.length ; iterA++ ){
+      for( var iterB = 0 ; iterB < this.settings.maze.length ; iterB++ ){
+        this.elements.spritegroup.create( ( iterA + this.settings.ox ) * 40 , ( iterB + this.settings.oy ) * 40 , 'maze' , this.settings.maze[ iterA ][ iterB ] )
         }
       }
-    this.that.spritegroup.create( this.that.player.x , this.that.player.y , this.that.player.generateTexture() )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].anchor.set( .5 )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].scale.set( .75 )
-      game.camera.focusOn( this.that.spritegroup.children[ this.that.spritegroup.total - 1 ] )
-    for( var a = 0 ; a < this.that.items.total ; a++ ){
-      this.that.spritegroup.create( this.that.items.children[ a ].x , this.that.items.children[ a ].y , this.that.items.children[ a ].generateTexture() )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].anchor.set( .5 )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].scale.set( .5 )
+    this.elements.spritegroup.create( this.elements.player.x , this.elements.player.y , this.elements.player.generateTexture() )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].anchor.set( .5 )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].scale.set( .75 )
+      game.camera.focusOn( this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ] )
+    for( var iterA = 0 ; iterA < this.elements.items.total ; iterA++ ){
+      this.elements.spritegroup.create( this.elements.items.children[ iterA ].x , this.elements.items.children[ iterA ].y , this.elements.items.children[ iterA ].generateTexture() )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].anchor.set( .5 )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].scale.set( .5 )
       }
-    for( var a = this.that.settings.gems + 1 ; a < this.that.infobar2.total ; a++ ){
-      this.that.spritegroup.create( this.that.infobar2.children[ a ].oldposition.x , this.that.infobar2.children[ a ].oldposition.y , this.that.infobar2.children[ a ].generateTexture() )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].anchor.set( .5 )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].scale.set( .5 )
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].alpha = .5
-      this.that.spritegroup.children[ this.that.spritegroup.total - 1 ].tine = 0x3f3f3f
+    for( var iterA = this.settings.gems + 1 ; iterA < this.elements.infobar2.total ; iterA++ ){
+      this.elements.spritegroup.create( this.elements.infobar2.children[ iterA ].oldposition.x , this.elements.infobar2.children[ iterA ].oldposition.y , this.elements.infobar2.children[ iterA ].generateTexture() )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].anchor.set( .5 )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].scale.set( .5 )
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].alpha = .5
+      this.elements.spritegroup.children[ this.elements.spritegroup.total - 1 ].tint = 0x1f1f1f
       }
     game.world.removeBetween( 0 , game.world.children.length - 2 , true )
-    if( this.that.spritegroup.height > game.height || this.that.spritegroup.width > game.width ){
-      var view = Math.min( game.width , game.height )
-      var ratio = game.scale.isGameLandscape ? game.height / this.that.spritegroup.height : game.width / this.that.spritegroup.height
-      var tween = game.make.tween( this.that.spritegroup.scale ).to( { x: ratio , y: ratio } , 2000 , Phaser.Easing.Linear.None , true , 500 )
-      var tween = game.make.tween( this.that.spritegroup ).to( { x: ( game.width - view ) / 2 , y: ( game.height - view ) / 2 } , 2000 , Phaser.Easing.Linear.None , true , 500 )
-      var tween = game.make.tween( game.camera ).to( { x: 0 , y: 0 } , 2000 , Phaser.Easing.Linear.None , true , 500 )
-      tween.onComplete.add( function(){
-        game.time.events.add( 1500 , function(){
-          game.state.start( 'over' , true , !true , !true , this.that.level , this.that.lives )
-          } , this )
-         } , this )
+    if( this.elements.spritegroup.height > game.height || this.elements.spritegroup.width > game.width ){
+      var tempView = Math.min( game.width , game.height )
+      var tempRatio = game.scale.isGameLandscape ? game.height / this.elements.spritegroup.height : game.width / this.elements.spritegroup.height
+      var tempTween = game.make.tween( this.elements.spritegroup.scale ).to( { x: tempRatio , y: tempRatio } , 2000 , Phaser.Easing.Linear.None , true , 500 )
+      var tempTween = game.make.tween( this.elements.spritegroup ).to( { x: ( game.width - tempView ) / 2 , y: ( game.height - tempView ) / 2 } , 2000 , Phaser.Easing.Linear.None , true , 500 )
+      var tempTween = game.make.tween( game.camera ).to( { x: 0 , y: 0 } , 2000 , Phaser.Easing.Linear.None , true , 500 )
       }
+
+    function NextState(){
+      game.state.start( 'over' , true , !true , this.settings.win , this.settings.mode , this.settings.level , this.settings.lives , this.settings.timeleft )
+      }
+    this.input.onDown.addOnce( NextState , this )
     },
   update: function(){},
   render: function(){},
