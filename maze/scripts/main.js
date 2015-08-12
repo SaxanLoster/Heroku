@@ -2,9 +2,7 @@ var states = {
   template: function(){},
   boot: function(){},
   title: function(){},
-  pregame: function(){},
   game: function(){},
-  postgame: function(){},
   over: function(){},
   }
 

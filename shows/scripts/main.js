@@ -208,7 +208,7 @@ Saxan = {
             }
           break
         case 'Basic' :
-          window.open( 'Config.html' )
+          window.open( 'config.html' )
           break
         }
       },

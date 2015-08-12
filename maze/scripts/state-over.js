@@ -5,7 +5,7 @@ states.over.prototype = {
     this.vars.win = arguments[ 0 ]
     this.vars.mode = arguments[ 1 ]
     this.vars.level = arguments[ 2 ]
-    this.vars.lives = arguments[ 3 ] - ( this.vars.win ? 0 : 1 ) + ( this.vars.level % 5 === 0 ? 1 : 0 )
+    this.vars.lives = arguments[ 3 ] - ( this.vars.win ? 0 : 1 ) + ( this.vars.mode === 1 && this.vars.level % 5 === 0 ? 1 : 0 )
     this.vars.time = arguments[ 4 ]
     },
   preload: function(){},
@@ -20,7 +20,7 @@ states.over.prototype = {
     this.vars.text.input.useHandCursor = true
     this.vars.text.events.onInputDown.add( function(){
       this.vars.next = this.vars.win ? this.vars.level + 1 : this.vars.level
-      if( this.vars.lives > 0 ) game.state.start( 'pregame' , true , !true , this.vars.mode , this.vars.next , this.vars.lives , this.vars.time )
+      if( this.vars.lives > 0 ) game.state.start( 'game' , true , !true , this.vars.mode , this.vars.next , this.vars.lives , this.vars.time )
       else game.state.start( 'title' )
       } , this )
     },

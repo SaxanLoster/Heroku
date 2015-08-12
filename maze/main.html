@@ -8,9 +8,7 @@
     <Script src="scripts/game-maze.js"></Script>
     <Script src="scripts/state-boot.js"></Script>
     <Script src="scripts/state-title.js"></Script>
-    <Script src="scripts/state-pregame.js"></Script>
     <Script src="scripts/state-game.js"></Script>
-    <Script src="scripts/state-postgame.js"></Script>
     <Script src="scripts/state-over.js"></Script>
     <Style>
       * {
@@ -36,9 +34,7 @@
       game.state.add( 'template' , states.template )
       game.state.add( 'boot' , states.boot )
       game.state.add( 'title' , states.title )
-      game.state.add( 'pregame' , states.pregame )
       game.state.add( 'game' , states.game )
-      game.state.add( 'postgame' , states.postgame )
       game.state.add( 'over' , states.over )
       game.state.start( 'boot' )
       </Script>
