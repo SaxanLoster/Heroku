@@ -11,7 +11,7 @@ states.title.prototype = {
       temp2.anchor.setTo( .5 )
       temp2.inputEnabled = true
       temp2.input.useHandCursor = true
-      temp2.events.onInputDown.add( function(){ game.state.start( 'game' , true , !true , 2 , 1 , 1 , 5 ) } , this )
+      temp2.events.onInputDown.add( function(){ game.state.start( 'game' , true , !true , 2 , 1 , 1 , 300 ) } , this )
     },
   update: function(){},
   render: function(){},
