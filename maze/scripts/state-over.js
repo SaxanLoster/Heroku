@@ -18,14 +18,12 @@ states.over.prototype = {
         if( SaxanStorage.highscores.life5 < temp1 ){
           SaxanStorage.highscores.life5 = temp1
           this.settings.newscore = true
-          console.log( '1' )
           }
         break
       case 2:
         if( SaxanStorage.highscores.time5 < temp1 ){
           SaxanStorage.highscores.time5 = temp1
           this.settings.newscore = true
-          console.log( '2' )
           }
         break
       }

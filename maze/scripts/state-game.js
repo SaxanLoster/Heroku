@@ -191,7 +191,7 @@ states.game.prototype = {
           }
         paraf2.position.set( paraf2.x - game.camera.x , paraf2.y - game.camera.y )
         game.make.tween( paraf2 ).to( { x: this.elements.infobar2.children[ paraf2.frame + 1 ].x , y: this.elements.infobar2.children[ paraf2.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
-          if( this.settings.win ) this.routines.PostGame.call( this )
+          if( this.settings.win && this.tweens._tweens.length <= 1 ) this.routines.PostGame.call( this )
           } , this )
         } , null , this  )
 
@@ -202,8 +202,6 @@ states.game.prototype = {
         var temp1 = 110
         
         if( game.input.activePointer.isDown ){
-          // this.elements.player.body.velocity.x = temp1
-          // this.elements.player.body.velocity.y = temp1
           if( this.elements.joystick.cursors.right ) this.elements.player.body.velocity.x += temp1
           if( this.elements.joystick.cursors.down ) this.elements.player.body.velocity.y += temp1
           if( this.elements.joystick.cursors.left ) this.elements.player.body.velocity.x -= temp1
