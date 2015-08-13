@@ -5,7 +5,7 @@ function GetLevelData( level ){
       data.gems = 2
       data.size = 5
       data.time = 5
-      break
+      // break
     case  1 :
       data.gems = 1
       data.size = 7
