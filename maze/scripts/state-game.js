@@ -5,7 +5,7 @@ states.game.prototype = {
 
     this.settings = {}
     this.elements = {}
-    this.functions = {}
+    this.routines = {}
 
     this.settings.mode = arguments[ 0 ]
 
@@ -17,7 +17,7 @@ states.game.prototype = {
 
     this.settings.gems = temp1.gems
     this.settings.size = temp1.size
-    this.settings.timestart = ( this.settings.mode === 1 ) ? ( temp1.time ) : ( arguments[ 3 ] || 300 )
+    this.settings.timestart = ( this.settings.mode === 1 ) ? ( temp1.time ) : ( arguments[ 3 ] )
     this.settings.timer = game.time.create( true )
 
     this.settings.win = !true
@@ -44,18 +44,15 @@ states.game.prototype = {
       right: game.input.keyboard.addKey( Phaser.Keyboard.D ),
       }
 
-
-    this.functions.GetRandomPosition = function( paraf1 , paraf2 ){
-      do{
-        var tempf1 = game.rnd.between( 1 , paraf1.settings.size - 2 )
-        var tempf2 = game.rnd.between( 1 , paraf1.settings.size - 2 )
+    this.routines.GetRandomPosition = function( paraf1 ){
+      while( tempf1 === undefined || tempf2 === undefined || this.settings.maze[ tempf1 ][ tempf2 ] === 0 || this.settings.spacetaken.indexOf( tempf1 + 'x' + tempf2 ) !== -1 ){
+        var tempf1 = game.rnd.between( 1 , this.settings.size - 2 )
+        var tempf2 = game.rnd.between( 1 , this.settings.size - 2 )
         }
-      while( paraf1.settings.maze[ tempf1 ][ tempf2 ] === 0 || paraf1.settings.spacetaken.indexOf( tempf1 + 'x' + tempf2 ) !== -1 )
-      paraf1.settings.spacetaken.push( tempf1 + 'x' + tempf2 )
-      paraf2.position.set( ( tempf1 + paraf1.settings.ox ) * paraf1.settings.tilesize + 20 , ( tempf2 + paraf1.settings.oy ) * paraf1.settings.tilesize + 20 )
+      this.settings.spacetaken.push( tempf1 + 'x' + tempf2 )
+      paraf1.position.set( ( tempf1 + this.settings.ox ) * this.settings.tilesize + 20 , ( tempf2 + this.settings.oy ) * this.settings.tilesize + 20 )
       }
-
-    this.functions.PostGame = function(){
+    this.routines.PostGame = function(){
       this.settings.playing = !true
       game.camera.unfollow()
       this.elements.spritegroup = game.add.group()
@@ -115,7 +112,7 @@ states.game.prototype = {
     this.elements.items = game.add.group( game.world , 'items' , !true , true )
       for( var iter1 = 0 ; iter1 < this.settings.gems ; iter1++ ){
         this.elements.items.create( 0 , 0 , 'items' , iter1 )
-          this.functions.GetRandomPosition( this , this.elements.items.children[ iter1 ] )
+          this.routines.GetRandomPosition.call( this , this.elements.items.children[ iter1 ] )
           this.elements.items.children[ iter1 ].anchor.set( .5 )
           this.elements.items.children[ iter1 ].scale.set( .5 )
         }
@@ -125,7 +122,7 @@ states.game.prototype = {
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].beginFill( 0xFFFFFF , 1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].endFill()
-      game.add.text( 5 , 20 , 'Level: ' + this.settings.level , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+      game.add.text( 5 , 20 , 'Level ' + this.settings.level , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( 0 , .5 )
       game.add.text( game.width / 2 , 20 , this.settings.mode === 1 ? 'Lives: ' + this.settings.lives : '' , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( .5 , .5 )
@@ -148,7 +145,7 @@ states.game.prototype = {
       this.elements.infobar2.fixedToCamera = true
 
     this.elements.player = game.add.sprite( 0 , 0 , 'player' )
-      this.functions.GetRandomPosition( this , this.elements.player )
+      this.routines.GetRandomPosition.call( this , this.elements.player )
       this.elements.player.anchor.setTo( .5 )
       this.elements.player.scale.setTo( .75 )
       game.camera.follow( this.elements.player )
@@ -162,7 +159,7 @@ states.game.prototype = {
     game.physics.enable( this.elements.player , Phaser.Physics.ARCADE )
     this.elements.player.body.collideWorldBounds = true
 
-    this.settings.timer.add( this.settings.timestart * Phaser.Timer.SECOND , this.functions.PostGame , this )
+    this.settings.timer.add( this.settings.timestart * Phaser.Timer.SECOND , this.routines.PostGame , this )
     this.settings.timer.start()
     this.settings.timer.pause()
     function StartGame(){
@@ -194,7 +191,7 @@ states.game.prototype = {
           }
         paraf2.position.set( paraf2.x - game.camera.x , paraf2.y - game.camera.y )
         game.make.tween( paraf2 ).to( { x: this.elements.infobar2.children[ paraf2.frame + 1 ].x , y: this.elements.infobar2.children[ paraf2.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
-          if( this.settings.win ) this.functions.PostGame.call( this )
+          if( this.settings.win ) this.routines.PostGame.call( this )
           } , this )
         } , null , this  )
 

@@ -18,13 +18,32 @@ states.template.prototype = {
   shutdown: function(){},
   }
 
-// rotate maze types
+var VERSION = '0001'
+
+if( !localStorage.MazeGame ){
+  SaxanStorage = {
+    'version': VERSION,
+    'highscores': {
+      'life5': 0,
+      'time5': 0,
+      },
+    }
+  localStorage.MazeGame = JSON.stringify( SaxanStorage )
+  }
+else{
+  SaxanStorage = JSON.parse( localStorage.MazeGame )
+  if( SaxanStorage.version !== VERSION ){
+    SaxanStorage.highscores = {
+      'life5': 0,
+      'time5': 0,
+      }
+    localStorage.MazeGame = JSON.stringify( SaxanStorage )
+    }
+  }
+
 // keyboard continue
 // phone dimensions
 // loading bar
 // local storage
 // maize maze
 // gemhunter
-// diff find gem time
-// eary game zoom
-// rollover time
