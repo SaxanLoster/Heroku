@@ -22,6 +22,8 @@
   </head>
   <body bgcolor='#202020'>
     <script>
+      if( !localStorage.Cards ) localStorage.Cards = JSON.stringify( [ 0 , 0 , 0 ] )
+      SaxanStorage = JSON.parse( localStorage.Cards )
       var game = new Phaser.Game( 500 , 500 , Phaser.AUTO , '' , state )
       </script>
     </body>
