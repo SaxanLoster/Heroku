@@ -1,41 +1,28 @@
 states.game.prototype = {
   init: function(){
-    game.time.reset()
+    game.physics.startSystem( Phaser.Physics.ARCADE )
+    game.stage.backgroundColor = 0x000000
     game.time.pausetime = 0
+    game.time.reset()
 
     this.settings = {}
-    this.elements = {}
-    this.routines = {}
-
     this.settings.mode = arguments[ 0 ]
-
     this.settings.level = arguments[ 1 ] || 1
-
     this.settings.lives = arguments[ 2 ] || 5
-
     var temp1 = GetLevelData( this.settings.level )
-
     this.settings.gems = temp1.gems
     this.settings.size = temp1.size
     this.settings.timestart = ( this.settings.mode === 1 ) ? ( temp1.time ) : ( arguments[ 3 ] )
     this.settings.timer = game.time.create( true )
-
     this.settings.win = !true
-
     this.settings.spacetaken = []
-
     this.settings.playing = true
-
     this.settings.maze = new Maze( this.settings.size )
-
     this.settings.tilesize = 40
-    
     this.settings.x = Math.max( Math.ceil( game.width  / this.settings.tilesize ) , this.settings.size )
     this.settings.y = Math.max( Math.ceil( game.height / this.settings.tilesize ) , this.settings.size )
-
     this.settings.ox = Math.floor( ( this.settings.x - this.settings.size ) / 2 )
     this.settings.oy = Math.floor( ( this.settings.y - this.settings.size ) / 2 )
-
     this.settings.cursors = game.input.keyboard.createCursorKeys()
     this.settings.wasd = {
       up: game.input.keyboard.addKey( Phaser.Keyboard.W ),
@@ -43,7 +30,26 @@ states.game.prototype = {
       left: game.input.keyboard.addKey( Phaser.Keyboard.A ),
       right: game.input.keyboard.addKey( Phaser.Keyboard.D ),
       }
-
+    },
+  preload: function(){
+    this.routines = {}
+    this.routines.CollectGem = function( paraf1 , paraf2 ){
+      paraf2.body.enable = !true
+      paraf2.oldposition = { x: paraf2.x , y: paraf2.y }
+      this.elements.infobar2.add( paraf2 )
+      if( this.elements.items.total === 0 ){
+        this.elements.player.body.enable = !true
+        this.elements.player.body.velocity.x = 0
+        this.elements.player.body.velocity.y = 0
+        this.settings.playing = !true
+        this.settings.timer.stop()
+        this.settings.win = true
+        }
+      paraf2.position.set( paraf2.x - game.camera.x , paraf2.y - game.camera.y )
+      game.make.tween( paraf2 ).to( { x: this.elements.infobar2.children[ paraf2.frame + 1 ].x , y: this.elements.infobar2.children[ paraf2.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
+        if( this.settings.win && this.tweens._tweens.length <= 1 ) this.routines.PostGame()
+        } , this )
+      }.bind( this )
     this.routines.GetRandomPosition = function( paraf1 ){
       while( tempf1 === undefined || tempf2 === undefined || this.settings.maze[ tempf1 ][ tempf2 ] === 0 || this.settings.spacetaken.indexOf( tempf1 + 'x' + tempf2 ) !== -1 ){
         var tempf1 = game.rnd.between( 1 , this.settings.size - 2 )
@@ -51,8 +57,9 @@ states.game.prototype = {
         }
       this.settings.spacetaken.push( tempf1 + 'x' + tempf2 )
       paraf1.position.set( ( tempf1 + this.settings.ox ) * this.settings.tilesize + 20 , ( tempf2 + this.settings.oy ) * this.settings.tilesize + 20 )
-      }
+      }.bind( this )
     this.routines.PostGame = function(){
+      game.stage.backgroundColor = 0x3fafaf
       this.settings.playing = !true
       game.camera.unfollow()
       this.elements.spritegroup = game.add.group()
@@ -90,12 +97,10 @@ states.game.prototype = {
         game.state.start( 'over' , true , !true , this.settings.win , this.settings.mode , this.settings.level , this.settings.lives , this.settings.timeleft )
         }
       this.input.onDown.addOnce( NextState , this )
-      }
+      }.bind( this )
     },
-  preload: function(){},
   create: function(){
-    game.physics.startSystem( Phaser.Physics.ARCADE )
-    game.stage.backgroundColor = '#000000'
+    this.elements = {}
 
     this.elements.map = game.add.tilemap( null , this.settings.tilesize , this.settings.tilesize , this.settings.x , this.settings.y )
       this.elements.map.addTilesetImage( 'maze' , 'maze' , 40 , 40 , 0 , 1 )
@@ -112,28 +117,28 @@ states.game.prototype = {
     this.elements.items = game.add.group( game.world , 'items' , !true , true )
       for( var iter1 = 0 ; iter1 < this.settings.gems ; iter1++ ){
         this.elements.items.create( 0 , 0 , 'items' , iter1 )
-          this.routines.GetRandomPosition.call( this , this.elements.items.children[ iter1 ] )
+          this.routines.GetRandomPosition( this.elements.items.children[ iter1 ] )
           this.elements.items.children[ iter1 ].anchor.set( .5 )
           this.elements.items.children[ iter1 ].scale.set( .5 )
         }
 
     this.elements.infobar1  = game.add.group()
       game.add.graphics( 0 , 0 , this.elements.infobar1 )
-        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].beginFill( 0xFFFFFF , 1 )
+        this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].beginFill( 0xafafff , 1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].endFill()
-      game.add.text( 5 , 20 , 'Level ' + this.settings.level , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+      game.add.text( 5 , 20 , 'Level ' + this.settings.level , { font: '20px Arial' , fill: '#000000' } , this.elements.infobar1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( 0 , .5 )
-      game.add.text( game.width / 2 , 20 , this.settings.mode === 1 ? 'Lives: ' + this.settings.lives : '' , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+      game.add.text( game.width / 2 , 20 , this.settings.mode === 1 ? 'Lives: ' + this.settings.lives : '' , { font: '20px Arial' , fill: '#000000' } , this.elements.infobar1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( .5 , .5 )
       var temp1 = Math.max( Math.ceil( this.settings.timer - game.time.totalElapsedSeconds() + game.time.pausetime ) , 0 )
-      game.add.text( this.elements.infobar1.width - 5 , 20 , Math.floor( temp1 / 60 ) + ':' + ( '00' + temp1 % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000' } , this.elements.infobar1 )
+      game.add.text( this.elements.infobar1.width - 5 , 20 , Math.floor( temp1 / 60 ) + ':' + ( '00' + temp1 % 60 ).slice( -2 ) , { font: '20px Arial' , fill: '#000000' } , this.elements.infobar1 )
         this.elements.infobar1.children[ this.elements.infobar1.total - 1 ].anchor.set( 1 , .5 )
       this.elements.infobar1.fixedToCamera = true
 
     this.elements.infobar2 = game.add.group()
       game.add.graphics( 0 , game.height - 40 , this.elements.infobar2 )
-        this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].beginFill( 0xFFFFFF , 1 )
+        this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].beginFill( 0xafafff , 1 )
         this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].drawRect( 0 , 0 , game.width , 40 )
         this.elements.infobar2.children[ this.elements.infobar2.total - 1 ].endFill()
       for( var iter1 = 0 ; iter1 < this.settings.gems ; iter1++ ){
@@ -145,7 +150,7 @@ states.game.prototype = {
       this.elements.infobar2.fixedToCamera = true
 
     this.elements.player = game.add.sprite( 0 , 0 , 'player' )
-      this.routines.GetRandomPosition.call( this , this.elements.player )
+      this.routines.GetRandomPosition( this.elements.player )
       this.elements.player.anchor.setTo( .5 )
       this.elements.player.scale.setTo( .75 )
       game.camera.follow( this.elements.player )
@@ -162,13 +167,12 @@ states.game.prototype = {
     this.settings.timer.add( this.settings.timestart * Phaser.Timer.SECOND , this.routines.PostGame , this )
     this.settings.timer.start()
     this.settings.timer.pause()
-    function StartGame(){
+    var StartGame = function(){
       this.input.keyboard.onDownCallback = null
       this.settings.timer.resume()
-      }
-    this.input.keyboard.callbackContext = this
+      }.bind( this )
     this.input.keyboard.onDownCallback = StartGame
-    this.input.onDown.addOnce( StartGame , this )
+    this.input.onDown.addOnce( StartGame )
     },
   update: function(){
     if( true && this.settings.playing ){
@@ -177,23 +181,7 @@ states.game.prototype = {
 
       game.physics.arcade.collide( this.elements.player , this.elements.mazelayer )
 
-      game.physics.arcade.overlap( this.elements.player , this.elements.items , function( paraf1 , paraf2 ){
-        paraf2.body.enable = !true
-        paraf2.oldposition = { x: paraf2.x , y: paraf2.y }
-        this.elements.infobar2.add( paraf2 )
-        if( this.elements.items.total === 0 ){
-          this.elements.player.body.enable = !true
-          this.elements.player.body.velocity.x = 0
-          this.elements.player.body.velocity.y = 0
-          this.settings.playing = !true
-          this.settings.timer.stop()
-          this.settings.win = true
-          }
-        paraf2.position.set( paraf2.x - game.camera.x , paraf2.y - game.camera.y )
-        game.make.tween( paraf2 ).to( { x: this.elements.infobar2.children[ paraf2.frame + 1 ].x , y: this.elements.infobar2.children[ paraf2.frame + 1 ].y } , 1000 , Phaser.Easing.Linear.None , true ).onComplete.add( function(){
-          if( this.settings.win && this.tweens._tweens.length <= 1 ) this.routines.PostGame.call( this )
-          } , this )
-        } , null , this  )
+      game.physics.arcade.overlap( this.elements.player , this.elements.items , this.routines.CollectGem , null , this  )
 
       /* Player Movement */
         this.elements.player.body.velocity.x = 0
@@ -268,9 +256,4 @@ states.game.prototype = {
         /**/
       }
     },
-  render: function(){},
-  paused: function(){},
-  resumed: function(){},
-  resize: function(){},
-  shutdown: function(){},
   }

@@ -4,16 +4,25 @@
     <script src="../phaser.js"></script>
     <script src="scripts/main.js"></script>
     <style>
-      canvas{
-        position: absolute;
-        top: 0;
+      * {
+        margin: 0;
+        }
+      Body {
+        overflow: hidden;
+        }
+      Canvas {
         bottom: 0;
         left: 0;
-        right: 0;
         margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
         }
     </style>
   </head>
   <body bgcolor='#202020'>
+    <script>
+      var game = new Phaser.Game( 500 , 500 , Phaser.AUTO , '' , state )
+      </script>
     </body>
 </html>

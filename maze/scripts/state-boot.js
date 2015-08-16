@@ -12,10 +12,4 @@ states.boot.prototype = {
     game.scale.scaleMode = 2
     game.state.start( 'title' )
     },
-  update: function(){},
-  render: function(){},
-  paused: function(){},
-  resumed: function(){},
-  resize: function(){},
-  shutdown: function(){},
   }

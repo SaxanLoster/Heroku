@@ -1,9 +1,9 @@
 states.over.prototype = {
   init: function(){
+    game.stage.backgroundColor = 0x000000
     game.world.setBounds( 0 , 0 , game.width , game.height )
 
     this.settings = {}
-    this.routines = {}
 
     this.settings.win = arguments[ 0 ]
     this.settings.mode = arguments[ 1 ]
@@ -29,14 +29,17 @@ states.over.prototype = {
       }
     localStorage.MazeGame = JSON.stringify( SaxanStorage )
     },
-  preload: function(){},
+  preload: function(){
+    this.routines = {}
+    },
   create: function(){
+    this.elements = {}
     var temp1 = 'Level ' + this.settings.level + ( this.settings.win ? ' complete.' : ' failed.' )
     var temp2 = '\n' + ( this.settings.mode === 1 ? this.settings.lives + ' lives' : ( Math.floor( this.settings.time / 60 ) + ':' + ( '00' + this.settings.time % 60 ).slice( -2 ) ) ) + ' left.'
     var temp3 = '\n' + ( this.settings.newscore ? 'NEW! ' : '' ) + 'Highscore: Level ' + ( this.settings.mode === 1 ? SaxanStorage.highscores.life5 : SaxanStorage.highscores.time5 )
     var temp4 = '\n' + 'Click to ' + ( this.settings.win ? 'continue.\n' : ( this.settings.mode === 1 && this.settings.lives > 0 ? 'retry.' : 'return to main menu.' ) )
     var tempText = temp1 + temp2 + temp3 + temp4
-    this.settings.text = game.add.text( game.world.centerX , game.world.centerY , tempText , { align: 'center' , fill: '#FF0088' , font: '30px Arial' , wordWrap: true , wordWrapWidth: game.width } )
+    this.settings.text = game.add.text( game.world.centerX , game.world.centerY , tempText , { align: 'center' , fill: '#ff008f' , font: '30px Arial' , wordWrap: true , wordWrapWidth: game.width } )
     this.settings.text.anchor.setTo( .5 )
     this.settings.text.inputEnabled = true
     this.settings.text.input.useHandCursor = true
@@ -45,10 +48,4 @@ states.over.prototype = {
       this.settings.lives === 0 ? game.state.start( 'title' ) : game.state.start( 'game' , true , !true , this.settings.mode , this.settings.next , this.settings.lives , this.settings.time )
       } , this )
     },
-  update: function(){},
-  render: function(){},
-  paused: function(){},
-  resumed: function(){},
-  resize: function(){},
-  shutdown: function(){},
   }
