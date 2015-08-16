@@ -25,8 +25,8 @@ state.settings = {
     stroke: '#ffffff',
     strokeThickness: 0,
     },
+  textcard0: 'TOSS',
   textcard1: 'KEEP',
-  textcard2: 'TOSS',
   textdeck1: 'deal',
   textdeck2: 'draw',
   textdeck3: 'show',
@@ -137,6 +137,7 @@ state.routines = {
   PlayPhase3: function(){
     this.elements.decktext.text = ''
     for( var iter1 = 0 ; iter1 < this.elements.cardtext.total ; iter1++ ) this.elements.cardtext.children[ iter1 ].text = ''
+    this.routines.AIDraw()
     this.settings.tweens = []
     for( var iter1 = 0 ; iter1 < this.settings.hand1.length ; iter1++ ){
       if( !this.settings.hand1[ iter1 ].keep ){
@@ -287,12 +288,27 @@ state.routines = {
     }.bind( state ),
   ToggleDraw: function( para1 , para2 , para3 ){
     if( para3.text === this.settings.textcard1 ){
-      para3.text = this.settings.textcard2
+      para3.text = this.settings.textcard0
       this.settings.hand1[ para1.name ].keep = !true
       }
     else{
       para3.text = this.settings.textcard1
       this.settings.hand1[ para1.name ].keep = true
+      }
+    }.bind( state ),
+  AIDraw: function(){
+    var temp1 = this.routines.AnalyzeHand( this.settings.hand2 )
+    if( temp1.type.toString().match( /0/ ) !== null ){
+      for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ){
+        }
+      }
+    if( temp1.type.toString().match( /1|2|3|6|7/ ) !== null ){
+      for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ){
+        if( temp1.power[ 1 ].indexOf( this.settings.hand2[ iter1 ].value ) !== -1 ){
+          if( this.settings.hand2[ iter1 ].value !== temp1.power[ 1 ][ 0 ] ) Math.random() > Math.pow( .999 , this.settings.hand2[ iter1 ].value * 50 )
+          else this.settings.hand2[ iter1 ].keep = Math.random() > Math.pow( .99 , this.settings.hand2[ iter1 ].value * this.settings.hand2[ iter1 ].value * 2 )
+          }
+        }
       }
     }.bind( state ),
   }
