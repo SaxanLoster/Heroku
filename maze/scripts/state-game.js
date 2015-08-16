@@ -58,6 +58,9 @@ states.game.prototype = {
       this.settings.spacetaken.push( tempf1 + 'x' + tempf2 )
       paraf1.position.set( ( tempf1 + this.settings.ox ) * this.settings.tilesize + 20 , ( tempf2 + this.settings.oy ) * this.settings.tilesize + 20 )
       }.bind( this )
+    this.routines.NextState = function(){
+      game.state.start( 'over' , true , !true , this.settings.win , this.settings.mode , this.settings.level , this.settings.lives , this.settings.timeleft )
+      }.bind( this )
     this.routines.PostGame = function(){
       game.stage.backgroundColor = 0x3fafaf
       this.settings.playing = !true
@@ -93,10 +96,7 @@ states.game.prototype = {
         var tempf3 = game.make.tween( game.camera ).to( { x: 0 , y: 0 } , 2000 , Phaser.Easing.Linear.None , true , 500 )
         }
 
-      function NextState(){
-        game.state.start( 'over' , true , !true , this.settings.win , this.settings.mode , this.settings.level , this.settings.lives , this.settings.timeleft )
-        }
-      this.input.onDown.addOnce( NextState , this )
+      this.input.onDown.addOnce( this.routines.NextState )
       }.bind( this )
     },
   create: function(){

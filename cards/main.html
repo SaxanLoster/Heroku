@@ -22,7 +22,29 @@
   </head>
   <body bgcolor='#202020'>
     <script>
-      if( !localStorage.Cards ) localStorage.Cards = JSON.stringify( [ 0 , 0 , 0 ] )
+      var SaxanStorage
+      ( function(){
+        var VERSION = '0001'
+        if( !localStorage.Cards ){
+          SaxanStorage = {
+            'hands': [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
+            'version': VERSION,
+            'wins': [ 0 , 0 , 0 ],
+            }
+          localStorage.Cards = JSON.stringify( SaxanStorage )
+          }
+        else{
+          SaxanStorage = JSON.parse( localStorage.Cards )
+          if( SaxanStorage.version !== VERSION ){
+            SaxanStorage = {
+              'hands': [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
+              'version': VERSION,
+              'wins': [ 0 , 0 , 0 ],
+              }
+            localStorage.Cards = JSON.stringify( SaxanStorage )
+            }
+          }
+        } )();
       SaxanStorage = JSON.parse( localStorage.Cards )
       var game = new Phaser.Game( 500 , 500 , Phaser.AUTO , '' , state )
       </script>

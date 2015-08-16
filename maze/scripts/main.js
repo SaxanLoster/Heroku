@@ -33,9 +33,12 @@ if( !localStorage.MazeGame ){
 else{
   SaxanStorage = JSON.parse( localStorage.MazeGame )
   if( SaxanStorage.version !== VERSION ){
-    SaxanStorage.highscores = {
-      'life5': 0,
-      'time5': 0,
+    SaxanStorage = {
+      'version': VERSION,
+      'highscores': {
+        'life5': 0,
+        'time5': 0,
+        },
       }
     localStorage.MazeGame = JSON.stringify( SaxanStorage )
     }

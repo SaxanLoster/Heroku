@@ -6,7 +6,6 @@ state.settings = {
     align: 'center',
     fill: '#ffffff',
     font: '18px Arial',
-    fontVariant: 'small-caps',
     },
   fontstyle2: {
     align: 'center',
@@ -26,14 +25,14 @@ state.settings = {
     stroke: '#ffffff',
     strokeThickness: 0,
     },
-  textcard1: 'keep',
-  textcard2: 'discard',
+  textcard1: 'KEEP',
+  textcard2: 'TOSS',
   textdeck1: 'deal',
   textdeck2: 'draw',
   textdeck3: 'show',
-  textover1: 'you win',
+  textover0: 'you win',
   textover1: 'you lose',
-  textover1: 'tie game',
+  textover2: 'tie game',
   }
 
 state.init = function(){
@@ -46,26 +45,60 @@ state.preload = function (){
   }
 state.create = function(){
   this.stage.backgroundColor = 0x000000
-  this.elements.deck = this.add.sprite( 250 , 250 , 'back' )
-    this.elements.deck.anchor.setTo( .5 , .5 )
+  this.elements.deck = this.add.sprite( this.world.centerX , this.world.centerY , 'back' )
+    this.elements.deck.anchor.set( .5 )
     this.elements.deck.inputEnabled = true
-  this.elements.decktext = this.add.text( 250 , 250 , '' , this.settings.fontstyle2 )
+  this.elements.decktext = this.add.text( this.world.centerX , this.world.centerY , '' , this.settings.fontstyle2 )
     this.elements.decktext.anchor.set( .5 )
   this.elements.cards1 = this.add.group()
     this.elements.cards1.name = 'cards1'
-    this.elements.cards1.x = 250
+    this.elements.cards1.x = this.world.centerX
     this.elements.cards1.y = 100
   this.elements.cards2 = this.add.group()
     this.elements.cards2.name = 'cards2'
-    this.elements.cards2.x = 250
-    this.elements.cards2.y = 400
+    this.elements.cards2.x = this.world.centerX
+    this.elements.cards2.y = this.world.height - 100
   this.elements.cardtext = this.add.group()
-    this.elements.cardtext.x = 250
+    this.elements.cardtext.x = this.world.centerX
     this.elements.cardtext.y = 25
     for( var iter1 = 0 ; iter1 < 5 ; iter1++ ){
       this.add.text( ( iter1 - 2 ) * 75 , 0 , '' , this.settings.fontstyle1 , this.elements.cardtext )
         this.elements.cardtext.children[ this.elements.cardtext.total - 1 ].anchor.set( .5 )
       }
+  this.elements.winstext = this.add.group()
+    this.elements.winstext.name = 'winstext'
+    this.elements.winstext.x = 25
+    this.elements.winstext.y = this.world.centerY
+    this.add.text( 0 , -30 , 'Wins: ' + SaxanStorage.wins[ 0 ] , this.settings.fontstyle1 , this.elements.winstext )
+      this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
+    this.add.text( 0 , -10 , 'Losses: ' + SaxanStorage.wins[ 1 ] , this.settings.fontstyle1 , this.elements.winstext )
+      this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
+    this.add.text( 0 , 10 , 'Ties: ' + SaxanStorage.wins[ 2 ] , this.settings.fontstyle1 , this.elements.winstext )
+      this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
+    this.add.text( 0 , 30 , 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%' , this.settings.fontstyle1 , this.elements.winstext )
+      this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
+  this.elements.handstext = this.add.group()
+    this.elements.handstext.name = 'handstext'
+    this.elements.handstext.x = this.world.width - 50
+    this.elements.handstext.y = this.world.centerY
+    this.add.text( 0 , -80 , 'High Cards: ' + SaxanStorage.hands[ 0 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , -60 , 'Pairs: ' + SaxanStorage.hands[ 1 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , -40 , '2 Pairs: ' + SaxanStorage.hands[ 2 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , -20 , '3 of a Kinds: ' + SaxanStorage.hands[ 3 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , 0 , 'Straights: ' + SaxanStorage.hands[ 4 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , 20 , 'Flushes: ' + SaxanStorage.hands[ 5 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , 40 , 'Full Houses: ' + SaxanStorage.hands[ 6 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , 60 , '4 of a Kinds: ' + SaxanStorage.hands[ 7 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
+    this.add.text( 0 , 80 , 'Straight Flushes: ' + SaxanStorage.hands[ 8 ] , this.settings.fontstyle1 , this.elements.handstext )
+      this.elements.handstext.children[ this.elements.handstext.total - 1 ].anchor.set( 1 , .5 )
   this.routines.PlayPhase1()
   }
 
@@ -138,10 +171,16 @@ state.routines = {
     this.elements.decktext.text = ''
     for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ) this.elements.cards2.children[ iter1 ].loadTexture( 'cards' , this.settings.hand2[ iter1 ].frame )
     this.elements.deck.events.onInputDown.addOnce( this.routines.PlayPhase1 )
-    var temp1 = this.routines.CompareHands( this.routines.AnalyzeHand( this.settings.hand1 ) , this.routines.AnalyzeHand( this.settings.hand2 ) )
-    this.elements.decktext.text = temp1 === 1 ? 'you win' : temp1 === 2 ? 'you lose' : 'tie'
-    SaxanStorage[ temp1 ]++
+    var temp1 = this.routines.AnalyzeHand( this.settings.hand1 )
+    var temp2 = this.routines.AnalyzeHand( this.settings.hand2 )
+    var temp3 = this.routines.CompareHands( temp1 , temp2 )
+    this.elements.decktext.text = temp3 === 0 ? this.settings.textover0 : temp3 === 1 ? this.settings.textover1 : this.settings.textover2
+    SaxanStorage.wins[ temp3 ]++
+    SaxanStorage.hands[ temp1.type ]++
     localStorage.Cards = JSON.stringify( SaxanStorage )
+    this.elements.winstext.children[ temp3 ].text = this.elements.winstext.children[ temp3 ].text.replace( /\d+/g , SaxanStorage.wins[ temp3 ] )
+    this.elements.winstext.children[ 3 ].text = 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%'
+    this.elements.handstext.children[ temp1.type ].text = this.elements.handstext.children[ temp1.type ].text.replace( /\d+$/ , SaxanStorage.hands[ temp1.type ] )
     }.bind( state ),
   AnalyzeHand: function( para1 ){
     var temp1 = { length: 0 }
@@ -198,17 +237,17 @@ state.routines = {
     return { type: temp4 , power: temp3 }
     }.bind( state ),
   CompareHands: function( para1 , para2 ){
-    if( para1.type > para2.type ) return 1
-    if( para1.type < para2.type ) return 2
+    if( para1.type > para2.type ) return 0
+    if( para1.type < para2.type ) return 1
     for( var iter1 = 4 ; iter1 > 0 ; iter1-- ){
       if( para1.power[ iter1 ].length > 0 ){
         for( var iter2 = 0 ; iter2 < para1.power[ iter1 ].length ; iter2++ ){
-          if( para1.power[ iter1 ][ iter2 ] > para2.power[ iter1 ][ iter2 ] ) return 1
-          if( para1.power[ iter1 ][ iter2 ] < para2.power[ iter1 ][ iter2 ] ) return 2
+          if( para1.power[ iter1 ][ iter2 ] > para2.power[ iter1 ][ iter2 ] ) return 0
+          if( para1.power[ iter1 ][ iter2 ] < para2.power[ iter1 ][ iter2 ] ) return 1
           }
         }
       }
-    return 0
+    return 2
     }.bind( state ),
   DealCard: function( para1 , para2 ){
     while( temp1 === undefined || this.settings.deck[ temp1 ].drawn ) var temp1 = Math.floor( Math.random() * this.settings.deck.length )
@@ -223,7 +262,7 @@ state.routines = {
         }
       this.elements[ 'cards' + para1 ].addAt( temp2 , para2 )
     var temp3 = this.add.tween( temp2 )
-      temp3.to( { x: ( para2 - 2 ) * 75 , y: 0 } , 250 , "Linear" )
+      temp3.to( { x: ( para2 - 2 ) * 75 , y: 0 } , 500 , "Linear" )
       temp3.onComplete.add( function( paraf1 , paraf2 ){
         if( paraf1.parent.name === 'cards1' ) paraf1.loadTexture( 'cards' , this.settings.hand1[ paraf1.name ].frame )
         } , this )
