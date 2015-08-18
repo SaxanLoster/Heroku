@@ -101,10 +101,8 @@
             },
           EventListeners: function(){
             var A = document.querySelectorAll( 'input[type="text"]' )
-            for( var a = 0 ; a < A.length ; a++ ){
-              A[ a ].addEventListener( 'focus' , Saxan.Functions.OnFocus )
-              A[ a ].addEventListener( 'keydown' , Saxan.Functions.OnKeyDown )
-              }
+            for( var a = 0 ; a < A.length ; a++ ) A[ a ].addEventListener( 'focus' , Saxan.Functions.OnFocus )
+            window.addEventListener( 'keydown' , Saxan.Functions.OnKeyDown )
             },
           InsertRow: function(){
             var a = '0'
@@ -248,14 +246,27 @@
             Saxan.Globals.Rows = document.getElementsByTagName( 'tr' ).length - 1
             },
           OnFocus: function(){
-            event.srcElement.select()
+            setTimeout( function( event ){
+              event.srcElement.select()
+              } , 50 , event )
             },
           OnKeyDown: function(){
-            if( event.keyCode == 13 ){
-              var A = event.srcElement
-              var B = A.placeholder
-              if( event.shiftKey ) A.parentElement.parentElement.previousSibling.querySelector( '[placeholder=' + B + ']' ).focus()
-              else                 A.parentElement.parentElement.nextSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+            if( event.altKey || event.ctrlKey ) return false
+            if( event.srcElement.tagName.toLowerCase() === 'input' ){
+              if( event.keyCode === 13 ){
+                var A = event.srcElement.parentElement.parentElement
+                var B = event.srcElement.placeholder
+                if( event.shiftKey ) A.previousSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+                else A.nextSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+                }
+              if( event.keyCode === 27 ){
+                event.srcElement.blur()
+                }
+              }
+            if( event.srcElement.tagName.toLowerCase() !== 'input' ){
+              var A = document.querySelectorAll( 'td:nth-child( 2 ) input' )
+              for( var a = 0 ; a < A.length ; a++ ) if( A[ a ].value.charCodeAt( 0 ) === event.keyCode ) break
+              if( a < A.length ) A[ a ].scrollIntoViewIfNeeded()
               }
             },
           OnResize: function(){
@@ -284,11 +295,11 @@
             B += ']'
             return B
             },
-          SaveFile:function(){
+          SaveFile: function(){
             var A = Saxan.Functions.SaveData()
             window.open( 'data:text.json,' + encodeURI( A ) , 'Show.JSON' )
             },
-          SaveLocal:function(){
+          SaveLocal: function(){
             var A = Saxan.Functions.SaveData()
             localStorage.ShowListing = A
             },

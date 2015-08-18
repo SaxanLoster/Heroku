@@ -1,4 +1,3 @@
-
 Array.prototype.has = function( string ){
   var bool = false
   for( var i = 0 ; i < this.length ; i++ ){
