@@ -23,29 +23,21 @@
   <body bgcolor='#202020'>
     <script>
       var SaxanStorage
-      ( function(){
-        var VERSION = '0001'
-        if( !localStorage.Cards ){
-          SaxanStorage = {
-            'hands': [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
-            'version': VERSION,
-            'wins': [ 0 , 0 , 0 ],
-            }
-          localStorage.Cards = JSON.stringify( SaxanStorage )
+      function ResetStats(){
+        SaxanStorage = {
+          'hands': [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
+          'version': 2,
+          'wins': [ 0 , 0 , 0 ],
+          'streak': '0|0',
           }
-        else{
-          SaxanStorage = JSON.parse( localStorage.Cards )
-          if( SaxanStorage.version !== VERSION ){
-            SaxanStorage = {
-              'hands': [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ],
-              'version': VERSION,
-              'wins': [ 0 , 0 , 0 ],
-              }
-            localStorage.Cards = JSON.stringify( SaxanStorage )
-            }
-          }
-        } )();
+        localStorage.Cards = JSON.stringify( SaxanStorage )
+        }
+      if( !localStorage.Cards ) ResetStats()
       SaxanStorage = JSON.parse( localStorage.Cards )
+      if( SaxanStorage.version < 2 ){
+        SaxanStorage.streak = '0|0'
+        SaxanStorage.version = 2
+        }
       var game = new Phaser.Game( 500 , 500 , Phaser.AUTO , '' , state )
       </script>
     </body>

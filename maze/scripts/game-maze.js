@@ -342,15 +342,17 @@ function BraidedGrowingTree( Size ){
     return NewMaze
     }
   function GetCell( Group , Types ){
-    if( !Types ) var Types = [ 1 , 2 , 3 , 4 ]
-    if( Types == 0 ) Types = [ 1 , 2 , 3 , 4 ]
-    var Mode = typeof Types == 'number' ? Types : Types[ Math.floor( Math.random() * Types.length ) ]
-    switch( Mode ){
-      case 1 : return Group[ Math.floor( Math.random() * Group.length ) ]
-      case 2 : return Group[ 0 ]
-      case 3 : return Group[ Math.round( ( Group.length - 1 ) / 2 + ( Math.random() - .5 ) ) ]
-      case 4 : return Group[ Group.length - 1 ]
-      }
+    if( !Types ) var Types = [ 1 , 1 , 1 , 1 ]
+    var total = Types.reduce( function( a , b ){ return a + b } , 0 )
+    var random = Math.floor( Math.random() * total )
+    if( random < Types[ 0 ] )
+      return Group[ 0 ]
+    if( random < Types[ 0 ] + Types[ 1 ] )
+      return Group[ Math.round( ( Group.length - 1 ) / 2 + ( Math.random() - .5 ) ) ]
+    if( random < Types[ 0 ] + Types[ 1 ] + Types[ 2 ] )
+      return Group[ Group.length - 1 ]
+    if( random < Types[ 0 ] + Types[ 1 ] + Types[ 2 ]  + Types[ 3 ] )
+      return Group[ Math.floor( Math.random() * Group.length ) ]
     }
   function GetNeighbors( A ){
     var B = []
@@ -383,7 +385,7 @@ function BraidedGrowingTree( Size ){
   Cells.push( Paths[ Math.floor( Math.random() * Paths.length ) ] )
   Cells[ 0 ].v = 1
   while( Cells.length > 0 ){
-    var Cell = GetCell( Cells , [ 2 , 3 , 3 , 4 ] )
+    var Cell = GetCell( Cells , [ 6 , 3 , 10 , 1 ] )
     var Neighbors = GetNeighbors( Cell )
     if( Neighbors.length == 0 ) Cells.splice( Cells.indexOf( Cell ) , 1 )
     else CarvePath( Cell , Neighbors[ Math.floor( Math.random() * Neighbors.length ) ] )
@@ -395,7 +397,7 @@ function BraidedGrowingTree( Size ){
         }
       }
     while( Walls.length > 0 ){
-      var Cell = GetCell( Walls , 0 )
+      var Cell = GetCell( Walls )
       if( Cell.x > 0 && Cell.x < Size - 1 && Cell.y > 0 && Cell.y < Size - 1 ){
         if( Math.random() < .05 ){
           if( Maze[ Cell.x - 1 ][ Cell.y ].w == 0 && Maze[ Cell.x + 1 ][ Cell.y ].w == 0 && Maze[ Cell.x ][ Cell.y - 1 ].w == 1 && Maze[ Cell.x ][ Cell.y + 1 ].w == 1 ){

@@ -2,6 +2,7 @@ var state = new Phaser.State()
 
 state.elements = {}
 state.settings = {
+  dealtimer: 200,
   fontstyle1: {
     align: 'center',
     fill: '#ffffff',
@@ -25,6 +26,7 @@ state.settings = {
     stroke: '#ffffff',
     strokeThickness: 0,
     },
+  mobile: /Mobi/i.test( navigator.userAgent ),
   textcard0: 'TOSS',
   textcard1: 'KEEP',
   textdeck1: 'deal',
@@ -69,13 +71,15 @@ state.create = function(){
     this.elements.winstext.name = 'winstext'
     this.elements.winstext.x = 25
     this.elements.winstext.y = this.world.centerY
-    this.add.text( 0 , -30 , 'Wins: ' + SaxanStorage.wins[ 0 ] , this.settings.fontstyle1 , this.elements.winstext )
+    this.add.text( 0 , -40 , 'Wins: ' + SaxanStorage.wins[ 0 ] , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
-    this.add.text( 0 , -10 , 'Losses: ' + SaxanStorage.wins[ 1 ] , this.settings.fontstyle1 , this.elements.winstext )
+    this.add.text( 0 , -20 , 'Losses: ' + SaxanStorage.wins[ 1 ] , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
-    this.add.text( 0 , 10 , 'Ties: ' + SaxanStorage.wins[ 2 ] , this.settings.fontstyle1 , this.elements.winstext )
+    this.add.text( 0 , 0 , 'Ties: ' + SaxanStorage.wins[ 2 ] , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
-    this.add.text( 0 , 30 , 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%' , this.settings.fontstyle1 , this.elements.winstext )
+    this.add.text( 0 , 20 , 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%' , this.settings.fontstyle1 , this.elements.winstext )
+      this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
+    this.add.text( 0 , 40 , 'Streak: ' + SaxanStorage.streak.split( '|' )[ 1 ] + ' ' + ( SaxanStorage.streak.split( '|' )[ 0 ] === 0 ? ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Win' : 'Wins' ) : ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Loss' : 'Losses' ) ) , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
   this.elements.handstext = this.add.group()
     this.elements.handstext.name = 'handstext'
@@ -107,10 +111,7 @@ state.routines = {
     this.elements.decktext.text = this.settings.textdeck1
     this.elements.cards1.removeAll()
     this.elements.cards2.removeAll()
-    for( var iter1 = 0 ; iter1 < this.settings.deck.length ; iter1++ ){
-      this.settings.deck[ iter1 ].drawn = !true
-      this.settings.deck[ iter1 ].keep = true
-      }
+    for( var iter1 = 0 ; iter1 < this.settings.deck.length ; iter1++ ) this.settings.deck[ iter1 ].place = 'deck'
     this.settings.hand1 = []
     this.settings.hand2 = []
     this.elements.deck.events.onInputDown.addOnce( this.routines.PlayPhase2 )
@@ -140,14 +141,14 @@ state.routines = {
     this.routines.AIDraw()
     this.settings.tweens = []
     for( var iter1 = 0 ; iter1 < this.settings.hand1.length ; iter1++ ){
-      if( !this.settings.hand1[ iter1 ].keep ){
+      if( this.settings.hand1[ iter1 ].place === 'discard1' ){
         this.settings.hand1.splice( iter1 , 1 )
         this.elements.cards1.removeChildAt( iter1 )
         this.settings.tweens.push( this.routines.DealCard( 1 , iter1 ) )
         }
       }
     for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ){
-      if( !this.settings.hand2[ iter1 ].keep ){
+      if( this.settings.hand2[ iter1 ].place === 'discard2' ){
         this.settings.hand2.splice( iter1 , 1 )
         this.elements.cards2.removeChildAt( iter1 )
         this.settings.tweens.push( this.routines.DealCard( 2 , iter1 ) )
@@ -170,6 +171,7 @@ state.routines = {
     }.bind( state ),
   PlayPhase4: function(){
     this.elements.decktext.text = ''
+    for( var iter1 = 0 ; iter1 < this.settings.hand1.length ; iter1++ ) this.elements.cards1.children[ iter1 ].loadTexture( 'cards' , this.settings.hand1[ iter1 ].frame )
     for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ) this.elements.cards2.children[ iter1 ].loadTexture( 'cards' , this.settings.hand2[ iter1 ].frame )
     this.elements.deck.events.onInputDown.addOnce( this.routines.PlayPhase1 )
     var temp1 = this.routines.AnalyzeHand( this.settings.hand1 )
@@ -178,69 +180,58 @@ state.routines = {
     this.elements.decktext.text = temp3 === 0 ? this.settings.textover0 : temp3 === 1 ? this.settings.textover1 : this.settings.textover2
     SaxanStorage.wins[ temp3 ]++
     SaxanStorage.hands[ temp1.type ]++
+    var temp4 = SaxanStorage.streak.split( '|' )
+    if( temp4[ 1 ] > 0 && temp4[ 0 ] == temp3 ) SaxanStorage.streak = temp3 + '|' + ( 1 + parseInt( temp4[ 1 ] ) )
+    else SaxanStorage.streak = temp3 + '|1'
     localStorage.Cards = JSON.stringify( SaxanStorage )
+    var temp4 = SaxanStorage.streak.split( '|' )[ 1 ]
     this.elements.winstext.children[ temp3 ].text = this.elements.winstext.children[ temp3 ].text.replace( /\d+/g , SaxanStorage.wins[ temp3 ] )
     this.elements.winstext.children[ 3 ].text = 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%'
+    this.elements.winstext.children[ 4 ].text = 'Streak: ' + temp4 + ' ' + ( temp3 === 0 ? ( temp4 == 1 ? 'Win' : 'Wins' ) : ( temp4 == 1 ? 'Loss' : 'Losses' ) )
     this.elements.handstext.children[ temp1.type ].text = this.elements.handstext.children[ temp1.type ].text.replace( /\d+$/ , SaxanStorage.hands[ temp1.type ] )
     }.bind( state ),
   AnalyzeHand: function( para1 ){
-    var temp1 = { length: 0 }
-    var temp2 = { length: 0 }
-    var temp3 = { 1: [] , 2: [] , 3: [] , 4: [] }
+    var temp1 = [ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ]
+    var temp2 = [ 0 , 0 , 0 , 0 ]
+    var temp3 = [ [] , [] , [] , [] ]
     var temp4 = 0
     for( var iter1 = 0 ; iter1 < para1.length ; iter1++ ){
-      if( temp1[ para1[ iter1 ].value ] ){
-        temp1[ para1[ iter1 ].value ]++
-        }
-      else{
-        temp1.length++
-        temp1[ para1[ iter1 ].value ] = 1
-        }
-      if( temp2[ para1[ iter1 ].suit ] ){
-        temp2[ para1[ iter1 ].suit ]++
-        }
-      else{
-        temp2.length++
-        temp2[ para1[ iter1 ].suit ] = 1
-        }
+      temp1[ para1[ iter1 ].value ]++
+      temp2[ para1[ iter1 ].suit ]++
       }
     for( var iter1 in temp1 ){
-      if( iter1 !== 'length' ){
-        if( !true ){}
-        else if( temp1[ iter1 ] === 1 ) temp3[ 1 ].push( parseInt( iter1 ) )
-        else if( temp1[ iter1 ] === 2 ) temp3[ 2 ].push( parseInt( iter1 ) )
-        else if( temp1[ iter1 ] === 3 ) temp3[ 3 ].push( parseInt( iter1 ) )
-        else if( temp1[ iter1 ] === 4 ) temp3[ 4 ].push( parseInt( iter1 ) )
-        else{}
-        }
+      if( temp1[ iter1 ] === 1 ) temp3[ 0 ].push( parseInt( iter1 ) )
+      if( temp1[ iter1 ] === 2 ) temp3[ 1 ].push( parseInt( iter1 ) )
+      if( temp1[ iter1 ] === 3 ) temp3[ 2 ].push( parseInt( iter1 ) )
+      if( temp1[ iter1 ] === 4 ) temp3[ 3 ].push( parseInt( iter1 ) )
       }
     for( var iter1 in temp3 ) temp3[ iter1 ].sort( function( paraf1 , paraf2 ){ return paraf2 - paraf1 } )
-    if( temp1.length < para1.length ){
-      if( temp1.length === 4 ) temp4 = 1
-      else if( temp1.length === 3 ){
-        if( temp3[ 2 ].length > 0 ) temp4 = 2
+    if( temp1.join( '' ).replace( /0/g , '' ).length < para1.length ){
+      if( temp1.join( '' ).replace( /0/g , '' ).length === 4 ) temp4 = 1
+      else if( temp1.join( '' ).replace( /0/g , '' ).length === 3 ){
+        if( temp3[ 1 ].length > 0 ) temp4 = 2
         else temp4 = 3
         }
       else{
-        if( temp3[ 3 ].length > 0 ) temp4 = 6
+        if( temp3[ 2 ].length > 0 ) temp4 = 6
         else temp4 = 7
         }
       }
     else{
-      if( temp3[ 1 ][ 0 ] - temp3[ 1 ][ temp3[ 1 ].length - 1 ] === 4 ){
-        if( temp2.length === 1 ) temp4 = 8
+      if( temp3[ 0 ][ 0 ] - temp3[ 0 ][ temp3[ 1 ].length - 1 ] === 4 ){
+        if( temp2.join( '' ).replace( /0/g , '' ).length === 1 ) temp4 = 8
         else temp4 = 4
         }
       else{
-        if( temp2.length === 1 ) temp4 = 5
+        if( temp2.join( '' ).replace( /0/g , '' ).length === 1 ) temp4 = 5
         }
       }
-    return { type: temp4 , power: temp3 }
+    return { type: temp4 , power: temp3 , suits: temp2 }
     }.bind( state ),
   CompareHands: function( para1 , para2 ){
     if( para1.type > para2.type ) return 0
     if( para1.type < para2.type ) return 1
-    for( var iter1 = 4 ; iter1 > 0 ; iter1-- ){
+    for( var iter1 = para1.power.length - 1 ; iter1 >= 0 ; iter1-- ){
       if( para1.power[ iter1 ].length > 0 ){
         for( var iter2 = 0 ; iter2 < para1.power[ iter1 ].length ; iter2++ ){
           if( para1.power[ iter1 ][ iter2 ] > para2.power[ iter1 ][ iter2 ] ) return 0
@@ -251,8 +242,8 @@ state.routines = {
     return 2
     }.bind( state ),
   DealCard: function( para1 , para2 ){
-    while( temp1 === undefined || this.settings.deck[ temp1 ].drawn ) var temp1 = Math.floor( Math.random() * this.settings.deck.length )
-    this.settings.deck[ temp1 ].drawn = true
+    while( temp1 === undefined || this.settings.deck[ temp1 ].place !== 'deck' ) var temp1 = Math.floor( Math.random() * this.settings.deck.length )
+    this.settings.deck[ temp1 ].place = 'hand' + para1 + '|' + para2
     this.settings[ 'hand' + para1 ].splice( para2 , 0 , this.settings.deck[ temp1 ] )
     var temp2 = this.add.sprite( 0 , para1 === 1 ? 150 : -150 , 'back' )
       temp2.anchor.set( .5 )
@@ -263,19 +254,19 @@ state.routines = {
         }
       this.elements[ 'cards' + para1 ].addAt( temp2 , para2 )
     var temp3 = this.add.tween( temp2 )
-      temp3.to( { x: ( para2 - 2 ) * 75 , y: 0 } , 500 , "Linear" )
+      temp3.to( { x: ( para2 - 2 ) * 75 , y: 0 } , this.settings.dealtimer * ( this.settings.mobile + 1 ), "Linear" )
       temp3.onComplete.add( function( paraf1 , paraf2 ){
         if( paraf1.parent.name === 'cards1' ) paraf1.loadTexture( 'cards' , this.settings.hand1[ paraf1.name ].frame )
+        // if( paraf1.parent.name === 'cards2' ) paraf1.loadTexture( 'cards' , this.settings.hand2[ paraf1.name ].frame )
         } , this )
     return temp3
     }.bind( state ),
   NewCard: function( para1 , para2 ){
     return {
-      drawn: !true,
       frame: para1 * 13 + para2,
-      suit: para1 + 1,
-      value: para2 + 2,
-      keep: true,
+      place: 'deck',
+      suit: para1,
+      value: para2,
       }
     }.bind( state ),
   NewDeck: function(){
@@ -286,27 +277,83 @@ state.routines = {
         }
       }
     }.bind( state ),
+  SortHand: function( para1 , para2 ){
+    if( para1.value > para2.value ) return -1
+    if( para1.value < para2.value ) return +1
+    return 0
+    }.bind( state ),
   ToggleDraw: function( para1 , para2 , para3 ){
+    if( para3.text === '' ) return !true
     if( para3.text === this.settings.textcard1 ){
       para3.text = this.settings.textcard0
-      this.settings.hand1[ para1.name ].keep = !true
+      this.settings.hand1[ para1.name ].place = 'discard1'
       }
     else{
       para3.text = this.settings.textcard1
-      this.settings.hand1[ para1.name ].keep = true
+      this.settings.hand1[ para1.name ].place = 'hand1'
       }
     }.bind( state ),
   AIDraw: function(){
-    var temp1 = this.routines.AnalyzeHand( this.settings.hand2 )
-    if( temp1.type.toString().match( /0/ ) !== null ){
-      for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ){
+    var f1 = this.settings.hand2.slice().sort( this.routines.SortHand )
+    var f2 = this.routines.AnalyzeHand( this.settings.hand2 )
+    if( f2.type.toString().match( /0/ ) !== null ){
+      var ff1 = [ [] , [] , [] , [] , [] ]
+      for( var iter1 = 0 ; iter1 < f2.power[ 0 ].length ; iter1++ ){
+        ff1[ iter1 ].push( f2.power[ 0 ][ iter1 ] )
+        for( var iter2 = iter1 + 1 ; iter2 < f2.power[ 0 ].length ; iter2++ ){
+          var fff1 = f2.power[ 0 ][ iter1 ] - f2.power[ 0 ][ iter2 ]
+          if( fff1 <= ( iter2 - iter1 + 1 ) ) ff1[ iter1 ].push( f2.power[ 0 ][ iter2 ] )
+          }
+        }
+      var ff2 = !true
+      var ff3 = []
+      for( var iter1 in f2.suits ) if( f2.suits[ iter1 ] === 4 ) ff2 = iter1
+      for( var iter1 in ff1 ) if( ff1[ iter1 ].length === 4 ) ff3.push( iter1 )
+      switch( true ){
+        case !!ff2 && !!ff3.length:
+          for( var iter1 = 0 , fff1 = 0 ; iter1 < 4 ; iter1++ ){
+            if( f1[ iter1 + ff3.length -1 ].suit === ff2 ) fff1++
+            }
+          if( fff1 === 4 ){
+            f1[ ( ff3[ 0 ] + 4 ) % 5 ].place = 'discard2'
+            }
+          else{
+            for( var iter1 = 0 , fff1 ; iter1 < this.settings.hand2.length ; iter1++ ) if( this.settings.hand2[ iter1 ].suit != ff2 ) fff1 = this.settings.hand2[ iter1 ]
+            var fff2 = f1[ ( ff3[ 0 ] + 4 ) % 5 ]
+            if( fff1.value < fff2.value ) fff1.place = 'discard2'
+            else fff2.place = 'discard2'
+            }
+          break
+        case !!ff2 && !ff3.length:
+          for( var iter1 = 0 , fff1 ; iter1 < this.settings.hand2.length ; iter1++ ) if( this.settings.hand2[ iter1 ].suit != ff2 ) fff1 = iter1
+          this.settings.hand2[ fff1 ].place = 'discard2'
+          break
+        case !ff2 && !!ff3.length:
+          f1[ ( ff3[ 0 ] + 4 ) % 5 ].place = 'discard2'
+          break
+        case !ff2 && !ff3.length:
+          f1[ 0 ].place = Math.random() < Math.pow( .99999 , f1[ 0 ].value * f1[ 0 ].value * f1[ 0 ].value * f1[ 0 ].value * 20 ) ? 'discard2' : f1[ 0 ].value
+          for( var iter1 = 1 ; iter1 < f1.length ; iter1++ ){
+            if( f1[ iter1 - 1 ].place !== 'discard2' || Math.random() > .8 ) f1[ iter1 ].place = Math.random() < Math.pow( .975 , f1[ 0 ].value / iter1 ) ? 'discard2' : f1[ iter1 ].place
+            else f1[ iter1 ].place = 'discard2'
+            }
+          break
         }
       }
-    if( temp1.type.toString().match( /1|2|3|6|7/ ) !== null ){
-      for( var iter1 = 0 ; iter1 < this.settings.hand2.length ; iter1++ ){
-        if( temp1.power[ 1 ].indexOf( this.settings.hand2[ iter1 ].value ) !== -1 ){
-          if( this.settings.hand2[ iter1 ].value !== temp1.power[ 1 ][ 0 ] ) Math.random() > Math.pow( .999 , this.settings.hand2[ iter1 ].value * 50 )
-          else this.settings.hand2[ iter1 ].keep = Math.random() > Math.pow( .99 , this.settings.hand2[ iter1 ].value * this.settings.hand2[ iter1 ].value * 2 )
+    if( f2.type.toString().match( /1|2|3|7/ ) !== null ){
+      for( var iter1 = 0 ; iter1 < f1.length ; iter1++ ){
+        if( f2.power[ 0 ].indexOf( f1[ iter1 ].value ) !== -1 ){
+          if( f1[ iter1 ].value === f2.power[ 0 ][ 0 ] ){
+            if( f2.type === 2 ){
+              f1[ iter1 ].place = 'discard2'
+              }
+            else if( Math.random() < Math.pow( .9999999925 , Math.pow( f1[ iter1 ].value , 8 ) ) ){
+              f1[ iter1 ].place = 'discard2'
+              }
+            }
+          else{
+            f1[ iter1 ].place = 'discard2'
+            }
           }
         }
       }
