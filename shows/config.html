@@ -71,17 +71,16 @@
           },
         Functions: {
           CheckLocalStorage: function(){
-            if( !localStorage.Backup ) localStorage.Backup = '{}'
-            if( !localStorage.Permanent ) localStorage.Permanent = ''
-            if( !localStorage.User ) localStorage.User = 'Basic'
+            if( !localStorage.Shows ) localStorage.Shows = '{ "Backup": {} , "Failure": {} , "Permanent": "" , "ShowList": {} , "User": "Basic" , "WatchSeries": "watch-series-tv.to" }'
+            Saxan.Globals.Storage = JSON.parse( localStorage.Shows )
             try{
-              Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
-              localStorage.Backup = localStorage.ShowListing
+              Saxan.Globals.ShowList = Saxan.Globals.Storage.ShowList
+              Saxan.Globals.Storage.Backup = Saxan.Globals.Storage.ShowList
               }
             catch( e ){
-              localStorage.Failure = localStorage.ShowListing
-              localStorage.ShowListing = localStorage.Backup
-              Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
+              Saxan.Globals.Storage.Failure = Saxan.Globals.Storage.ShowList
+              Saxan.Globals.Storage.ShowList = Saxan.Globals.Storage.Backup
+              Saxan.Globals.ShowList = JSON.parse( Saxan.Globals.Storage.ShowList )
               }
             },
           CheckNumbers: function(){
@@ -300,8 +299,8 @@
             window.open( 'data:text.json,' + encodeURI( A ) , 'Show.JSON' )
             },
           SaveLocal: function(){
-            var A = Saxan.Functions.SaveData()
-            localStorage.ShowListing = A
+            Saxan.Globals.Storage.ShowList = JSON.parse( Saxan.Functions.SaveData() )
+            localStorage.Shows = JSON.stringify( Saxan.Globals.Storage )
             },
           SortByLevel: function(){
             var A = document.getElementById( 'main' )

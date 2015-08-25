@@ -218,7 +218,7 @@ state.routines = {
         }
       }
     else{
-      if( temp3[ 0 ][ 0 ] - temp3[ 0 ][ temp3[ 1 ].length - 1 ] === 4 ){
+      if( temp3[ 0 ][ 0 ] - temp3[ 0 ][ temp3[ 0 ].length - 1 ] === 4 ){
         if( temp2.join( '' ).replace( /0/g , '' ).length === 1 ) temp4 = 8
         else temp4 = 4
         }
@@ -272,7 +272,7 @@ state.routines = {
   NewDeck: function(){
     this.settings.deck = []
     for( var iter1 = 0 ; iter1 < 4 ; iter1++ ){
-      for( var iter2 = 0 ; iter2 < 13 ; iter2++ ){
+      for( var iter2 = 0 ; iter2 < 5 ; iter2++ ){
         this.settings.deck.push( this.routines.NewCard( iter1 , iter2 ) )
         }
       }

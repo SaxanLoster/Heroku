@@ -44,19 +44,18 @@ Saxan = {
     },
   Functions: {
     CheckLocalStorage: function(){
-      if( !localStorage.Backup ) localStorage.Backup = '{}'
-      if( !localStorage.Permanent ) localStorage.Permanent = ''
-      if( !localStorage.User ) localStorage.User = 'Basic'
-      if( !localStorage.WatchSeries ) localStorage.WatchSeries = 'watch-series-tv.to'
+      if( !localStorage.Shows ) localStorage.Shows = '{ "Backup": {} , "Failure": {} , "Permanent": "" , "ShowList": {} , "User": "Basic" , "WatchSeries": "watch-series-tv.to" }'
+      Saxan.Globals.Storage = JSON.parse( localStorage.Shows )
       try{
-        Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
-        localStorage.Backup = localStorage.ShowListing
+        Saxan.Globals.ShowList = Saxan.Globals.Storage.ShowList
+        Saxan.Globals.Storage.Backup = Saxan.Globals.Storage.ShowList
         }
       catch( e ){
-        localStorage.Failure = localStorage.ShowListing
-        localStorage.ShowListing = localStorage.Backup
-        Saxan.Globals.ShowList = JSON.parse( localStorage.ShowListing )
+        Saxan.Globals.Storage.Failure = Saxan.Globals.Storage.ShowList
+        Saxan.Globals.Storage.ShowList = Saxan.Globals.Storage.Backup
+        Saxan.Globals.ShowList = JSON.parse( Saxan.Globals.Storage.ShowList )
         }
+      localStorage.Shows = JSON.stringify( Saxan.Globals.Storage )
       for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ) if( !Saxan.Globals.ShowInfo.Levels.has( 'level' + Saxan.Globals.ShowList[ a ].Level ) ) Saxan.Globals.ShowInfo.Levels.push( 'level' + Saxan.Globals.ShowList[ a ].Level )
       Saxan.Globals.ShowInfo.Levels.sort()
       },
@@ -85,14 +84,14 @@ Saxan = {
         B.id = 'level0'
         B.onmousedown = Saxan.Functions.OnConfigureClick
         B.type = 'button'
-        B.value = localStorage.User == 'Basic' ? 'Configure' : ''
+        B.value = Saxan.Globals.Storage.User == 'Basic' ? 'Configure' : ''
       A.appendChild( B )
       for( var a = 0 ; a < Saxan.Globals.ShowInfo.Levels.length && Saxan.Globals.ShowInfo.Levels.length > 1 ; a++ ){
         var B = document.createElement( 'Input' )
           B.id = Saxan.Globals.ShowInfo.Levels[ a ]
           B.onmousedown = Saxan.Functions.OnLevelClick
           B.type = 'button'
-          B.value = localStorage.User == 'Basic' ? 'Level ' + ( a + 1 ) : ''
+          B.value = Saxan.Globals.Storage.User == 'Basic' ? 'Level ' + ( a + 1 ) : ''
         A.appendChild( B )
         }
       },
@@ -118,8 +117,8 @@ Saxan = {
       var IMDBSearch = 'http://www.imdb.com/find?q=REPLACE%20TV&s=tt'
       var NetflixLink = 'http://www.netflix.com/title/REPLACE'
       var NetflixSearch = 'http://www.netflix.com/search/REPLACE'
-      var WatchSeriesLink = 'http://' + localStorage.WatchSeries + '/serie/REPLACE'
-      var WatchSeriesSearch = 'http://' + localStorage.WatchSeries + '/search/REPLACE'
+      var WatchSeriesLink = 'http://' + Saxan.Globals.Storage.WatchSeries + '/serie/REPLACE'
+      var WatchSeriesSearch = 'http://' + Saxan.Globals.Storage.WatchSeries + '/search/REPLACE'
       var WikipediaLink = 'http://en.wikipedia.org/wiki/REPLACE'
       var WikipediaSearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
       for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ){
@@ -135,13 +134,13 @@ Saxan = {
           Show.classList.add( 'level' + Saxan.Globals.ShowList[ a ].Level )
         A.appendChild( Show )
         }
-      if( localStorage.User === 'Basic' || Saxan.Globals.ShowInfo.Levels.Length === 1 ){
+      if( Saxan.Globals.Storage.User === 'Basic' || Saxan.Globals.ShowInfo.Levels.Length === 1 ){
         ccss( '.level1' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
         if( document.querySelector( '#level1' ) ) document.querySelector( '#level1' ).classList.add( 'active' )
         }
       else{
         ccss( '.perm' , 'display' , 'block' , Saxan.Globals.StyleSheets.B )
-        if( localStorage.Permanent !== '' ) Saxan.Globals.ShowInfo.Permanent = localStorage.Permanent.split( '|' )
+        if( Saxan.Globals.Storage.Permanent !== '' ) Saxan.Globals.ShowInfo.Permanent = Saxan.Globals.Storage.Permanent.split( '|' )
         for( var a = 0 ; a < Saxan.Globals.ShowInfo.Permanent.length ; a++ ) Saxan.Globals.ShowInfo.All[ Saxan.Globals.ShowInfo.Permanent[ a ] ].classList.add( 'perm' )
         }
       },
@@ -190,7 +189,7 @@ Saxan = {
       Saxan.Functions.MainDisplayFunctions()
       },
     OnConfigureClick: function(){
-      switch( localStorage.User ){
+      switch( Saxan.Globals.Storage.User ){
         case 'Advanced' :
           switch( event.button ){
             case 0 :
@@ -254,7 +253,7 @@ Saxan = {
         Saxan.Functions.StyleElements()
       },
     OnShowClick: function(){
-      switch( localStorage.User ){
+      switch( Saxan.Globals.Storage.User ){
         case 'Advanced' :
           switch( event.button ){
             case 0 :
@@ -309,7 +308,8 @@ Saxan = {
         case !true : Saxan.Globals.ShowInfo.Permanent.push( ShowTitle ) ; break
         }
       Saxan.Globals.ShowInfo.Permanent.sort()
-      localStorage.Permanent = Saxan.Globals.ShowInfo.Permanent.join( '|' )
+      Saxan.Globals.Storage.Permanent = Saxan.Globals.ShowInfo.Permanent.join( '|' )
+      localStorage.Shows = Saxan.Globals.Storage.Permanent
       },
     RowsAndColumns: function(){
       var A = Saxan.Globals.ShowInfo.Display.length <= Saxan.Globals.ShowInfo.Max
