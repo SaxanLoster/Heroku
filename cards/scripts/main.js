@@ -79,7 +79,7 @@ state.create = function(){
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
     this.add.text( 0 , 20 , 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%' , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
-    this.add.text( 0 , 40 , 'Streak: ' + SaxanStorage.streak.split( '|' )[ 1 ] + ' ' + ( SaxanStorage.streak.split( '|' )[ 0 ] === 0 ? ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Win' : 'Wins' ) : ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Loss' : 'Losses' ) ) , this.settings.fontstyle1 , this.elements.winstext )
+    this.add.text( 0 , 40 , 'Streak: ' + SaxanStorage.streak.split( '|' )[ 1 ] + ' ' + ( SaxanStorage.streak.split( '|' )[ 0 ] == 0 ? ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Win' : 'Wins' ) : ( SaxanStorage.streak.split( '|' )[ 1 ] == 1 ? 'Loss' : 'Losses' ) ) , this.settings.fontstyle1 , this.elements.winstext )
       this.elements.winstext.children[ this.elements.winstext.total - 1 ].anchor.set( 0 , .5 )
   this.elements.handstext = this.add.group()
     this.elements.handstext.name = 'handstext'
@@ -187,7 +187,7 @@ state.routines = {
     var temp4 = SaxanStorage.streak.split( '|' )[ 1 ]
     this.elements.winstext.children[ temp3 ].text = this.elements.winstext.children[ temp3 ].text.replace( /\d+/g , SaxanStorage.wins[ temp3 ] )
     this.elements.winstext.children[ 3 ].text = 'Win Rate: ' + ( ( ( 100 * SaxanStorage.wins[ 0 ] ) / ( SaxanStorage.wins[ 0 ] + SaxanStorage.wins[ 1 ] ) ) || 0 ).toFixed( 2 ) + '%'
-    this.elements.winstext.children[ 4 ].text = 'Streak: ' + temp4 + ' ' + ( temp3 === 0 ? ( temp4 == 1 ? 'Win' : 'Wins' ) : ( temp4 == 1 ? 'Loss' : 'Losses' ) )
+    this.elements.winstext.children[ 4 ].text = 'Streak: ' + temp4 + ' ' + ( temp3 == 0 ? ( temp4 == 1 ? 'Win' : 'Wins' ) : ( temp4 == 1 ? 'Loss' : 'Losses' ) )
     this.elements.handstext.children[ temp1.type ].text = this.elements.handstext.children[ temp1.type ].text.replace( /\d+$/ , SaxanStorage.hands[ temp1.type ] )
     }.bind( state ),
   AnalyzeHand: function( para1 ){
