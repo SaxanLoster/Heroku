@@ -309,7 +309,7 @@ Saxan = {
         }
       Saxan.Globals.ShowInfo.Permanent.sort()
       Saxan.Globals.Storage.Permanent = Saxan.Globals.ShowInfo.Permanent.join( '|' )
-      localStorage.Shows = Saxan.Globals.Storage.Permanent
+      localStorage.Shows = JSON.stringify( Saxan.Globals.Storage )
       },
     RowsAndColumns: function(){
       var A = Saxan.Globals.ShowInfo.Display.length <= Saxan.Globals.ShowInfo.Max
