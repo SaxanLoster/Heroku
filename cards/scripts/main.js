@@ -272,7 +272,7 @@ state.routines = {
   NewDeck: function(){
     this.settings.deck = []
     for( var iter1 = 0 ; iter1 < 4 ; iter1++ ){
-      for( var iter2 = 0 ; iter2 < 5 ; iter2++ ){
+      for( var iter2 = 0 ; iter2 < 13 ; iter2++ ){
         this.settings.deck.push( this.routines.NewCard( iter1 , iter2 ) )
         }
       }
