@@ -316,19 +316,19 @@ Saxan = {
       var B = Saxan.Globals.Booleans.MinimunSize
       var C = Saxan.Globals.Booleans.LeftToRight
       switch( true ){
-        case A && B :
+        case A && B : console.log( 'A && B' )
           Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
           Saxan.Globals.RowsInfo.Count = Saxan.Globals.RowsInfo.Max
           break
-        case A && !B :
+        case A && !B : console.log( 'A && !B' )
           Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
           Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Count )
           break
-        case !A && C :
+        case !A && C : console.log( '!A && C' )
           Saxan.Globals.ColsInfo.Count = Saxan.Globals.ColsInfo.Max
           Saxan.Globals.RowsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.ColsInfo.Max )
           break
-        case !A && !C :
+        case !A && !C : console.log( '!A && !C' )
           Saxan.Globals.ColsInfo.Count = Math.ceil( Saxan.Globals.ShowInfo.Display.length / Saxan.Globals.RowsInfo.Max )
           Saxan.Globals.RowsInfo.Count = Saxan.Globals.RowsInfo.Max
           break
@@ -367,7 +367,14 @@ Saxan = {
       ccss( '#Shows' , 'marginTop' , A + 'px' , Saxan.Globals.StyleSheets.A )
       ccss( '#Shows' , 'width' , Saxan.Globals.ShowInfo.Width  * Saxan.Globals.ColsInfo.Count + 'px' , Saxan.Globals.StyleSheets.A )
 
-      Saxan.Globals.Booleans.LeftToRight ? ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.Globals.StyleSheets.A ) : ccss( '#Shows' , 'webkitColumnCount' , Saxan.Globals.ColsInfo.Count , Saxan.Globals.StyleSheets.A )
+      if ( Saxan.Globals.Booleans.LeftToRight ) {
+        ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.Globals.StyleSheets.A )
+        // ccss( '#Shows' , 'columnFill' , '' , Saxan.Globals.StyleSheets.A )
+        }
+      else {
+        ccss( '#Shows' , 'webkitColumnCount' , Saxan.Globals.ColsInfo.Count , Saxan.Globals.StyleSheets.A )
+        // ccss( '#Shows' , 'columnFill' , 'auto' , Saxan.Globals.StyleSheets.A )
+        }
 
       Saxan.Functions.CountVisible()
 

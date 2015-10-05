@@ -87,6 +87,7 @@ show.hide{
   margin-left: auto;
   margin-right: auto;
   overflow: scroll;
+  column-fill: auto;
   padding: 0px;
   width: 100%;
   }
