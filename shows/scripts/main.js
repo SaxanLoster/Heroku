@@ -162,7 +162,10 @@ Saxan.CreateShowList = function () {
       Saxan.ShowInfo.Permanent = Saxan.Storage.Permanent.split( '|' )
       }
     for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Permanent.length ; iter1++ ) {
-      Saxan.ShowInfo.All[ Saxan.ShowInfo.Permanent[ iter1 ] ].classList.add( 'perm' )
+      try {
+        Saxan.ShowInfo.All[ Saxan.ShowInfo.Permanent[ iter1 ] ].classList.add( 'perm' )
+        }
+      catch ( e ) {}
       }
     }
   }
