@@ -1,13 +1,13 @@
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
   }
-*{
+* {
   cursor: default;
   font-family: "Palatino Linotype";
   font-size: 0;
   margin: 0px;
   }
-input{
+input {
   background-color: #333;
   border-color: #000;
   border-radius: 15px;
@@ -23,7 +23,7 @@ input{
   outline: 0px;
   padding: 0px;
   }
-show{
+show {
   border: 0 solid rgba(0,0,0,0);
   border-width: 0 25px;
   box-sizing: border-box;
@@ -38,20 +38,20 @@ show{
   overflow: hidden;
   white-space: nowrap;
   }
-show:hover{
+show:hover {
   color: #FFAFAF;
   }
-.active{
+.active {
   background-color: #777;
   color: #000;
   }
-.perm{
+.perm {
   color: #4682B4;
   }
-.perm:hover{
+.perm:hover {
   color: #AFAFFF;
   }
-.randomLinks{
+.randomLinks {
   cursor: pointer;
   font-size: 24px;
   font-variant: small-caps;
@@ -60,18 +60,18 @@ show:hover{
   white-space: pre;
   width: auto;
   }
-.randomLinks:hover{
+.randomLinks:hover {
   color: #FFAFAF;
   }
-.Title{
+.Title {
   cursor: pointer;
   font-size: 36px;
   margin: auto;
   }
-show.hide{
+show.hide {
   display: none;
   }
-#Buttons{
+#Buttons {
   background-color: #000;
   bottom: 0px;
   display: block;
@@ -80,7 +80,7 @@ show.hide{
   text-align: center;
   width: 100%;
   }
-#Shows{
+#Shows {
   cursor: default;
   display: block;
   margin: 0px;

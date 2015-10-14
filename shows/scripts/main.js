@@ -3,6 +3,7 @@ Saxan = {}
 Saxan.Booleans = {
   LeftToRight: !true,
   MinimunSize: !true,
+  MaintainSize: !true,
   Permanent: !true,
   }
 Saxan.ClickInfo = {
@@ -38,8 +39,8 @@ Saxan.ShowInfo = {
   Width: 0,
   }
 Saxan.StyleSheets = {
-  A: 1,
-  B: 2,
+  Sheet1: 1,
+  Sheet2: 2,
   }
 
 Saxan.CheckLocalStorage = function () {
@@ -151,13 +152,13 @@ Saxan.CreateShowList = function () {
       Show.classList.add( 'level' + Saxan.ShowList[ iter1 ].Level )
     }
   if ( Saxan.Storage.User === 'Basic' || Saxan.ShowInfo.Levels.Length === 1 ) {
-    ccss( '.level1' , 'display' , 'block' , Saxan.StyleSheets.B )
+    ccss( '.level1' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
     if ( document.querySelector( '#level1' ) ) {
       document.querySelector( '#level1' ).classList.add( 'active' )
       }
     }
   else {
-    ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.B )
+    ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
     if ( Saxan.Storage.Permanent !== '' ) {
       Saxan.ShowInfo.Permanent = Saxan.Storage.Permanent.split( '|' )
       }
@@ -170,18 +171,18 @@ Saxan.CreateShowList = function () {
     }
   }
 Saxan.DeclareStyleSheet = function () {
-  document.styleSheets[ Saxan.StyleSheets.A ].addRule( 'Body' )
-  document.styleSheets[ Saxan.StyleSheets.A ].addRule( 'Input' )
-  document.styleSheets[ Saxan.StyleSheets.A ].addRule( 'Show' )
-  document.styleSheets[ Saxan.StyleSheets.A ].addRule( '#Buttons' )
-  document.styleSheets[ Saxan.StyleSheets.A ].addRule( '#Shows' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Body' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Input' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Show' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( '#Buttons' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( '#Shows' )
 
   for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Levels.length ; iter1++ ) {
-    document.styleSheets[ Saxan.StyleSheets.B ].addRule( '.' + Saxan.ShowInfo.Levels[ iter1 ] )
+    document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.' + Saxan.ShowInfo.Levels[ iter1 ] )
     }
 
-  document.styleSheets[ Saxan.StyleSheets.B ].addRule( '.perm' )
-  document.styleSheets[ Saxan.StyleSheets.B ].addRule( '.hide' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.perm' )
+  document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.hide' )
   }
 Saxan.GetCR = function () {
   var temp1 = Saxan.ColsInfo.Count.pad( 2 , ' ' )
@@ -196,7 +197,7 @@ Saxan.HideAllShows = function () {
     elem1[ a ].classList.remove( 'active' )
     }
   for ( var a = 0 ; a < Saxan.ShowInfo.Levels.length ; a++ ) {
-    ccss( '.' + Saxan.ShowInfo.Levels[ a ] , 'display' , '' , Saxan.StyleSheets.B )
+    ccss( '.' + Saxan.ShowInfo.Levels[ a ] , 'display' , '' , Saxan.StyleSheets.Sheet2 )
     }
   }
 Saxan.MainDisplayFunctions = function () {
@@ -205,7 +206,9 @@ Saxan.MainDisplayFunctions = function () {
   Saxan.ShowInfo.Max = Saxan.ColsInfo.Max * Saxan.RowsInfo.Max
   Saxan.CountDisplay()
   Saxan.CountVisible()
-  Saxan.RowsAndColumns()
+  if ( !Saxan.Booleans.MaintainSize ) {
+    Saxan.RowsAndColumns()
+    }
   Saxan.StyleElements()
   }
 Saxan.OnChange = function () {
@@ -214,33 +217,33 @@ Saxan.OnChange = function () {
   Saxan.MainInfo.ButtonsHeight = temp1 && 50 || Math.ceil( innerWidth / ( temp1 * 5 ) )
   Saxan.MainInfo.ShowsHeight = innerHeight - Saxan.MainInfo.ButtonsHeight
   Saxan.MainInfo.ShowsWidth = innerWidth
-  ccss( '#Buttons' , 'height' , Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.A )
-  ccss( 'input' , 'width' , innerWidth / temp1 + 'px' , Saxan.StyleSheets.A )
+  ccss( '#Buttons' , 'height' , Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( 'input' , 'width' , innerWidth / temp1 + 'px' , Saxan.StyleSheets.Sheet1 )
   Saxan.MainDisplayFunctions()
   }
 Saxan.OnConfigureClick = function () {
-  switch ( Saxan.Storage.User ) {
-    case 'Advanced' :
-      switch ( event.button ) {
-        case 0 :
-          Saxan.Booleans.MinimunSize = !Saxan.Booleans.MinimunSize
-          Saxan.MainDisplayFunctions()
-          break
-        case 1 :
-          Saxan.Booleans.LeftToRight = !Saxan.Booleans.LeftToRight
-          Saxan.MainDisplayFunctions()
-          break
-        case 2 :
-          if ( Saxan.ShowInfo.Hidden.length > 0 ) {
-            Saxan.ShowInfo.Hidden.pop().classList.remove( 'hide' )
-            }
-          Saxan.MainDisplayFunctions()
-          break
-        }
-      break
-    case 'Basic' :
-      window.open( 'config.html' )
-      break
+  if ( Saxan.Storage.User !== 'Advanced' ) {
+    window.open( 'config.html' )
+    }
+  else if ( event.button === 0 ) {
+    // Saxan.Booleans.MinimunSize = !Saxan.Booleans.MinimunSize
+    Saxan.Booleans.MaintainSize = !Saxan.Booleans.MaintainSize
+    Saxan.MainDisplayFunctions()
+    }
+  else if ( event.button === 1 ) {
+    Saxan.Booleans.LeftToRight = !Saxan.Booleans.LeftToRight
+    Saxan.Booleans.MaintainSize = !true
+    Saxan.MainDisplayFunctions()
+    }
+  else if ( event.button === 2 ) {
+    if ( Saxan.ShowInfo.Hidden.length > 0 ) {
+      Saxan.ShowInfo.Hidden.pop().classList.remove( 'hide' )
+      Saxan.Booleans.MaintainSize = !true
+      }
+    Saxan.MainDisplayFunctions()
+    }
+  else {
+    console.log( event )
     }
   }
 Saxan.OnLevelClick = function () {
@@ -249,48 +252,54 @@ Saxan.OnLevelClick = function () {
       this.classList.toggle( 'active' )
       if ( this.classList.contains( 'active' ) ) {
         if ( !Saxan.Booleans.Permanent ) {
-          ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.B )
+          ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.Sheet2 )
           }
-        ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.B )
+        ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
         }
       else {
-        ccss( '.' + this.id , 'display' , '' , Saxan.StyleSheets.B )
+        ccss( '.' + this.id , 'display' , '' , Saxan.StyleSheets.Sheet2 )
         if ( document.getElementsByClassName( 'active' ).length === 0 ) {
-          ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.B )
+          ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
           }
         }
+      Saxan.Booleans.MaintainSize = !true
       Saxan.MainDisplayFunctions()
       break
     case 1 :
       Saxan.HideAllShows()
       this.classList.add( 'active' )
       if ( !Saxan.Booleans.Permanent ) {
-        ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.B )
+        ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.Sheet2 )
         }
-      ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.B )
+      ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
+      Saxan.Booleans.MaintainSize = !true
       Saxan.MainDisplayFunctions()
       break
     case 2 :
       Saxan.HideAllShows()
       if ( !Saxan.Booleans.Permanent ) {
-        ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.B )
+        ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
         }
+      Saxan.Booleans.MaintainSize = !true
       Saxan.MainDisplayFunctions()
       break
     }
   }
 Saxan.OnScroll = function () {
-  if ( !event.ctrlKey ) {
-    event.preventDefault()
-    var temp1 = event.deltaY > 0 ? 1 : -1
-    if ( Saxan.Booleans.LeftToRight ) {
-      scrollBy( 0 , temp1 * Saxan.ShowInfo.Height )
+  if ( event.srcElement.id === 'AlertCenter' || event.srcElement.parentNode.id === 'AlertCenter' ) {}
+  else {
+    if ( !event.ctrlKey ) {
+      event.preventDefault()
+      var temp1 = event.deltaY > 0 ? 1 : -1
+      if ( Saxan.Booleans.LeftToRight ) {
+        scrollBy( 0 , temp1 * Saxan.ShowInfo.Height )
+        }
+      else {
+        scrollBy( temp1 * Saxan.ShowInfo.Width , 0 )
+        }
       }
-    else {
-      scrollBy( temp1 * Saxan.ShowInfo.Width , 0 )
-      }
-    }
     Saxan.StyleElements()
+    }
   }
 Saxan.OnShowClick = function () {
   if ( Saxan.Storage.User !== 'Advanced' || event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
@@ -322,6 +331,11 @@ Saxan.OnStart = function () {
   Saxan.CreateInputs()
   Saxan.CreateShowList()
   Saxan.OnChange()
+  window.addEventListener( 'resize' , Saxan.OnChange )
+  document.body.addEventListener( 'contextmenu' , PreventActions )
+  document.body.addEventListener( 'keydown' , PreventActions )
+  document.body.addEventListener( 'mousedown' , PreventActions )
+  document.body.addEventListener( 'mousewheel' , Saxan.OnScroll )
   }
 Saxan.PermanentItemToggle = function ( ShowTitle ) {
   if ( Saxan.ShowInfo.Permanent.has( ShowTitle ) ) {
@@ -380,22 +394,22 @@ Saxan.StyleElements = function () {
 
   var A = ( Saxan.MainInfo.ShowsHeight - Saxan.ShowInfo.Height * Math.min( Saxan.RowsInfo.Count , Saxan.RowsInfo.Max ) ) / 2
 
-  ccss( 'show' , 'height' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.A )
-  ccss( 'show' , 'lineHeight' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.A )
-  ccss( 'show' , 'width' , Saxan.ShowInfo.Width  + 'px' , Saxan.StyleSheets.A )
+  ccss( 'show' , 'height' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( 'show' , 'lineHeight' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( 'show' , 'width' , Saxan.ShowInfo.Width  + 'px' , Saxan.StyleSheets.Sheet1 )
 
-  ccss( '#Shows' , 'height' , Saxan.ShowInfo.Height * Saxan.RowsInfo.Count + 'px' , Saxan.StyleSheets.A )
-  ccss( '#Shows' , 'marginBottom' , A + Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.A )
-  ccss( '#Shows' , 'marginTop' , A + 'px' , Saxan.StyleSheets.A )
-  ccss( '#Shows' , 'width' , Saxan.ShowInfo.Width  * Saxan.ColsInfo.Count + 'px' , Saxan.StyleSheets.A )
+  ccss( '#Shows' , 'height' , Saxan.ShowInfo.Height * Saxan.RowsInfo.Count + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( '#Shows' , 'marginBottom' , A + Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( '#Shows' , 'marginTop' , A + 'px' , Saxan.StyleSheets.Sheet1 )
+  ccss( '#Shows' , 'width' , Saxan.ShowInfo.Width  * Saxan.ColsInfo.Count + 'px' , Saxan.StyleSheets.Sheet1 )
 
   if ( Saxan.Booleans.LeftToRight ) {
-    ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.StyleSheets.A )
-    // ccss( '#Shows' , 'columnFill' , '' , Saxan.StyleSheets.A )
+    ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.StyleSheets.Sheet1 )
+    // ccss( '#Shows' , 'columnFill' , '' , Saxan.StyleSheets.Sheet1 )
     }
   else {
-    ccss( '#Shows' , 'webkitColumnCount' , Saxan.ColsInfo.Count , Saxan.StyleSheets.A )
-    // ccss( '#Shows' , 'columnFill' , 'auto' , Saxan.StyleSheets.A )
+    ccss( '#Shows' , 'webkitColumnCount' , Saxan.ColsInfo.Count , Saxan.StyleSheets.Sheet1 )
+    // ccss( '#Shows' , 'columnFill' , 'auto' , Saxan.StyleSheets.Sheet1 )
     }
 
   Saxan.CountVisible()

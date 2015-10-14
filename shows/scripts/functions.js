@@ -201,8 +201,8 @@ function customAlert( TextTop , TextMid , TextBot , Clock ){
     AlertCenter.style.display = 'flex'
     AlertCenter.style.flexDirection = 'column'
     AlertCenter.style.height = '45%'
-    AlertCenter.style.justifyContent = 'center'
-    AlertCenter.style.overflow = 'hidden'
+    // AlertCenter.style.justifyContent = 'center'
+    AlertCenter.style.overflow = 'scroll'
     AlertCenter.style.position = 'relative'
     AlertCenter.style.textAlign = 'center'
     AlertCenter.style.verticalAlign = 'middle'
@@ -260,7 +260,8 @@ function GetProperties( MyObject , MyString ){
 function PreventActions( Event ){
   var Alphabet  = Event.which >= 65 && Event.which <= 90 && !Event.ctrlKey
   var SelectAll = Event.which == 65 && Event.ctrlKey
-  if( Alphabet || SelectAll ) Event.preventDefault()
+  var Type = Event.type.match( /contextmenu|mousedown|wheel/ ) !== null
+  if( Alphabet || SelectAll || Type ) Event.preventDefault()
   }
 function Random( Min , Max ){
   Min = Math.R( Min ) , Max = Math.R( Max )
