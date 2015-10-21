@@ -131,14 +131,14 @@
     elem1.id = 'level0'
     elem1.onmousedown = OnConfigureClick
     elem1.type = 'button'
-    elem1.value = storage.user == 'Basic' ? 'Configure' : ''
+    elem1.value = storage.user !== 'advanced' ? 'Configure' : ''
     for ( var iter1 = 0 ; iter1 < showinfo.levels.length && showinfo.levels.length > 1 ; iter1++ ) {
       var elem1 = document.createElement( 'input' )
       elem0.appendChild( elem1 )
       elem1.id = showinfo.levels[ iter1 ]
       elem1.onmousedown = OnLevelClick
       elem1.type = 'button'
-      elem1.value = storage.user == 'Basic' ? 'Level ' + ( iter1 + 1 ) : ''
+      elem1.value = storage.user !== 'advanced' ? 'Level ' + ( iter1 + 1 ) : ''
       }
     }
   var CreateShowList = function () {
@@ -180,7 +180,7 @@
       show.onmousedown = OnShowClick
       show.textContent = showlist[ iter1 ].title
       }
-    if ( storage.user === 'Basic' || showinfo.levels.length === 1 ) {
+    if ( storage.user !== 'advanced' || showinfo.levels.length === 1 ) {
       EditStyle( stylesheets.sheet2 , '.level1' , 'display' , 'block' )
       if ( document.querySelector( '#level1' ) ) {
         document.querySelector( '#level1' ).classList.add( 'active' )
@@ -279,7 +279,7 @@
     MainDisplayFunctions()
     }
   var OnConfigureClick = function () {
-    if ( storage.user !== 'Advanced' ) {
+    if ( storage.user !== 'advanced' ) {
       window.open( 'config.html' )
       }
     else if ( event.button === 0 ) {
@@ -359,7 +359,7 @@
       }
     }
   var OnShowClick = function () {
-    if ( storage.user !== 'Advanced' || event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
+    if ( storage.user !== 'advanced' || event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
       ShowLinks( this )
       }
     else if ( event.button === 0 ) {
