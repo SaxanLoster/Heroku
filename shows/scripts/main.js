@@ -463,24 +463,29 @@
     elem3.appendChild( elem4 )
     elem4.id = 'alertCenter'
     var elem5 = document.createElement( 'div' )
-    elem3.appendChild( elem5 )
+    elem4.appendChild( elem5 )
     elem5.className = 'alertLink'
+    elem5.textContent = 'Amazon Prime'
     elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.amazon ) } )
     var elem5 = document.createElement( 'div' )
-    elem3.appendChild( elem5 )
+    elem4.appendChild( elem5 )
     elem5.className = 'alertLink'
+    elem5.textContent = 'IMDB'
     elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.imdb ) } )
     var elem5 = document.createElement( 'div' )
-    elem3.appendChild( elem5 )
+    elem4.appendChild( elem5 )
     elem5.className = 'alertLink'
+    elem5.textContent = 'Netflix'
     elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.netflix ) } )
     var elem5 = document.createElement( 'div' )
-    elem3.appendChild( elem5 )
+    elem4.appendChild( elem5 )
     elem5.className = 'alertLink'
+    elem5.textContent = 'Watch Series'
     elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.watchseries ) } )
     var elem5 = document.createElement( 'div' )
-    elem3.appendChild( elem5 )
+    elem4.appendChild( elem5 )
     elem5.className = 'alertLink'
+    elem5.textContent = 'Wikipedia'
     elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.wikipedia ) } )
     var elem4 = document.createElement( 'div' )
     elem3.appendChild( elem4 )
@@ -490,6 +495,8 @@
     elem5.id = 'alertButton'
     elem5.textContent = 'Exit'
     elem5.addEventListener( 'click' , function ( event ) { document.body.removeChild( document.getElementById( 'alertFiller' ) ) } )
+    EditStyle( stylesheets.sheet1 , '#alertButton' , 'fontSize' , document.getElementById( 'alertButton' ).offsetHeight / 2 + 'px' )
+    EditStyle( stylesheets.sheet1 , '#alertButton' , 'lineHeight' , document.getElementById( 'alertButton' ).offsetHeight - 2 + 'px' )
     }
   var StyleElements = function () {
     showinfo.height = Math.floor( maininfo.showsheight / Math.min( rowsinfo.count , rowsinfo.max ) )
