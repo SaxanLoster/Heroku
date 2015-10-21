@@ -77,12 +77,12 @@
   var CheckLocalStorage = function () {
     if ( !localStorage.Shows ) {
       localStorage.Shows = '{\
-        "Backup": {},\
-        "Failure": {},\
-        "Permanent": "",\
-        "ShowList": {},\
-        "User": "Basic",\
-        "WatchSeries": "watch-series-tv.to"\
+        "backup": {},\
+        "failure": {},\
+        "permanent": "",\
+        "showlist": {},\
+        "user": "basic",\
+        "watchseries": "watch-series-tv.to"\
         }'
       }
     storage = JSON.parse( localStorage.Shows )
@@ -124,21 +124,21 @@
       }
     }
   var CreateInputs = function () {
-    var elem0 = document.querySelector( '#buttons' )
-    RemoveChildNodes( elem0 )
-    var elem1 = document.createElement( 'input' )
-    elem0.appendChild( elem1 )
-    elem1.id = 'level0'
-    elem1.onmousedown = OnConfigureClick
-    elem1.type = 'button'
-    elem1.value = storage.user !== 'advanced' ? 'Configure' : ''
+    var e1 = document.querySelector( '#buttons' )
+    RemoveChildNodes( e1 )
+    var e1e1 = document.createElement( 'input' )
+    e1.appendChild( e1e1 )
+    e1e1.id = 'level0'
+    e1e1.onmousedown = OnConfigureClick
+    e1e1.type = 'button'
+    e1e1.value = storage.user !== 'advanced' ? 'Configure' : ''
     for ( var iter1 = 0 ; iter1 < showinfo.levels.length && showinfo.levels.length > 1 ; iter1++ ) {
-      var elem1 = document.createElement( 'input' )
-      elem0.appendChild( elem1 )
-      elem1.id = showinfo.levels[ iter1 ]
-      elem1.onmousedown = OnLevelClick
-      elem1.type = 'button'
-      elem1.value = storage.user !== 'advanced' ? 'Level ' + ( iter1 + 1 ) : ''
+      var e1e1 = document.createElement( 'input' )
+      e1.appendChild( e1e1 )
+      e1e1.id = showinfo.levels[ iter1 ]
+      e1e1.onmousedown = OnLevelClick
+      e1e1.type = 'button'
+      e1e1.value = storage.user !== 'advanced' ? 'Level ' + ( iter1 + 1 ) : ''
       }
     }
   var CreateShowList = function () {
@@ -442,59 +442,62 @@
     StyleElements()
     }
   var ShowLinks = function ( show ) {
-    var elem1 = document.createElement( 'div' )
-    document.body.appendChild( elem1 )
-    elem1.id = 'alertFiller'
-    var elem2 = document.createElement( 'div' )
-    elem1.appendChild( elem2 )
-    elem2.id = 'alertBorder'
-    var elem3 = document.createElement( 'div' )
-    elem2.appendChild( elem3 )
-    elem3.id = 'alertHolder'
-    var elem4 = document.createElement( 'div' )
-    elem3.appendChild( elem4 )
-    elem4.id = 'alertHeader'
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.id = 'alertTitle'
-    elem5.textContent = show.id
-    elem5.addEventListener( 'click' , function ( event ) { window.open( 'https://www.google.com/search?q=' + ToHyperLink( show.id ) ) } )
-    var elem4 = document.createElement( 'div' )
-    elem3.appendChild( elem4 )
-    elem4.id = 'alertCenter'
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.className = 'alertLink'
-    elem5.textContent = 'Amazon Prime'
-    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.amazon ) } )
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.className = 'alertLink'
-    elem5.textContent = 'IMDB'
-    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.imdb ) } )
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.className = 'alertLink'
-    elem5.textContent = 'Netflix'
-    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.netflix ) } )
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.className = 'alertLink'
-    elem5.textContent = 'Watch Series'
-    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.watchseries ) } )
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.className = 'alertLink'
-    elem5.textContent = 'Wikipedia'
-    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.wikipedia ) } )
-    var elem4 = document.createElement( 'div' )
-    elem3.appendChild( elem4 )
-    elem4.id = 'alertFooter'
-    var elem5 = document.createElement( 'div' )
-    elem4.appendChild( elem5 )
-    elem5.id = 'alertButton'
-    elem5.textContent = 'Exit'
-    elem5.addEventListener( 'click' , function ( event ) { document.body.removeChild( document.getElementById( 'alertFiller' ) ) } )
+    var e1 = document.createElement( 'div' )
+    var e1e1 = document.createElement( 'div' )
+    var e1e1e1 = document.createElement( 'div' )
+    var e1e1e1e1 = document.createElement( 'div' )
+    var e1e1e1e2 = document.createElement( 'div' )
+    var e1e1e1e3 = document.createElement( 'div' )
+    var e1e1e1e1e1 = document.createElement( 'div' )
+    var e1e1e1e2e1 = document.createElement( 'div' )
+    var e1e1e1e2e2 = document.createElement( 'div' )
+    var e1e1e1e2e3 = document.createElement( 'div' )
+    var e1e1e1e2e4 = document.createElement( 'div' )
+    var e1e1e1e2e5 = document.createElement( 'div' )
+    var e1e1e1e3e1 = document.createElement( 'div' )
+
+    document.body.appendChild( e1 )
+    e1.appendChild( e1e1 )
+    e1e1.appendChild( e1e1e1 )
+    e1e1e1.appendChild( e1e1e1e1 )
+    e1e1e1.appendChild( e1e1e1e2 )
+    e1e1e1.appendChild( e1e1e1e3 )
+    e1e1e1e1.appendChild( e1e1e1e1e1 )
+    e1e1e1e2.appendChild( e1e1e1e2e1 )
+    e1e1e1e2.appendChild( e1e1e1e2e2 )
+    e1e1e1e2.appendChild( e1e1e1e2e3 )
+    e1e1e1e2.appendChild( e1e1e1e2e4 )
+    e1e1e1e2.appendChild( e1e1e1e2e5 )
+    e1e1e1e3.appendChild( e1e1e1e3e1 )
+
+    e1.id = 'alertFiller'
+    e1e1.id = 'alertBorder'
+    e1e1e1.id = 'alertHolder'
+    e1e1e1e1.id = 'alertHeader'
+    e1e1e1e1e1.addEventListener( 'click' , function ( event ) { window.open( 'https://www.google.com/search?q=' + ToHyperLink( show.id ) ) } )
+    e1e1e1e1e1.id = 'alertTitle'
+    e1e1e1e1e1.textContent = show.id
+    e1e1e1e2.id = 'alertCenter'
+    e1e1e1e2e1.addEventListener( 'click' , function ( event ) { window.open( show.dataset.amazon ) } )
+    e1e1e1e2e1.className = 'alertLink'
+    e1e1e1e2e1.textContent = 'Amazon Prime'
+    e1e1e1e2e2.addEventListener( 'click' , function ( event ) { window.open( show.dataset.imdb ) } )
+    e1e1e1e2e2.className = 'alertLink'
+    e1e1e1e2e2.textContent = 'IMDB'
+    e1e1e1e2e3.addEventListener( 'click' , function ( event ) { window.open( show.dataset.netflix ) } )
+    e1e1e1e2e3.className = 'alertLink'
+    e1e1e1e2e3.textContent = 'Netflix'
+    e1e1e1e2e4.addEventListener( 'click' , function ( event ) { window.open( show.dataset.watchseries ) } )
+    e1e1e1e2e4.className = 'alertLink'
+    e1e1e1e2e4.textContent = 'Watch Series'
+    e1e1e1e2e5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.wikipedia ) } )
+    e1e1e1e2e5.className = 'alertLink'
+    e1e1e1e2e5.textContent = 'Wikipedia'
+    e1e1e1e3.id = 'alertFooter'
+    e1e1e1e3e1.addEventListener( 'click' , function ( event ) { document.body.removeChild( document.getElementById( 'alertFiller' ) ) } )
+    e1e1e1e3e1.id = 'alertButton'
+    e1e1e1e3e1.textContent = 'Exit'
+
     EditStyle( stylesheets.sheet1 , '#alertButton' , 'fontSize' , document.getElementById( 'alertButton' ).offsetHeight / 2 + 'px' )
     EditStyle( stylesheets.sheet1 , '#alertButton' , 'lineHeight' , document.getElementById( 'alertButton' ).offsetHeight - 2 + 'px' )
     }

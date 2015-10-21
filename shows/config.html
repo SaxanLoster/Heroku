@@ -1,80 +1,21 @@
 <html>
-  <TITLE>Edit Shows</TITLE>
+  <title>Edit Shows</title>
   <head>
     <link rel="icon" href="images/favicon.png" type="image/png"/>
-    <style>
-      ::-webkit-scrollbar{
-        display: none;
-        }
-      *{
-        background-color: #000;
-        border-color: #777;
-        color: #FFF;
-        }
-      body{
-        margin: 0;
-        }
-      input{
-        border-radius: 5px;
-        border-style: solid;
-        font-family: 'Courier New';
-        height: 28px;
-        padding: 2px 5px;
-        text-align: left;
-        width: 95%;
-        }
-      input.head{
-        background-color: #666;
-        border-color: #333;
-        margin: 0 10px;
-        text-align: center;
-        width: calc( 100% / 6 - 24px );
-        }
-      table{
-        width: 100%;
-        }
-      td{
-        text-align: center;
-        }
-      th{
-        text-align: center;
-        white-space: pre;
-        }
-      tr{
-        height: 30px;
-        }
-      .centerText{
-        text-align: center;
-        }
-      #head{
-        height: 30px;
-        left: 0;
-        margin: auto;
-        padding: 10px 0;
-        position: fixed;
-        right: 0;
-        top: 0;
-        width: 100%;
-        z-index: 100;
-        }
-      #tableMain{
-        padding-top: 50px;
-        }
-      </style>
-    <script src="scripts/functions.js" type="text/javascript"></script>
-    <Script src="scripts/config.js" type="text/javascript"></Script>
+    <Link rel="stylesheet" type="text/css" href="styles/config.css"/>
     </head>
-  <body onload="Saxan.Functions.CheckLocalStorage();Saxan.Functions.Main()" onresize="">
-    <div id="head">
-      <input type="button" class="head" value="Delete Row"    onclick="Saxan.Functions.DeleteRow()" />
-      <input type="button" class="head" value="Insert Row"    onclick="Saxan.Functions.InsertRow()" />
-      <input type="button" class="head" value="Save File"     onclick="Saxan.Functions.SaveFile()" />
-      <input type="button" class="head" value="Save Local"    onclick="Saxan.Functions.SaveLocal()" />
-      <input type="button" class="head" value="Sort By Level" onclick="Saxan.Functions.SortByLevel()" />
-      <input type="button" class="head" value="Sort By Title" onclick="Saxan.Functions.SortByTitle()" />
+  <body>
+    <div id="buttons">
+      <input type="button" value="Delete Row"/>
+      <input type="button" value="Insert Row"/>
+      <input type="button" value="Save File"/>
+      <input type="button" value="Save Local"/>
+      <input type="button" value="Sort By Level"/>
+      <input type="button" value="Sort By Title"/>
       </div>
-    <table id="tableMain">
+    <table id="table">
       <tbody id="main"></tbody>
       </table>
+    <script src="scripts/config.js" type="text/javascript"></script>
     </body>
   </html>

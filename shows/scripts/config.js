@@ -1,289 +1,348 @@
-Saxan = {
-  Globals: {
-    Rows: 0,
-    ShowList: {},
-    Skip: false,
-    },
-  Functions: {
-    CheckLocalStorage: function(){
-      if( !localStorage.Shows ) localStorage.Shows = '{ "Backup": {} , "Failure": {} , "Permanent": "" , "ShowList": {} , "User": "Basic" , "WatchSeries": "watch-series-tv.to" }'
-      Saxan.Globals.Storage = JSON.parse( localStorage.Shows )
-      try{
-        Saxan.Globals.ShowList = Saxan.Globals.Storage.ShowList
-        Saxan.Globals.Storage.Backup = Saxan.Globals.Storage.ShowList
-        }
-      catch( e ){
-        Saxan.Globals.Storage.Failure = Saxan.Globals.Storage.ShowList
-        Saxan.Globals.Storage.ShowList = Saxan.Globals.Storage.Backup
-        Saxan.Globals.ShowList = JSON.parse( Saxan.Globals.Storage.ShowList )
-        }
-      },
-    CheckNumbers: function(){
-      var A = document.querySelectorAll( 'tr' )
-      for( var a = 1 ; a < A.length ; a++ ) A[ a ].firstElementChild.textContent = a.pad( 3 , ' ' ).replace( / /g , '\u00a0' )
-      Saxan.Functions.EventListeners()
-      },
-    DeleteRow: function(){
-      var A = prompt( 'What row do you want to delete?' )
-      if( A ) A = A * 1
-      else return
-      if( A == 0 || A > Saxan.Globals.Rows ) return
-      var B = document.querySelectorAll( 'tr' )
-      B[ A ].parentNode.removeChild( B[ A ] )
-      rows--
-      Saxan.Functions.CheckNumbers()
-      },
-    EventListeners: function(){
-      var A = document.querySelectorAll( 'input[type="text"]' )
-      for( var a = 0 ; a < A.length ; a++ ) A[ a ].addEventListener( 'focus' , Saxan.Functions.OnFocus )
-      window.addEventListener( 'keydown' , Saxan.Functions.OnKeyDown )
-      },
-    InsertRow: function(){
-      var a = '0'
-      if( a ) a = a * 1
-      else return
-      var A = document.getElementById( 'main' )
-      var B = document.getElementsByTagName( 'tr' )
-      var C , D , E
-      Saxan.Globals.Rows++
+( function () {
+  var rowcount = 0
+  var skip = false
+  var showlist = []
+  var storage
 
-      C = document.createElement( 'tr' )
-        D = document.createElement( 'th' )
-          D.textContent = a + 1
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.placeholder = 'Title'
-            E.type = 'text'
-            D.appendChild( E )
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.classList.add( 'centerText' )
-            E.placeholder = 'Level'
-            E.type = 'text'
-            E.value = '1'
-            D.appendChild( E )
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.placeholder = 'IMDB'
-            E.type = 'text'
-            D.appendChild( E )
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.placeholder = 'Netflix'
-            E.type = 'text'
-            D.appendChild( E )
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.placeholder = 'Watch Series'
-            E.type = 'text'
-            D.appendChild( E )
-          C.appendChild( D )
-        D = document.createElement( 'td' )
-          E = document.createElement( 'input' )
-            E.placeholder = 'Wikipedia'
-            E.type = 'text'
-            D.appendChild( E )
-          C.appendChild( D )
+  Number.prototype.pad = function ( size , text ) {
+    var i = 0
+    var n = this < 0
+    var s = ''
+    var t = text || '0'
+    var z = Math.max( size , this.toString().length )
+    while( s.length < z - 1 ){
+      s += t[ i ]
+      i = i + 1 == t.length ? 0 : i + 1
+      }
+    s = t == '0' && n ? '-' + s : t + s
+    s = t == '0'
+      ? s.slice( 0 , z - Math.abs( this ).toString().length ) + Math.abs( this )
+      : s.slice( 0 , z - this.toString().length ) + this
+    return s
+    }
 
-      if( a < Saxan.Globals.Rows - 1 ) A.insertBefore( C , B[ a + 1 ] )
-      else A.appendChild( C )
-      Saxan.Functions.CheckNumbers()
-      scroll( 0 , 0 )
-      document.querySelector( '#main > tr:nth-child(2) > td:nth-child(2) > input[type="text"]' ).focus()
-      },
-    Main: function(){
-      var A = document.getElementById( 'main' )
-      var B , C , D , E
+  var CheckLocalStorage = function () {
+    if ( !localStorage.Shows ) {
+      localStorage.Shows = '{ "backup": {} , "failure": {} , "permanent": "" , "showlist": {} , "user": "basic" , "watchseries": "watch-series-tv.to" }'
+      }
+    storage = JSON.parse( localStorage.Shows )
+    try {
+      showlist = storage.showlist
+      storage.backup = storage.showlist
+      }
+    catch ( e ) {
+      storage.failure = storage.showlist
+      storage.showlist = storage.backup
+      showlist = JSON.parse( storage.showlist )
+      }
+    }
+  var CheckNumbers = function () {
+    var rows = document.querySelectorAll( 'tr' )
+    for ( var iter1 = 1 ; iter1 < rows.length ; iter1++ ) {
+      rows[ iter1 ].firstElementChild.textContent = iter1.pad( 3 , ' ' ).replace( / /g , '\u00a0' )
+      }
+    var inputs = document.querySelectorAll( 'input[type="text"]' )
+    for ( var iter1 = 0 ; iter1 < inputs.length ; iter1++ ) {
+      inputs[ iter1 ].addEventListener( 'focus' , OnFocus )
+      }
+    }
+  var DeleteRow = function () {
+    var rows = document.querySelectorAll( 'tr' )
+    var rownumber = prompt( 'What row do you want to delete?' )
+    if ( rownumber ) {
+      rownumber = rownumber * 1
+      }
+    else {
+      return false
+      }
+    if ( rownumber === 0 || rownumber > rowcount ) {
+      return false
+      }
+    rows[ rownumber ].parentNode.removeChild( rows[ rownumber ] )
+    rowcount--
+    CheckNumbers()
+    }
+  var EventListeners = function () {
+    window.addEventListener( 'keydown' , OnKeyDown )
+    document.getElementById( 'buttons' ).children[ 0 ].addEventListener( 'click' , DeleteRow )
+    document.getElementById( 'buttons' ).children[ 1 ].addEventListener( 'click' , InsertRow )
+    document.getElementById( 'buttons' ).children[ 2 ].addEventListener( 'click' , SaveFile )
+    document.getElementById( 'buttons' ).children[ 3 ].addEventListener( 'click' , SaveLocal )
+    document.getElementById( 'buttons' ).children[ 4 ].addEventListener( 'click' , SortByLevel )
+    document.getElementById( 'buttons' ).children[ 5 ].addEventListener( 'click' , SortByTitle )
+    }
+  var InsertRow = function(){
+    var rownumber = '0'
+    if ( rownumber ) {
+      rownumber = rownumber * 1
+      }
+    else {
+      return false
+      }
+    var main = document.getElementById( 'main' )
+    var rows = document.getElementsByTagName( 'tr' )
+    rowcount++
 
-      RemoveChildNodes( A )
+    var e1 = document.createElement( 'tr' )
+    var e1e1 = document.createElement( 'th' )
+    var e1e2 = document.createElement( 'td' )
+    var e1e3 = document.createElement( 'td' )
+    var e1e4 = document.createElement( 'td' )
+    var e1e5 = document.createElement( 'td' )
+    var e1e6 = document.createElement( 'td' )
+    var e1e7 = document.createElement( 'td' )
+    var e1e2e1 = document.createElement( 'input' )
+    var e1e3e1 = document.createElement( 'input' )
+    var e1e4e1 = document.createElement( 'input' )
+    var e1e5e1 = document.createElement( 'input' )
+    var e1e6e1 = document.createElement( 'input' )
+    var e1e7e1 = document.createElement( 'input' )
 
-      B = document.createElement( 'tr' )
-        C = document.createElement( 'th' )
-          C.textContent = 'Count'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'Title'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'Level'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'IMDB'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'Netflix'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'Watch Series'
-          B.appendChild( C )
-        C = document.createElement( 'th' )
-          C.textContent = 'Wikipedia'
-          B.appendChild( C )
-        A.appendChild( B )
+    e1.appendChild( e1e1 )
+    e1.appendChild( e1e2 )
+    e1.appendChild( e1e3 )
+    e1.appendChild( e1e4 )
+    e1.appendChild( e1e5 )
+    e1.appendChild( e1e6 )
+    e1.appendChild( e1e7 )
+    e1e2.appendChild( e1e2e1 )
+    e1e3.appendChild( e1e3e1 )
+    e1e4.appendChild( e1e4e1 )
+    e1e5.appendChild( e1e5e1 )
+    e1e6.appendChild( e1e6e1 )
+    e1e7.appendChild( e1e7e1 )
 
-      for( var a = 0 ; a < Saxan.Globals.ShowList.length ; a++ ){
-        B = document.createElement( 'tr' )
-          C = document.createElement( 'th' )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.placeholder = 'Title'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].Title
-              C.appendChild( D )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.classList.add( 'centerText' )
-              D.placeholder = 'Level'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].Level
-              C.appendChild( D )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.placeholder = 'IMDB'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].IMDB
-              C.appendChild( D )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.placeholder = 'Netflix'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].Netflix
-              C.appendChild( D )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.placeholder = 'Watch Series'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].WatchSeries
-              C.appendChild( D )
-            B.appendChild( C )
-          C = document.createElement( 'td' )
-            D = document.createElement( 'input' )
-              D.placeholder = 'Wikipedia'
-              D.type = 'text'
-              D.value = Saxan.Globals.ShowList[ a ].Wikipedia
-              C.appendChild( D )
-            B.appendChild( C )
-          A.appendChild( B )
-        }
+    e1e1.textContent = rownumber + 1
+    e1e2e1.placeholder = 'Title'
+    e1e2e1.type = 'text'
+    e1e3e1.value = '1'
+    e1e3e1.className = 'centered'
+    e1e3e1.placeholder = 'Level'
+    e1e3e1.type = 'text'
+    e1e4e1.placeholder = 'IMDB'
+    e1e4e1.type = 'text'
+    e1e5e1.placeholder = 'Netflix'
+    e1e5e1.type = 'text'
+    e1e6e1.placeholder = 'Watch Series'
+    e1e6e1.type = 'text'
+    e1e7e1.placeholder = 'Wikipedia'
+    e1e7e1.type = 'text'
 
-      Saxan.Functions.CheckNumbers()
-      Saxan.Globals.Rows = document.getElementsByTagName( 'tr' ).length - 1
-      },
-    OnFocus: function(){
-      setTimeout( function( event ){
-        event.srcElement.select()
-        } , 50 , event )
-      },
-    OnKeyDown: function(){
-      if( event.altKey || event.ctrlKey ) return false
-      if( event.srcElement.tagName.toLowerCase() === 'input' ){
-        if( event.keyCode === 13 ){
-          var A = event.srcElement.parentElement.parentElement
-          var B = event.srcElement.placeholder
-          if( event.shiftKey ) A.previousSibling.querySelector( '[placeholder=' + B + ']' ).focus()
-          else A.nextSibling.querySelector( '[placeholder=' + B + ']' ).focus()
+    if ( rownumber < rowcount - 1 ) {
+      main.insertBefore( e1 , rows[ rownumber + 1 ] )
+      }
+    else {
+      main.appendChild( e1 )
+      }
+    CheckNumbers()
+    scroll( 0 , 0 )
+    document.querySelector( '#main > tr:nth-child(2) > td:nth-child(2) > input[type="text"]' ).focus()
+    }
+  var Main = function(){
+    var main = document.getElementById( 'main' )
+
+    while ( main.childNodes.length > 0 ) {
+      main.removeChild( main.firstChild )
+      }
+
+    var e1 = document.createElement( 'tr' )
+    var e1e1 = document.createElement( 'th' )
+    var e1e2 = document.createElement( 'th' )
+    var e1e3 = document.createElement( 'th' )
+    var e1e4 = document.createElement( 'th' )
+    var e1e5 = document.createElement( 'th' )
+    var e1e6 = document.createElement( 'th' )
+    var e1e7 = document.createElement( 'th' )
+
+    main.appendChild( e1 )
+    e1.appendChild( e1e1 )
+    e1.appendChild( e1e2 )
+    e1.appendChild( e1e3 )
+    e1.appendChild( e1e4 )
+    e1.appendChild( e1e5 )
+    e1.appendChild( e1e6 )
+    e1.appendChild( e1e7 )
+
+    e1e1.textContent = 'Count'
+    e1e2.textContent = 'Title'
+    e1e3.textContent = 'Level'
+    e1e4.textContent = 'IMDB'
+    e1e5.textContent = 'Netflix'
+    e1e6.textContent = 'Watch Series'
+    e1e7.textContent = 'Wikipedia'
+
+    for ( var iter1 = 0 ; iter1 < showlist.length ; iter1++ ) {
+      var e1 = document.createElement( 'tr' )
+      var e1e1 = document.createElement( 'th' )
+      var e1e2 = document.createElement( 'td' )
+      var e1e3 = document.createElement( 'td' )
+      var e1e4 = document.createElement( 'td' )
+      var e1e5 = document.createElement( 'td' )
+      var e1e6 = document.createElement( 'td' )
+      var e1e7 = document.createElement( 'td' )
+      var e1e2e1 = document.createElement( 'input' )
+      var e1e3e1 = document.createElement( 'input' )
+      var e1e4e1 = document.createElement( 'input' )
+      var e1e5e1 = document.createElement( 'input' )
+      var e1e6e1 = document.createElement( 'input' )
+      var e1e7e1 = document.createElement( 'input' )
+
+      main.appendChild( e1 )
+      e1.appendChild( e1e1 )
+      e1.appendChild( e1e2 )
+      e1.appendChild( e1e3 )
+      e1.appendChild( e1e4 )
+      e1.appendChild( e1e5 )
+      e1.appendChild( e1e6 )
+      e1.appendChild( e1e7 )
+      e1e2.appendChild( e1e2e1 )
+      e1e3.appendChild( e1e3e1 )
+      e1e4.appendChild( e1e4e1 )
+      e1e5.appendChild( e1e5e1 )
+      e1e6.appendChild( e1e6e1 )
+      e1e7.appendChild( e1e7e1 )
+
+      e1e2e1.placeholder = 'Title'
+      e1e2e1.type = 'text'
+      e1e2e1.value = showlist[ iter1 ].title
+      e1e3e1.className = 'centered'
+      e1e3e1.placeholder = 'Level'
+      e1e3e1.type = 'text'
+      e1e3e1.value = showlist[ iter1 ].level
+      e1e4e1.placeholder = 'IMDB'
+      e1e4e1.type = 'text'
+      e1e4e1.value = showlist[ iter1 ].imdb
+      e1e5e1.placeholder = 'Netflix'
+      e1e5e1.type = 'text'
+      e1e5e1.value = showlist[ iter1 ].netflix
+      e1e6e1.placeholder = 'Watch Series'
+      e1e6e1.type = 'text'
+      e1e6e1.value = showlist[ iter1 ].watchseries
+      e1e7e1.placeholder = 'Wikipedia'
+      e1e7e1.type = 'text'
+      e1e7e1.value = showlist[ iter1 ].wikipedia
+      }
+
+    CheckNumbers()
+    rowcount = document.getElementsByTagName( 'tr' ).length - 1
+    }
+  var OnFocus = function () {
+    setTimeout( function ( event ) {
+      event.srcElement.select()
+      } , 50 , event )
+    }
+  var OnKeyDown = function () {
+    if ( event.altKey || event.ctrlKey ) {
+      return false
+      }
+    if ( event.srcElement.tagName === 'INPUT' ) {
+      if ( event.keyCode === 13 ) {
+        var input = event.srcElement.parentElement.parentElement
+        var column = event.srcElement.placeholder
+        if( event.shiftKey ) {
+          input.previousSibling.querySelector( '[placeholder=' + column + ']' ).focus()
           }
-        if( event.keyCode === 27 ){
-          event.srcElement.blur()
+        else {
+          input.nextSibling.querySelector( '[placeholder=' + column + ']' ).focus()
           }
         }
-      if( event.srcElement.tagName.toLowerCase() !== 'input' ){
-        var A = document.querySelectorAll( 'td:nth-child( 2 ) input' )
-        for( var a = 0 ; a < A.length ; a++ ) if( A[ a ].value.charCodeAt( 0 ) === event.keyCode ) break
-        if( a < A.length ) A[ a ].scrollIntoViewIfNeeded()
+      if ( event.keyCode === 27 ) {
+        event.srcElement.blur()
         }
-      },
-    OnResize: function(){
-      var A = document.querySelectorAll( 'input.head' )
-      var B = Math.floor( innerWidth / A.length )
-      document.querySelector( '#head' ).style.width       = B * A.length
-      document.querySelector( '#head' ).style.marginLeft  = ( innerWidth - ( B * A.length ) ) / 2
-      document.querySelector( '#head' ).style.marginRight = ( innerWidth - ( B * A.length ) ) / 2
-      for( var i = 0 ; i < A.length ; i++ ) A[ i ].style.width = B - 24 + 'px'
-      },
-    SaveData: function(){
-      Saxan.Functions.SortByTitle()
-      var A = document.querySelectorAll( 'tr' )
-      if( A.length < 2 ) return
-      var B = '[\n'
-      for( var a = 1 ; a < A.length ; a++ ){
-        B += '\t{'
-        B += ' "Title": "'       + A[ a ].children[ 1 ].firstChild.value + '" ,'
-        B += ' "Level": "'       + A[ a ].children[ 2 ].firstChild.value + '" ,'
-        B += ' "IMDB": "'        + A[ a ].children[ 3 ].firstChild.value + '" ,'
-        B += ' "Netflix": "'     + A[ a ].children[ 4 ].firstChild.value + '" ,'
-        B += ' "WatchSeries": "' + A[ a ].children[ 5 ].firstChild.value + '" ,'
-        B += ' "Wikipedia": "'   + A[ a ].children[ 6 ].firstChild.value + '" '
-        B += a < A.length - 1 ? '},\n' : '}\n'
-        }
-      B += ']'
-      return B
-      },
-    SaveFile: function(){
-      var A = Saxan.Functions.SaveData()
-      window.open( 'data:text.json,' + encodeURI( A ) , 'Show.JSON' )
-      },
-    SaveLocal: function(){
-      Saxan.Globals.Storage.ShowList = JSON.parse( Saxan.Functions.SaveData() )
-      localStorage.Shows = JSON.stringify( Saxan.Globals.Storage )
-      },
-    SortByLevel: function(){
-      var A = document.getElementById( 'main' )
-      var B = document.querySelectorAll( 'tr' )
-      var C = A.cloneNode( true )
-      var D = document.createElement( 'tbody' )
-      C.removeChild( C.firstElementChild )
-      var E = C.children
-      var F = 0
-      while( E.length > 0 ){
-        var a = 0
-        for( var b = 0 ; b < E.length ; b++ ){
-          var c = E[ a ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
-          var d = E[ b ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
-          if( c > d ) a = b
+      }
+    if ( event.srcElement.tagName !== 'INPUT' ) {
+      var titles = document.querySelectorAll( 'td:nth-child( 2 ) input' )
+      for ( var iter1 = 0 ; iter1 < titles.length ; iter1++ ) {
+        if ( titles[ iter1 ].value.charCodeAt( 0 ) === event.keyCode ) {
+          break
           }
-        D.appendChild( E[ a ] )
-        F++
         }
-      while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
-      while( D.childElementCount > 0 ) A.appendChild( D.firstElementChild )
-      Saxan.Functions.CheckNumbers()
-      },
-    SortByTitle: function(){
-      var A = document.getElementById( 'main' )
-      var B = document.querySelectorAll( 'tr' )
-      var C = A.cloneNode( true )
-      var D = document.createElement( 'tbody' )
-      C.removeChild( C.firstElementChild )
-      var E = C.children
-      var F = 0
-      while( E.length > 0 ){
-        var a = 0
-        for( var b = 0 ; b < E.length ; b++ ){
-          var c = E[ a ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
-          var d = E[ b ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
-          if( Saxan.Globals.Skip ){
-            c = c.replace( /^(the | a )/ , '' )
-            d = d.replace( /^(the | a )/ , '' )
-            }
-          if( c > d ) a = b
+      if ( iter1 < titles.length ) titles[ iter1 ].scrollIntoViewIfNeeded()
+      }
+    }
+  var SaveData = function(){
+    SortByTitle()
+    var rows = document.querySelectorAll( 'tr' )
+    if ( rows.length < 2 ) {
+      return false
+      }
+    var data = '[\n'
+    for ( var iter1 = 1 ; iter1 < rows.length ; iter1++ ) {
+      data += '\t{'
+      data += ' "title": "'       + rows[ iter1 ].children[ 1 ].firstChild.value + '" ,'
+      data += ' "level": "'       + rows[ iter1 ].children[ 2 ].firstChild.value + '" ,'
+      data += ' "imdb": "'        + rows[ iter1 ].children[ 3 ].firstChild.value + '" ,'
+      data += ' "netflix": "'     + rows[ iter1 ].children[ 4 ].firstChild.value + '" ,'
+      data += ' "watchseries": "' + rows[ iter1 ].children[ 5 ].firstChild.value + '" ,'
+      data += ' "wikipedia": "'   + rows[ iter1 ].children[ 6 ].firstChild.value + '" '
+      data += iter1 < rows.length - 1 ? '},\n' : '}\n'
+      }
+    data += ']'
+    return data
+    }
+  var SaveFile = function(){
+    window.open( 'data:text.json,' + encodeURI( SaveData() ) , 'Show.JSON' )
+    }
+  var SaveLocal = function(){
+    storage.showlist = JSON.parse( SaveData() )
+    localStorage.Shows = JSON.stringify( storage )
+    }
+  var SortByLevel = function(){
+    var main = document.getElementById( 'main' )
+    var cloned = main.cloneNode( true )
+    var holder = document.createElement( 'tbody' )
+    cloned.removeChild( cloned.firstElementChild )
+    var rows = cloned.children
+    while ( rows.length > 0 ) {
+      var iter1 = 0
+      for ( var iter2 = 0 ; iter2 < rows.length ; iter2++ ) {
+        var row1level = rows[ iter1 ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+        var row2level = rows[ iter2 ].firstElementChild.nextSibling.nextSibling.firstElementChild.value.toLowerCase()
+        if ( row1level > row2level ) {
+          iter1 = iter2
           }
-        D.appendChild( E[ a ] )
-        F++
         }
-      while( A.childNodes.length > 1 ) A.removeChild( A.firstChild.nextSibling )
-      while( D.childElementCount > 0 ) A.appendChild( D.firstElementChild )
-      Saxan.Functions.CheckNumbers()
-      },
-    },
-  }
+      holder.appendChild( rows[ iter1 ] )
+      }
+    while ( main.childNodes.length > 1 ) {
+      main.removeChild( main.firstChild.nextSibling )
+      }
+    while ( holder.childElementCount > 0 ) {
+      main.appendChild( holder.firstElementChild )
+      }
+    CheckNumbers()
+    }
+  var SortByTitle = function(){
+    var main = document.getElementById( 'main' )
+    var cloned = main.cloneNode( true )
+    var holder = document.createElement( 'tbody' )
+    cloned.removeChild( cloned.firstElementChild )
+    var rows = cloned.children
+    while ( rows.length > 0 ) {
+      var iter1 = 0
+      for ( var iter2 = 0 ; iter2 < rows.length ; iter2++ ) {
+        var row1name = rows[ iter1 ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+        var row2name = rows[ iter2 ].firstElementChild.nextSibling.firstElementChild.value.toLowerCase()
+        if ( skip ) {
+          row1name = row1name.replace( /^(the | a )/ , '' )
+          row2name = row2name.replace( /^(the | a )/ , '' )
+          }
+        if ( row1name > row2name ) {
+          iter1 = iter2
+          }
+        }
+      holder.appendChild( rows[ iter1 ] )
+      }
+    while ( main.childNodes.length > 1 ) {
+      main.removeChild( main.firstChild.nextSibling )
+      }
+    while ( holder.childElementCount > 0 ) {
+      main.appendChild( holder.firstElementChild )
+      }
+    CheckNumbers()
+    }
+
+  CheckLocalStorage()
+  EventListeners()
+  Main()
+  }() )
