@@ -142,11 +142,11 @@ Saxan.CreateShowList = function () {
     var Show = document.createElement( 'Show' )
       elem1.appendChild( Show )
       Show.id = Saxan.ShowList[ iter1 ].Title
-      Show.dataset.Amazon = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Amazon , AmazonLink , AmazonSearch )
-      Show.dataset.IMDB = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].IMDB , IMDBLink , IMDBSearch )
-      Show.dataset.Netflix = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Netflix , NetflixLink , NetflixSearch )
-      Show.dataset.WatchSeries = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].WatchSeries , WatchSeriesLink , WatchSeriesSearch )
-      Show.dataset.Wikipedia = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Wikipedia , WikipediaLink , WikipediaSearch )
+      Show.dataset.amazon = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Amazon , AmazonLink , AmazonSearch )
+      Show.dataset.imdb = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].IMDB , IMDBLink , IMDBSearch )
+      Show.dataset.netflix = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Netflix , NetflixLink , NetflixSearch )
+      Show.dataset.watchseries = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].WatchSeries , WatchSeriesLink , WatchSeriesSearch )
+      Show.dataset.wikipedia = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Wikipedia , WikipediaLink , WikipediaSearch )
       Show.onmousedown = Saxan.OnShowClick
       Show.textContent = Saxan.ShowList[ iter1 ].Title
       Show.classList.add( 'level' + Saxan.ShowList[ iter1 ].Level )
@@ -378,11 +378,11 @@ Saxan.SetCR = function ( para1 , para2 ) {
 Saxan.ShowLinks = function ( Show ) {
   var A = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.toHyperLink() + '\' )" >' + Show.id + '</div>'
   var B = '\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Amazon + '\' )" >Amazon Prime</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.IMDB + '\' )" >IMDB</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Netflix + '\' )" >Netflix</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.WatchSeries + '\' )" >Watch Series</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.Wikipedia + '\' )" >Wikipedia</div>\
+    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.amazon + '\' )" >Amazon Prime</div>\
+    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.imdb + '\' )" >IMDB</div>\
+    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.netflix + '\' )" >Netflix</div>\
+    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.watchseries + '\' )" >Watch Series</div>\
+    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.wikipedia + '\' )" >Wikipedia</div>\
     '
   var C = 'Exit'
   var D = 0
