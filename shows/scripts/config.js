@@ -100,7 +100,7 @@ Saxan = {
       var A = document.getElementById( 'main' )
       var B , C , D , E
 
-      removeChildren( A )
+      RemoveChildNodes( A )
 
       B = document.createElement( 'tr' )
         C = document.createElement( 'th' )
@@ -205,7 +205,7 @@ Saxan = {
       },
     OnResize: function(){
       var A = document.querySelectorAll( 'input.head' )
-      var B = Math.F( innerWidth / A.length )
+      var B = Math.floor( innerWidth / A.length )
       document.querySelector( '#head' ).style.width       = B * A.length
       document.querySelector( '#head' ).style.marginLeft  = ( innerWidth - ( B * A.length ) ) / 2
       document.querySelector( '#head' ).style.marginRight = ( innerWidth - ( B * A.length ) ) / 2

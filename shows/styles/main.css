@@ -51,27 +51,10 @@ show:hover {
 .perm:hover {
   color: #AFAFFF;
   }
-.randomLinks {
-  cursor: pointer;
-  font-size: 24px;
-  font-variant: small-caps;
-  letter-spacing: 2px;
-  margin: auto;
-  white-space: pre;
-  width: auto;
-  }
-.randomLinks:hover {
-  color: #FFAFAF;
-  }
-.Title {
-  cursor: pointer;
-  font-size: 36px;
-  margin: auto;
-  }
 show.hide {
   display: none;
   }
-#Buttons {
+#buttons {
   background-color: #000;
   bottom: 0px;
   display: block;
@@ -80,14 +63,134 @@ show.hide {
   text-align: center;
   width: 100%;
   }
-#Shows {
+#shows {
+  column-fill: auto;
   cursor: default;
   display: block;
-  margin: 0px;
   margin-left: auto;
   margin-right: auto;
+  margin: 0px;
   overflow: scroll;
-  column-fill: auto;
   padding: 0px;
   width: 100%;
+  }
+#alertFiller {
+  background-color: #000;
+  bottom: 0;
+  display: block;
+  height: 100%;
+  left: 0;
+  margin: auto;
+  opacity: 1;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  }
+#alertBorder {
+  -moz-box-sizing: content-box;
+  background-color: #222;
+  border-radius: 10px;
+  bottom: 0;
+  box-sizing: content-box;
+  color: #FFF;
+  display: block;
+  font-size: 20px;
+  height: 75%;
+  left: 0;
+  margin: auto;
+  max-height: 600px;
+  max-width: 800px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 75%;
+  z-index: 11;
+  }
+#alertHolder {
+  bottom: 0;
+  height: calc( 100% - 20px );
+  left: 0;
+  margin: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: calc( 100% - 20px );
+  }
+#alertHeader {
+  align-content: center;
+  background-color: #444;
+  border-radius: 5px 5px 0 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-variant: small-caps;
+  height: 25%;
+  justify-content: center;
+  letter-spacing: 2px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+  }
+#alertTitle {
+  cursor: pointer;
+  font-size: 36px;
+  margin: auto;
+  }
+#alertCenter {
+  background-color: #666;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 45%;
+  overflow: scroll;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+  }
+.alertLink {
+  cursor: pointer;
+  font-size: 24px;
+  font-variant: small-caps;
+  letter-spacing: 2px;
+  margin: auto;
+  white-space: pre;
+  width: auto;
+  }
+.alertLink:hover {
+  color: #FFAFAF;
+  }
+#alertFooter {
+  background-color: #444;
+  border-radius: 0 0 5px 5px;
+  box-sizing: border-box;
+  display: block;
+  height: 30%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  }
+#alertButton {
+  background-color: #999;
+  border-radius: 25px;
+  border: 1px solid #000;
+  bottom: 0;
+  box-sizing: border-box;
+  color: #000;
+  cursor: pointer;
+  height: 50%;
+  justify-content: center;
+  left: 0;
+  margin: auto;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 50%;
   }

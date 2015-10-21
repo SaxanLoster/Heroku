@@ -1,442 +1,551 @@
-Saxan = {}
+( function () {
 
-Saxan.Booleans = {
-  LeftToRight: !true,
-  MinimunSize: !true,
-  MaintainSize: !true,
-  Permanent: !true,
-  }
-Saxan.ClickInfo = {
-  Elem1: null,
-  Elem2: null,
-  Time1: null,
-  Time2: null,
-  }
-Saxan.ColsInfo = {
-  Count: 0,
-  Max: 0,
-  }
-Saxan.MainInfo = {
-  ButtonsHeight: 0,
-  ShowsHeight: 0,
-  ShowsWidth: 0,
-  }
-Saxan.RowsInfo = {
-  Count: 0,
-  Max: 0,
-  }
-Saxan.ShowInfo = {
-  All: document.getElementsByTagName( 'Show' ),
-  BaseHeight: 80,
-  BaseWidth: 300,
-  Display: [],
-  Height: 0,
-  Hidden: [],
-  Levels: [],
-  Max: 0,
-  Permanent: [],
-  Visible: [],
-  Width: 0,
-  }
-Saxan.StyleSheets = {
-  Sheet1: 1,
-  Sheet2: 2,
-  }
+  var booleans = {
+    lefttoright: !true,
+    minimunsize: !true,
+    maintainsize: !true,
+    permanent: !true,
+    }
+  var clickinfo = {
+    elem1: null,
+    elem2: null,
+    time1: null,
+    time2: null,
+    }
+  var colsinfo = {
+    count: 0,
+    max: 0,
+    }
+  var maininfo = {
+    buttonsheight: 0,
+    showsheight: 0,
+    showswidth: 0,
+    }
+  var rowsinfo = {
+    count: 0,
+    max: 0,
+    }
+  var showinfo = {
+    all: document.getElementsByTagName( 'show' ),
+    baseheight: 80,
+    basewidth: 300,
+    display: [],
+    height: 0,
+    hidden: [],
+    levels: [],
+    max: 0,
+    permanent: [],
+    visible: [],
+    width: 0,
+    }
+  var stylesheets = {
+    sheet1: 1,
+    sheet2: 2,
+    }
+  var storage
+  var showlist
 
-Saxan.CheckLocalStorage = function () {
-  if ( !localStorage.Shows ) {
-    localStorage.Shows = '{\
-      "Backup": {},\
-      "Failure": {},\
-      "Permanent": "",\
-      "ShowList": {},\
-      "User": "Basic",\
-      "WatchSeries": "watch-series-tv.to"\
-      }'
+  Array.prototype.has = function( string ){
+    var bool = false
+    for ( var iter1 = 0 ; iter1 < this.length ; iter1++ ) {
+      if ( this[ iter1 ] == string ) {
+        bool = true
+        }
+      }
+    return bool
     }
-  Saxan.Storage = JSON.parse( localStorage.Shows )
-  try {
-    Saxan.ShowList = Saxan.Storage.ShowList
-    Saxan.Storage.Backup = Saxan.Storage.ShowList
+  Number.prototype.pad = function( size , text ){
+    var i = 0
+    var n = this < 0
+    var s = ''
+    var t = text || '0'
+    var z = Math.max( size , this.toString().length )
+    while( s.length < z - 1 ){
+      s += t[ i ]
+      i = i + 1 == t.length ? 0 : i + 1
+      }
+    s = t == '0' && n ? '-' + s : t + s
+    s = t == '0'
+      ? s.slice( 0 , z - Math.abs( this ).toString().length ) + Math.abs( this )
+      : s.slice( 0 , z - this.toString().length ) + this
+    return s
     }
-  catch ( e ) {
-    Saxan.Storage.Failure = Saxan.Storage.ShowList
-    Saxan.Storage.ShowList = Saxan.Storage.Backup
-    Saxan.ShowList = JSON.parse( Saxan.Storage.ShowList )
+  String.prototype.has = function( string ){
+    return this.match( string ) !== null
     }
-  localStorage.Shows = JSON.stringify( Saxan.Storage )
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowList.length ; iter1++ ) {
-    if ( !Saxan.ShowInfo.Levels.has( 'level' + Saxan.ShowList[ iter1 ].Level ) ) {
-      Saxan.ShowInfo.Levels.push( 'level' + Saxan.ShowList[ iter1 ].Level )
+
+  var CheckLocalStorage = function () {
+    if ( !localStorage.Shows ) {
+      localStorage.Shows = '{\
+        "Backup": {},\
+        "Failure": {},\
+        "Permanent": "",\
+        "ShowList": {},\
+        "User": "Basic",\
+        "WatchSeries": "watch-series-tv.to"\
+        }'
+      }
+    storage = JSON.parse( localStorage.Shows )
+    try {
+      showlist = storage.showlist
+      storage.backup = storage.showlist
+      }
+    catch ( e ) {
+      storage.failure = storage.showlist
+      storage.showlist = storage.backup
+      showlist = JSON.parse( storage.showlist )
+      }
+    localStorage.Shows = JSON.stringify( storage )
+    for ( var iter1 = 0 ; iter1 < showlist.length ; iter1++ ) {
+      if ( !showinfo.levels.has( 'level' + showlist[ iter1 ].level ) ) {
+        showinfo.levels.push( 'level' + showlist[ iter1 ].level )
+        }
+      }
+    showinfo.levels.sort()
+    }
+  var CountDisplay = function () {
+    showinfo.display = []
+    for ( var iter1 = 0 ; iter1 < showinfo.all.length ; iter1++ ) {
+      if ( showinfo.all[ iter1 ].offsetWidth && showinfo.all[ iter1 ].offsetHeight ) {
+        showinfo.display.push( showinfo.all[ iter1 ] )
+        }
       }
     }
-  Saxan.ShowInfo.Levels.sort()
-  }
-Saxan.CountDisplay = function () {
-  Saxan.ShowInfo.Display = []
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.All.length ; iter1++ ) {
-    var temp1 = Saxan.ShowInfo.All[ iter1 ].offsetWidth > 0
-    var temp2 = Saxan.ShowInfo.All[ iter1 ].offsetHeight > 0
-    if ( temp1 && temp2 ) {
-      Saxan.ShowInfo.Display.push( Saxan.ShowInfo.All[ iter1 ] )
+  var CountVisible = function () {
+    showinfo.visible = []
+    for ( var iter1 = 0 ; iter1 < showinfo.display.length ; iter1++ ) {
+      var temp1 = showinfo.display[ iter1 ].offsetLeft >= window.scrollX
+      var temp2 = showinfo.display[ iter1 ].offsetTop >= window.scrollY
+      var temp3 = showinfo.display[ iter1 ].offsetLeft <= window.scrollX + maininfo.showswidth
+      var temp4 = showinfo.display[ iter1 ].offsetTop <= window.scrollY + maininfo.showsheight
+      if ( temp1 && temp2 && temp3 && temp4 ) {
+        showinfo.visible.push( showinfo.display[ iter1 ] )
+        }
       }
     }
-  }
-Saxan.CountVisible = function () {
-  Saxan.ShowInfo.Visible = []
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Display.length ; iter1++ ) {
-    var temp1 = Saxan.ShowInfo.Display[ iter1 ].offsetLeft >= window.scrollX
-    var temp2 = Saxan.ShowInfo.Display[ iter1 ].offsetTop >= window.scrollY
-    var temp3 = Saxan.ShowInfo.Display[ iter1 ].offsetLeft <= window.scrollX + Saxan.MainInfo.ShowsWidth
-    var temp4 = Saxan.ShowInfo.Display[ iter1 ].offsetTop <= window.scrollY + Saxan.MainInfo.ShowsHeight
-    if ( temp1 && temp2 && temp3 && temp4 ) {
-      Saxan.ShowInfo.Visible.push( Saxan.ShowInfo.Display[ iter1 ] )
+  var CreateInputs = function () {
+    var elem0 = document.querySelector( '#buttons' )
+    RemoveChildNodes( elem0 )
+    var elem1 = document.createElement( 'input' )
+    elem0.appendChild( elem1 )
+    elem1.id = 'level0'
+    elem1.onmousedown = OnConfigureClick
+    elem1.type = 'button'
+    elem1.value = storage.user == 'Basic' ? 'Configure' : ''
+    for ( var iter1 = 0 ; iter1 < showinfo.levels.length && showinfo.levels.length > 1 ; iter1++ ) {
+      var elem1 = document.createElement( 'input' )
+      elem0.appendChild( elem1 )
+      elem1.id = showinfo.levels[ iter1 ]
+      elem1.onmousedown = OnLevelClick
+      elem1.type = 'button'
+      elem1.value = storage.user == 'Basic' ? 'Level ' + ( iter1 + 1 ) : ''
       }
     }
-  }
-Saxan.CreateInputs = function () {
-  var elem1 = document.querySelector( '#Buttons' )
-  removeChildNodes( elem1 )
-  var elem2 = document.createElement( 'Input' )
-    elem2.id = 'level0'
-    elem2.onmousedown = Saxan.OnConfigureClick
-    elem2.type = 'button'
-    elem2.value = Saxan.Storage.User == 'Basic' ? 'Configure' : ''
-  elem1.appendChild( elem2 )
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Levels.length && Saxan.ShowInfo.Levels.length > 1 ; iter1++ ) {
-    var elem2 = document.createElement( 'Input' )
-      elem2.id = Saxan.ShowInfo.Levels[ iter1 ]
-      elem2.onmousedown = Saxan.OnLevelClick
-      elem2.type = 'button'
-      elem2.value = Saxan.Storage.User == 'Basic' ? 'Level ' + ( iter1 + 1 ) : ''
+  var CreateShowList = function () {
+    var shows = document.querySelector( '#shows' )
+    RemoveChildNodes( shows )
+    var AddData = function ( title , data , link , search ) {
+      if ( data ) {
+        if ( data.has( /^http/ ) ) {
+          return data
+          }
+        else {
+          return link.replace( /REPLACE/ , ToHyperLink( data ) )
+          }
+        }
+      else {
+        return search.replace( /REPLACE/ , ToHyperLink( title ) )
+        }
+      }
+    var amazonlink = ''
+    var amazonsearch = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE+TV'
+    var imdblink = 'http://www.imdb.com/title/REPLACE'
+    var imdbsearch = 'http://www.imdb.com/find?q=REPLACE%20TV&s=tt'
+    var netflixlink = 'http://www.netflix.com/title/REPLACE'
+    var netflixsearch = 'http://www.netflix.com/search/REPLACE'
+    var watchserieslink = 'http://' + storage.watchseries + '/serie/REPLACE'
+    var watchseriessearch = 'http://' + storage.watchseries + '/search/REPLACE'
+    var wikipedialink = 'http://en.wikipedia.org/wiki/REPLACE'
+    var wikipediasearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
+    for ( var iter1 = 0 ; iter1 < showlist.length ; iter1++ ) {
+      var show = document.createElement( 'show' )
+      shows.appendChild( show )
+      show.classList.add( 'level' + showlist[ iter1 ].level )
+      show.dataset.amazon = AddData( showlist[ iter1 ].title , showlist[ iter1 ].amazon , amazonlink , amazonsearch )
+      show.dataset.imdb = AddData( showlist[ iter1 ].title , showlist[ iter1 ].imdb , imdblink , imdbsearch )
+      show.dataset.netflix = AddData( showlist[ iter1 ].title , showlist[ iter1 ].netflix , netflixlink , netflixsearch )
+      show.dataset.watchseries = AddData( showlist[ iter1 ].title , showlist[ iter1 ].watchseries , watchserieslink , watchseriessearch )
+      show.dataset.wikipedia = AddData( showlist[ iter1 ].title , showlist[ iter1 ].wikipedia , wikipedialink , wikipediasearch )
+      show.id = showlist[ iter1 ].title
+      show.onmousedown = OnShowClick
+      show.textContent = showlist[ iter1 ].title
+      }
+    if ( storage.user === 'Basic' || showinfo.levels.length === 1 ) {
+      EditStyle( stylesheets.sheet2 , '.level1' , 'display' , 'block' )
+      if ( document.querySelector( '#level1' ) ) {
+        document.querySelector( '#level1' ).classList.add( 'active' )
+        }
+      }
+    else {
+      EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+      if ( storage.permanent !== '' ) {
+        showinfo.permanent = storage.permanent.split( '|' )
+        }
+      for ( var iter1 = 0 ; iter1 < showinfo.permanent.length ; iter1++ ) {
+        try {
+          showinfo.all[ showinfo.permanent[ iter1 ] ].classList.add( 'perm' )
+          }
+        catch ( e ) {}
+        }
+      }
+    }
+  var DeclareStyleSheet = function () {
+    document.styleSheets[ stylesheets.sheet1 ].addRule( 'body' )
+    document.styleSheets[ stylesheets.sheet1 ].addRule( 'input' )
+    document.styleSheets[ stylesheets.sheet1 ].addRule( 'show' )
+    document.styleSheets[ stylesheets.sheet1 ].addRule( '#alertButton' )
+    document.styleSheets[ stylesheets.sheet1 ].addRule( '#buttons' )
+    document.styleSheets[ stylesheets.sheet1 ].addRule( '#shows' )
+
+    for ( var iter1 = 0 ; iter1 < showinfo.levels.length ; iter1++ ) {
+      document.styleSheets[ stylesheets.sheet2 ].addRule( '.' + showinfo.levels[ iter1 ] )
+      }
+
+    document.styleSheets[ stylesheets.sheet2 ].addRule( '.perm' )
+    document.styleSheets[ stylesheets.sheet2 ].addRule( '.hide' )
+    }
+  var EditStyle = function ( sheet , selector , property , value ) {
+    var selector = selector.toLowerCase()
+    var value = typeof value === 'number' ? value.toString() : value
+    var sheet = typeof sheet === 'number' ? document.styleSheets[ sheet ] : sheet
+    var rules = sheet.cssRules || sheet.rules
+    for ( var iter1 = 0 ; iter1 < rules.length ; iter1++ ) {
+      if ( rules[ iter1 ].type === 1 ) {
+        if ( selector === rules[ iter1 ].selectorText.toLowerCase() ) {
+          rules[ iter1 ].style[ property ] = value
+          return true
+          }
+        }
+      }
+    try {
+      sheet.insertRule( selector + '{  }' , rules.length )
+      }
+    catch ( error ) {
+      sheet.addRule( selector , '' , rules.length )
+      }
+    rules[ rules.length - 1 ].selectorText = selector
+    rules[ rules.length - 1 ].style[ property ] = value
+    }
+  var GetCR = function () {
+    var temp1 = colsinfo.count.pad( 2 , ' ' )
+    var temp2 = rowsinfo.count.pad( 2 , ' ' )
+    var temp3 = colsinfo.max.pad( 2 , ' ' )
+    var temp4 = rowsinfo.max.pad( 2 , ' ' )
+    console.log( '\tCount:\t%s x %s\n\tMax:\t%s x %s' , temp1 , temp2 , temp3 , temp4 )
+    }
+  var HideAllShows = function () {
+    var inputs = document.getElementsByTagName( 'input' )
+    for ( var iter1 = 0 ; iter1 < inputs.length ; iter1++ ) {
+      inputs[ iter1 ].classList.remove( 'active' )
+      }
+    for ( var iter1 = 0 ; iter1 < showinfo.levels.length ; iter1++ ) {
+      EditStyle( stylesheets.sheet2 , '.' + showinfo.levels[ iter1 ] , 'display' , '' )
+      }
+    }
+  var MainDisplayFunctions = function () {
+    colsinfo.max = Math.floor( maininfo.showswidth / showinfo.basewidth )
+    rowsinfo.max = Math.floor( maininfo.showsheight / showinfo.baseheight )
+    showinfo.max = colsinfo.max * rowsinfo.max
+    CountDisplay()
+    CountVisible()
+    if ( !booleans.maintainsize ) {
+      RowsAndColumns()
+      }
+    StyleElements()
+    }
+  var OnChange = function () {
+    scrollTo( 0 , 0 )
+    var temp1 = document.getElementsByTagName( 'input' ).length
+    var temp2 = document.getElementById( 'alertButton' )
+    maininfo.buttonsheight = temp1 && 50 || Math.ceil( innerWidth / ( temp1 * 5 ) )
+    maininfo.showsheight = innerHeight - maininfo.buttonsheight
+    maininfo.showswidth = innerWidth
+    if ( temp2 ) {
+      EditStyle( stylesheets.sheet1 , '#alertButton' , 'fontSize' , temp2.offsetHeight / 2 + 'px' )
+      EditStyle( stylesheets.sheet1 , '#alertButton' , 'lineHeight' , temp2.offsetHeight - 2 + 'px' )
+      }
+    EditStyle( stylesheets.sheet1 , '#buttons' , 'height' , maininfo.buttonsheight + 'px' )
+    EditStyle( stylesheets.sheet1 , 'input' , 'width' , innerWidth / temp1 + 'px' )
+    MainDisplayFunctions()
+    }
+  var OnConfigureClick = function () {
+    if ( storage.user !== 'Advanced' ) {
+      window.open( 'config.html' )
+      }
+    else if ( event.button === 0 ) {
+      // booleans.minimunsize = !booleans.minimunsize
+      booleans.maintainsize = !booleans.maintainsize
+      MainDisplayFunctions()
+      }
+    else if ( event.button === 1 ) {
+      booleans.lefttoright = !booleans.lefttoright
+      booleans.maintainsize = !true
+      MainDisplayFunctions()
+      }
+    else if ( event.button === 2 ) {
+      if ( showinfo.hidden.length > 0 ) {
+        showinfo.hidden.pop().classList.remove( 'hide' )
+        booleans.maintainsize = !true
+        }
+      MainDisplayFunctions()
+      }
+    else {
+      console.log( event )
+      }
+    }
+  var OnLevelClick = function () {
+    switch ( event.button ) {
+      case 0 :
+        this.classList.toggle( 'active' )
+        if ( this.classList.contains( 'active' ) ) {
+          if ( !booleans.permanent ) {
+            EditStyle( stylesheets.sheet2 , '.perm' , 'display' , '' )
+            }
+          EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , 'block' )
+          }
+        else {
+          EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , '' )
+          if ( document.getElementsByClassName( 'active' ).length === 0 ) {
+            EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+            }
+          }
+        booleans.maintainsize = !true
+        MainDisplayFunctions()
+        break
+      case 1 :
+        HideAllShows()
+        this.classList.add( 'active' )
+        if ( !booleans.permanent ) {
+          EditStyle( stylesheets.sheet2 , '.perm' , 'display' , '' )
+          }
+        EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , 'block' )
+        booleans.maintainsize = !true
+        MainDisplayFunctions()
+        break
+      case 2 :
+        HideAllShows()
+        if ( !booleans.permanent ) {
+          EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+          }
+        booleans.maintainsize = !true
+        MainDisplayFunctions()
+        break
+      }
+    }
+  var OnScroll = function () {
+    if ( event.srcElement.id === 'AlertCenter' || event.srcElement.parentNode.id === 'AlertCenter' ) {}
+    else {
+      if ( !event.ctrlKey ) {
+        event.preventDefault()
+        var temp1 = event.deltaY > 0 ? 1 : -1
+        if ( booleans.lefttoright ) {
+          scrollBy( 0 , temp1 * showinfo.height )
+          }
+        else {
+          scrollBy( temp1 * showinfo.width , 0 )
+          }
+        }
+      StyleElements()
+      }
+    }
+  var OnShowClick = function () {
+    if ( storage.user !== 'Advanced' || event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
+      ShowLinks( this )
+      }
+    else if ( event.button === 0 ) {
+      clickinfo.elem1 = clickinfo.elem2
+      clickinfo.elem2 = event.toElement
+      clickinfo.time1 = clickinfo.time2
+      clickinfo.time2 = event.timeStamp
+      if ( ( clickinfo.time2 - clickinfo.time1 ) < 250 && clickinfo.elem1 === clickinfo.elem2 ) {
+        showinfo.permanent.has( this.id ) ? this.classList.remove( 'perm' ) : this.classList.add( 'perm' )
+        PermanentItemToggle( this.id )
+        MainDisplayFunctions()
+        }
+      }
+    else if ( event.button === 2 ) {
+      this.classList.add( 'hide' )
+      showinfo.hidden.push( this )
+      MainDisplayFunctions()
+      }
+    else {
+      console.log( event )
+      }
+    }
+  var OnStart = function () {
+    CheckLocalStorage()
+    DeclareStyleSheet()
+    CreateInputs()
+    CreateShowList()
+    OnChange()
+    window.addEventListener( 'resize' , OnChange )
+    document.body.addEventListener( 'contextmenu' , PreventActions )
+    document.body.addEventListener( 'keydown' , PreventActions )
+    document.body.addEventListener( 'mousedown' , PreventActions )
+    document.body.addEventListener( 'mousewheel' , OnScroll )
+    }
+  var PermanentItemToggle = function ( show ) {
+    if ( showinfo.permanent.has( show ) ) {
+      showinfo.permanent.splice( showinfo.permanent.indexOf( show ) , 1 )
+      }
+    else {
+      showinfo.permanent.push( show )
+      }
+    showinfo.permanent.sort()
+    storage.permanent = showinfo.permanent.join( '|' )
+    localStorage.Shows = JSON.stringify( storage )
+    }
+  var PreventActions = function ( event ) {
+    var alphabet  = event.which >= 65 && event.which <= 90 && !event.ctrlKey
+    var selectall = event.which == 65 && event.ctrlKey
+    var type = event.type.match( /contextmenu|mousedown|wheel/ ) !== null
+    if( alphabet || selectall || type ) event.preventDefault()
+    }
+  var RemoveChildNodes = function ( element ) {
+    while( element.childNodes.length > 0 ) element.removeChild( element.firstChild )
+    }
+  var RowsAndColumns = function () {
+    if ( showinfo.display.length <= showinfo.max ) {
+      if ( booleans.minimunsize ) {
+        colsinfo.count = colsinfo.max
+        rowsinfo.count = rowsinfo.max
+        }
+      else {
+        colsinfo.count = Math.ceil( showinfo.display.length / rowsinfo.max )
+        rowsinfo.count = Math.ceil( showinfo.display.length / colsinfo.count )
+        }
+      }
+    else {
+      if ( booleans.lefttoright ) {
+        colsinfo.count = colsinfo.max
+        rowsinfo.count = Math.ceil( showinfo.display.length / colsinfo.max )
+        }
+      else {
+        colsinfo.count = Math.ceil( showinfo.display.length / rowsinfo.max )
+        rowsinfo.count = rowsinfo.max
+        }
+      }
+    }
+  var SetCR = function ( cols , rows ) {
+    colsinfo.count = cols || Math.ceil( showinfo.visible.length / rows )
+    rowsinfo.count = rows || Math.ceil( showinfo.visible.length / cols )
+    StyleElements()
+    }
+  var ShowLinks = function ( show ) {
+    var elem1 = document.createElement( 'div' )
+    document.body.appendChild( elem1 )
+    elem1.id = 'alertFiller'
+    var elem2 = document.createElement( 'div' )
     elem1.appendChild( elem2 )
+    elem2.id = 'alertBorder'
+    var elem3 = document.createElement( 'div' )
+    elem2.appendChild( elem3 )
+    elem3.id = 'alertHolder'
+    var elem4 = document.createElement( 'div' )
+    elem3.appendChild( elem4 )
+    elem4.id = 'alertHeader'
+    var elem5 = document.createElement( 'div' )
+    elem4.appendChild( elem5 )
+    elem5.id = 'alertTitle'
+    elem5.textContent = show.id
+    elem5.addEventListener( 'click' , function ( event ) { window.open( 'https://www.google.com/search?q=' + ToHyperLink( show.id ) ) } )
+    var elem4 = document.createElement( 'div' )
+    elem3.appendChild( elem4 )
+    elem4.id = 'alertCenter'
+    var elem5 = document.createElement( 'div' )
+    elem3.appendChild( elem5 )
+    elem5.className = 'alertLink'
+    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.amazon ) } )
+    var elem5 = document.createElement( 'div' )
+    elem3.appendChild( elem5 )
+    elem5.className = 'alertLink'
+    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.imdb ) } )
+    var elem5 = document.createElement( 'div' )
+    elem3.appendChild( elem5 )
+    elem5.className = 'alertLink'
+    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.netflix ) } )
+    var elem5 = document.createElement( 'div' )
+    elem3.appendChild( elem5 )
+    elem5.className = 'alertLink'
+    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.watchseries ) } )
+    var elem5 = document.createElement( 'div' )
+    elem3.appendChild( elem5 )
+    elem5.className = 'alertLink'
+    elem5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.wikipedia ) } )
+    var elem4 = document.createElement( 'div' )
+    elem3.appendChild( elem4 )
+    elem4.id = 'alertFooter'
+    var elem5 = document.createElement( 'div' )
+    elem4.appendChild( elem5 )
+    elem5.id = 'alertButton'
+    elem5.textContent = 'Exit'
+    elem5.addEventListener( 'click' , function ( event ) { document.body.removeChild( document.getElementById( 'alertFiller' ) ) } )
     }
-  }
-Saxan.CreateShowList = function () {
-  var elem1 = document.querySelector( '#Shows' )
-  removeChildNodes( elem1 )
-  var AddData = function ( Title , Data , Link , Search ) {
-    if ( Data ) {
-      if ( Data.has( /^http/ ) ) {
-        return Data
+  var StyleElements = function () {
+    showinfo.height = Math.floor( maininfo.showsheight / Math.min( rowsinfo.count , rowsinfo.max ) )
+    showinfo.width = Math.floor( maininfo.showswidth / Math.min( colsinfo.count , colsinfo.max ) )
+
+    var margin = ( maininfo.showsheight - showinfo.height * Math.min( rowsinfo.count , rowsinfo.max ) ) / 2
+
+    EditStyle( stylesheets.sheet1 , 'show' , 'height' , showinfo.height + 'px' )
+    EditStyle( stylesheets.sheet1 , 'show' , 'lineHeight' , showinfo.height + 'px' )
+    EditStyle( stylesheets.sheet1 , 'show' , 'width' , showinfo.width  + 'px' )
+
+    EditStyle( stylesheets.sheet1 , '#shows' , 'height' , showinfo.height * rowsinfo.count + 'px' )
+    EditStyle( stylesheets.sheet1 , '#shows' , 'marginBottom' , margin + maininfo.buttonsheight + 'px' )
+    EditStyle( stylesheets.sheet1 , '#shows' , 'marginTop' , margin + 'px' )
+    EditStyle( stylesheets.sheet1 , '#shows' , 'width' , showinfo.width  * colsinfo.count + 'px' )
+
+    if ( booleans.lefttoright ) {
+      EditStyle( stylesheets.sheet1 , '#shows' , 'webkitColumnCount' , '' )
+      // EditStyle( stylesheets.sheet1 , '#shows' , 'columnFill' , '' )
+      }
+    else {
+      EditStyle( stylesheets.sheet1 , '#shows' , 'webkitColumnCount' , colsinfo.count )
+      // EditStyle( stylesheets.sheet1 , '#shows' , 'columnFill' , 'auto' )
+      }
+
+    CountVisible()
+
+    var array = []
+    var columns = Math.min( colsinfo.count , colsinfo.max )
+    var middle = ( columns - 1 ) / 2
+    var alignmenttoggle = true
+    var shows = showinfo.visible
+
+    for ( var iter1 = 0 ; iter1 < columns ; iter1++ ) {
+      if ( iter1 === middle ) {
+        array.push( 'center' )
         }
       else {
-        return Link.replace( /REPLACE/ , Data.toHyperLink() )
+        alignmenttoggle ? array.push( 'left' ) : array.push( 'right' )
+        alignmenttoggle = !alignmenttoggle
         }
       }
-    else {
-      return Search.replace( /REPLACE/ , Title.toHyperLink() )
-      }
-    }
-  var AmazonLink = ''
-  var AmazonSearch = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE+TV'
-  var IMDBLink = 'http://www.imdb.com/title/REPLACE'
-  var IMDBSearch = 'http://www.imdb.com/find?q=REPLACE%20TV&s=tt'
-  var NetflixLink = 'http://www.netflix.com/title/REPLACE'
-  var NetflixSearch = 'http://www.netflix.com/search/REPLACE'
-  var WatchSeriesLink = 'http://' + Saxan.Storage.WatchSeries + '/serie/REPLACE'
-  var WatchSeriesSearch = 'http://' + Saxan.Storage.WatchSeries + '/search/REPLACE'
-  var WikipediaLink = 'http://en.wikipedia.org/wiki/REPLACE'
-  var WikipediaSearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowList.length ; iter1++ ) {
-    var Show = document.createElement( 'Show' )
-      elem1.appendChild( Show )
-      Show.id = Saxan.ShowList[ iter1 ].Title
-      Show.dataset.amazon = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Amazon , AmazonLink , AmazonSearch )
-      Show.dataset.imdb = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].IMDB , IMDBLink , IMDBSearch )
-      Show.dataset.netflix = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Netflix , NetflixLink , NetflixSearch )
-      Show.dataset.watchseries = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].WatchSeries , WatchSeriesLink , WatchSeriesSearch )
-      Show.dataset.wikipedia = AddData( Saxan.ShowList[ iter1 ].Title , Saxan.ShowList[ iter1 ].Wikipedia , WikipediaLink , WikipediaSearch )
-      Show.onmousedown = Saxan.OnShowClick
-      Show.textContent = Saxan.ShowList[ iter1 ].Title
-      Show.classList.add( 'level' + Saxan.ShowList[ iter1 ].Level )
-    }
-  if ( Saxan.Storage.User === 'Basic' || Saxan.ShowInfo.Levels.Length === 1 ) {
-    ccss( '.level1' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-    if ( document.querySelector( '#level1' ) ) {
-      document.querySelector( '#level1' ).classList.add( 'active' )
-      }
-    }
-  else {
-    ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-    if ( Saxan.Storage.Permanent !== '' ) {
-      Saxan.ShowInfo.Permanent = Saxan.Storage.Permanent.split( '|' )
-      }
-    for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Permanent.length ; iter1++ ) {
-      try {
-        Saxan.ShowInfo.All[ Saxan.ShowInfo.Permanent[ iter1 ] ].classList.add( 'perm' )
-        }
-      catch ( e ) {}
-      }
-    }
-  }
-Saxan.DeclareStyleSheet = function () {
-  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Body' )
-  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Input' )
-  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( 'Show' )
-  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( '#Buttons' )
-  document.styleSheets[ Saxan.StyleSheets.Sheet1 ].addRule( '#Shows' )
-
-  for ( var iter1 = 0 ; iter1 < Saxan.ShowInfo.Levels.length ; iter1++ ) {
-    document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.' + Saxan.ShowInfo.Levels[ iter1 ] )
-    }
-
-  document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.perm' )
-  document.styleSheets[ Saxan.StyleSheets.Sheet2 ].addRule( '.hide' )
-  }
-Saxan.GetCR = function () {
-  var temp1 = Saxan.ColsInfo.Count.pad( 2 , ' ' )
-  var temp2 = Saxan.RowsInfo.Count.pad( 2 , ' ' )
-  var temp3 = Saxan.ColsInfo.Max.pad( 2 , ' ' )
-  var temp4 = Saxan.RowsInfo.Max.pad( 2 , ' ' )
-  console.log( '\tCount:\t%s x %s\n\tMax:\t%s x %s' , temp1 , temp2 , temp3 , temp4 )
-  }
-Saxan.HideAllShows = function () {
-  var elem1 = document.getElementsByTagName( 'input' )
-  for ( var a = 0 ; a < elem1.length ; a++ ) {
-    elem1[ a ].classList.remove( 'active' )
-    }
-  for ( var a = 0 ; a < Saxan.ShowInfo.Levels.length ; a++ ) {
-    ccss( '.' + Saxan.ShowInfo.Levels[ a ] , 'display' , '' , Saxan.StyleSheets.Sheet2 )
-    }
-  }
-Saxan.MainDisplayFunctions = function () {
-  Saxan.ColsInfo.Max = Math.floor( Saxan.MainInfo.ShowsWidth / Saxan.ShowInfo.BaseWidth )
-  Saxan.RowsInfo.Max = Math.floor( Saxan.MainInfo.ShowsHeight / Saxan.ShowInfo.BaseHeight )
-  Saxan.ShowInfo.Max = Saxan.ColsInfo.Max * Saxan.RowsInfo.Max
-  Saxan.CountDisplay()
-  Saxan.CountVisible()
-  if ( !Saxan.Booleans.MaintainSize ) {
-    Saxan.RowsAndColumns()
-    }
-  Saxan.StyleElements()
-  }
-Saxan.OnChange = function () {
-  scrollTo( 0 , 0 )
-  var temp1 = document.getElementsByTagName( 'input' ).length
-  Saxan.MainInfo.ButtonsHeight = temp1 && 50 || Math.ceil( innerWidth / ( temp1 * 5 ) )
-  Saxan.MainInfo.ShowsHeight = innerHeight - Saxan.MainInfo.ButtonsHeight
-  Saxan.MainInfo.ShowsWidth = innerWidth
-  ccss( '#Buttons' , 'height' , Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( 'input' , 'width' , innerWidth / temp1 + 'px' , Saxan.StyleSheets.Sheet1 )
-  Saxan.MainDisplayFunctions()
-  }
-Saxan.OnConfigureClick = function () {
-  if ( Saxan.Storage.User !== 'Advanced' ) {
-    window.open( 'config.html' )
-    }
-  else if ( event.button === 0 ) {
-    // Saxan.Booleans.MinimunSize = !Saxan.Booleans.MinimunSize
-    Saxan.Booleans.MaintainSize = !Saxan.Booleans.MaintainSize
-    Saxan.MainDisplayFunctions()
-    }
-  else if ( event.button === 1 ) {
-    Saxan.Booleans.LeftToRight = !Saxan.Booleans.LeftToRight
-    Saxan.Booleans.MaintainSize = !true
-    Saxan.MainDisplayFunctions()
-    }
-  else if ( event.button === 2 ) {
-    if ( Saxan.ShowInfo.Hidden.length > 0 ) {
-      Saxan.ShowInfo.Hidden.pop().classList.remove( 'hide' )
-      Saxan.Booleans.MaintainSize = !true
-      }
-    Saxan.MainDisplayFunctions()
-    }
-  else {
-    console.log( event )
-    }
-  }
-Saxan.OnLevelClick = function () {
-  switch ( event.button ) {
-    case 0 :
-      this.classList.toggle( 'active' )
-      if ( this.classList.contains( 'active' ) ) {
-        if ( !Saxan.Booleans.Permanent ) {
-          ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.Sheet2 )
-          }
-        ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-        }
-      else {
-        ccss( '.' + this.id , 'display' , '' , Saxan.StyleSheets.Sheet2 )
-        if ( document.getElementsByClassName( 'active' ).length === 0 ) {
-          ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-          }
-        }
-      Saxan.Booleans.MaintainSize = !true
-      Saxan.MainDisplayFunctions()
-      break
-    case 1 :
-      Saxan.HideAllShows()
-      this.classList.add( 'active' )
-      if ( !Saxan.Booleans.Permanent ) {
-        ccss( '.perm' , 'display' , '' , Saxan.StyleSheets.Sheet2 )
-        }
-      ccss( '.' + this.id , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-      Saxan.Booleans.MaintainSize = !true
-      Saxan.MainDisplayFunctions()
-      break
-    case 2 :
-      Saxan.HideAllShows()
-      if ( !Saxan.Booleans.Permanent ) {
-        ccss( '.perm' , 'display' , 'block' , Saxan.StyleSheets.Sheet2 )
-        }
-      Saxan.Booleans.MaintainSize = !true
-      Saxan.MainDisplayFunctions()
-      break
-    }
-  }
-Saxan.OnScroll = function () {
-  if ( event.srcElement.id === 'AlertCenter' || event.srcElement.parentNode.id === 'AlertCenter' ) {}
-  else {
-    if ( !event.ctrlKey ) {
-      event.preventDefault()
-      var temp1 = event.deltaY > 0 ? 1 : -1
-      if ( Saxan.Booleans.LeftToRight ) {
-        scrollBy( 0 , temp1 * Saxan.ShowInfo.Height )
-        }
-      else {
-        scrollBy( temp1 * Saxan.ShowInfo.Width , 0 )
+    if ( booleans.lefttoright ) {
+      for( var iter1 = 0 ; iter1 < shows.length ; iter1++ ) {
+        shows[ iter1 ].style.textAlign = array[ iter1 % colsinfo.count ]
         }
       }
-    Saxan.StyleElements()
-    }
-  }
-Saxan.OnShowClick = function () {
-  if ( Saxan.Storage.User !== 'Advanced' || event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
-    Saxan.ShowLinks( this )
-    }
-  else if ( event.button === 0 ) {
-    Saxan.ClickInfo.Elem1 = Saxan.ClickInfo.Elem2
-    Saxan.ClickInfo.Elem2 = event.toElement
-    Saxan.ClickInfo.Time1 = Saxan.ClickInfo.Time2
-    Saxan.ClickInfo.Time2 = event.timeStamp
-    if ( ( Saxan.ClickInfo.Time2 - Saxan.ClickInfo.Time1 ) < 250 && Saxan.ClickInfo.Elem1 === Saxan.ClickInfo.Elem2 ) {
-      Saxan.ShowInfo.Permanent.has( this.id ) ? this.classList.remove( 'perm' ) : this.classList.add( 'perm' )
-      Saxan.PermanentItemToggle( this.id )
-      Saxan.MainDisplayFunctions()
+    if ( !booleans.lefttoright ) {
+      for( var iter1 = 0 ; iter1 < shows.length ; iter1++ ) {
+        shows[ iter1 ].style.textAlign = array[ Math.floor( iter1 / rowsinfo.count ) ]
+        }
       }
     }
-  else if ( event.button === 2 ) {
-    this.classList.add( 'hide' )
-    Saxan.ShowInfo.Hidden.push( this )
-    Saxan.MainDisplayFunctions()
+  var ToHyperLink = function ( string ) {
+    return encodeURIComponent( string ).replace( /'/g , '\\\'' )
     }
-  else {
-    console.log( event )
-    }
-  }
-Saxan.OnStart = function () {
-  Saxan.CheckLocalStorage()
-  Saxan.DeclareStyleSheet()
-  Saxan.CreateInputs()
-  Saxan.CreateShowList()
-  Saxan.OnChange()
-  window.addEventListener( 'resize' , Saxan.OnChange )
-  document.body.addEventListener( 'contextmenu' , PreventActions )
-  document.body.addEventListener( 'keydown' , PreventActions )
-  document.body.addEventListener( 'mousedown' , PreventActions )
-  document.body.addEventListener( 'mousewheel' , Saxan.OnScroll )
-  }
-Saxan.PermanentItemToggle = function ( ShowTitle ) {
-  if ( Saxan.ShowInfo.Permanent.has( ShowTitle ) ) {
-    Saxan.ShowInfo.Permanent.splice( Saxan.ShowInfo.Permanent.indexOf( ShowTitle ) , 1 )
-    }
-  else {
-    Saxan.ShowInfo.Permanent.push( ShowTitle )
-    }
-  Saxan.ShowInfo.Permanent.sort()
-  Saxan.Storage.Permanent = Saxan.ShowInfo.Permanent.join( '|' )
-  localStorage.Shows = JSON.stringify( Saxan.Storage )
-  }
-Saxan.RowsAndColumns = function () {
-  if ( Saxan.ShowInfo.Display.length <= Saxan.ShowInfo.Max ) {
-    if ( Saxan.Booleans.MinimunSize ) {
-      Saxan.ColsInfo.Count = Saxan.ColsInfo.Max
-      Saxan.RowsInfo.Count = Saxan.RowsInfo.Max
-      }
-    else {
-      Saxan.ColsInfo.Count = Math.ceil( Saxan.ShowInfo.Display.length / Saxan.RowsInfo.Max )
-      Saxan.RowsInfo.Count = Math.ceil( Saxan.ShowInfo.Display.length / Saxan.ColsInfo.Count )
-      }
-    }
-  else {
-    if ( Saxan.Booleans.LeftToRight ) {
-      Saxan.ColsInfo.Count = Saxan.ColsInfo.Max
-      Saxan.RowsInfo.Count = Math.ceil( Saxan.ShowInfo.Display.length / Saxan.ColsInfo.Max )
-      }
-    else {
-      Saxan.ColsInfo.Count = Math.ceil( Saxan.ShowInfo.Display.length / Saxan.RowsInfo.Max )
-      Saxan.RowsInfo.Count = Saxan.RowsInfo.Max
-      }
-    }
-  }
-Saxan.SetCR = function ( para1 , para2 ) {
-  Saxan.ColsInfo.Count = para1 > 0 ? para1 : Math.ceil( Saxan.ShowInfo.Visible.length / para2 )
-  Saxan.RowsInfo.Count = para2 > 0 ? para2 : Math.ceil( Saxan.ShowInfo.Visible.length / para1 )
-  Saxan.StyleElements()
-  }
-Saxan.ShowLinks = function ( Show ) {
-  var A = '<div class="Title" onclick="window.open( \'https://www.google.com/search?q=' + Show.id.toHyperLink() + '\' )" >' + Show.id + '</div>'
-  var B = '\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.amazon + '\' )" >Amazon Prime</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.imdb + '\' )" >IMDB</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.netflix + '\' )" >Netflix</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.watchseries + '\' )" >Watch Series</div>\
-    <div class="randomLinks" onclick="window.open( \'' + Show.dataset.wikipedia + '\' )" >Wikipedia</div>\
-    '
-  var C = 'Exit'
-  var D = 0
-  customAlert( A , B , C , D )
-  }
-Saxan.StyleElements = function () {
-  Saxan.ShowInfo.Height = Math.floor( Saxan.MainInfo.ShowsHeight / Math.min( Saxan.RowsInfo.Count , Saxan.RowsInfo.Max ) )
-  Saxan.ShowInfo.Width = Math.floor( Saxan.MainInfo.ShowsWidth / Math.min( Saxan.ColsInfo.Count , Saxan.ColsInfo.Max ) )
-
-  var A = ( Saxan.MainInfo.ShowsHeight - Saxan.ShowInfo.Height * Math.min( Saxan.RowsInfo.Count , Saxan.RowsInfo.Max ) ) / 2
-
-  ccss( 'show' , 'height' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( 'show' , 'lineHeight' , Saxan.ShowInfo.Height + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( 'show' , 'width' , Saxan.ShowInfo.Width  + 'px' , Saxan.StyleSheets.Sheet1 )
-
-  ccss( '#Shows' , 'height' , Saxan.ShowInfo.Height * Saxan.RowsInfo.Count + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( '#Shows' , 'marginBottom' , A + Saxan.MainInfo.ButtonsHeight + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( '#Shows' , 'marginTop' , A + 'px' , Saxan.StyleSheets.Sheet1 )
-  ccss( '#Shows' , 'width' , Saxan.ShowInfo.Width  * Saxan.ColsInfo.Count + 'px' , Saxan.StyleSheets.Sheet1 )
-
-  if ( Saxan.Booleans.LeftToRight ) {
-    ccss( '#Shows' , 'webkitColumnCount' , '' , Saxan.StyleSheets.Sheet1 )
-    // ccss( '#Shows' , 'columnFill' , '' , Saxan.StyleSheets.Sheet1 )
-    }
-  else {
-    ccss( '#Shows' , 'webkitColumnCount' , Saxan.ColsInfo.Count , Saxan.StyleSheets.Sheet1 )
-    // ccss( '#Shows' , 'columnFill' , 'auto' , Saxan.StyleSheets.Sheet1 )
-    }
-
-  Saxan.CountVisible()
-
-  var A = []
-  var B = Math.min( Saxan.ColsInfo.Count , Saxan.ColsInfo.Max )
-  var C = ( B - 1 ) / 2
-  var D = true
-  var E = Saxan.ShowInfo.Visible
-
-  for ( var i = 0 ; i < B ; i++ ) {
-    if ( i == C ) {
-      A.push( 'center' )
-      }
-    else {
-      D ? A.push( 'left' ) : A.push( 'right' )
-      D = !D
-      }
-    }
-  if ( Saxan.Booleans.LeftToRight ) {
-    for( var i = 0 ; i < E.length ; i++ ) {
-      E[ i ].style.textAlign = A[ i % Saxan.ColsInfo.Count ]
-      }
-    }
-  if ( !Saxan.Booleans.LeftToRight ) {
-    for( var i = 0 ; i < E.length ; i++ ) {
-      E[ i ].style.textAlign = A[ Math.floor( i / Saxan.RowsInfo.Count ) ]
-      }
-    }
-  }
+  
+  OnStart()
+  }() )
