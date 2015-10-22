@@ -1,4 +1,4 @@
-// ( function () {
+( function () {
 
   var booleans = {
     lefttoright: !true,
@@ -465,4 +465,4 @@
     }
   
   OnStart()
-  // }() )
+  }() )
