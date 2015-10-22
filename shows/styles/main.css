@@ -7,23 +7,70 @@
   font-size: 0;
   margin: 0px;
   }
-input {
-  background-color: #333;
-  border-color: #000;
-  border-radius: 15px;
-  border-width: 5px;
-  color: #FFF;
-  cursor: pointer;
-  font-size: 15px;
-  font-variant: small-caps;
-  font-weight: bold;
-  height: 100%;
-  letter-spacing: 3px;
-  margin: 0px;
-  outline: 0px;
-  padding: 0px;
+body {
+  background-color: #000000;
   }
-show {
+
+#alert {
+  background-color: #000;
+  bottom: 0;
+  display: none;
+  flex-flow: column nowrap;
+  height: 100%;
+  left: 0;
+  margin: auto;
+  opacity: 1;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  }
+#alert * {
+  background-color: #000000;
+  color: #ffffff;
+  cursor: pointer;
+  flex: 0 1 auto;
+  text-align: center;
+  text-decoration: none;
+  margin: auto;
+  }
+#alert *:hover {
+  color: #bf7fbf;
+  }
+#alert .title {
+  font-size: 32px;
+  }
+#alert .link {
+  font-size: 24px;
+  }
+#alert input {
+  background-color: #333333;
+  border-radius: 5px;
+  border: 2px solid #999999;
+  font-size: 32px;
+  justify-content: center;
+  margin: auto;
+  padding: 5px 10%;
+  text-align: center;
+  }
+#alert input:hover {
+  color: #bf7fbf;
+  }
+
+#shows {
+  column-fill: auto;
+  cursor: default;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0px;
+  overflow: scroll;
+  padding: 0px;
+  width: 100%;
+  }
+#shows * {
+  background-color: #000000;
   border: 0 solid rgba(0,0,0,0);
   border-width: 0 25px;
   box-sizing: border-box;
@@ -36,161 +83,52 @@ show {
   height: 1px;
   letter-spacing: 2px;
   overflow: hidden;
+  padding: 0px;
   white-space: nowrap;
   }
-show:hover {
+#shows *:hover {
   color: #FFAFAF;
   }
-.active {
-  background-color: #777;
-  color: #000;
-  }
-.perm {
+#shows .perm {
   color: #4682B4;
   }
-.perm:hover {
+#shows .perm:hover {
   color: #AFAFFF;
   }
-show.hide {
+#shows input.hide {
   display: none;
   }
+
 #buttons {
   background-color: #000;
   bottom: 0px;
-  display: block;
+  display: flex;
+  flex-flow: row nowrap;
+  height: 50px;
   margin: 0px auto;
   position: fixed;
   text-align: center;
   width: 100%;
   }
-#shows {
-  column-fill: auto;
-  cursor: default;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin: 0px;
-  overflow: scroll;
-  padding: 0px;
-  width: 100%;
-  }
-#alertFiller {
-  background-color: #000;
-  bottom: 0;
-  display: block;
-  height: 100%;
-  left: 0;
-  margin: auto;
-  opacity: 1;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  z-index: 10;
-  }
-#alertBorder {
-  -moz-box-sizing: content-box;
-  background-color: #222;
-  border-radius: 10px;
-  bottom: 0;
-  box-sizing: content-box;
+#buttons * {
+  background-color: #333;
+  border-color: #000;
+  border-radius: 15px;
+  border-width: 5px;
   color: #FFF;
-  display: block;
-  font-size: 20px;
-  height: 75%;
-  left: 0;
-  margin: auto;
-  max-height: 600px;
-  max-width: 800px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 75%;
-  z-index: 11;
-  }
-#alertHolder {
-  bottom: 0;
-  height: calc( 100% - 20px );
-  left: 0;
-  margin: 10px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: calc( 100% - 20px );
-  }
-#alertHeader {
-  align-content: center;
-  background-color: #444;
-  border-radius: 5px 5px 0 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  font-size: 36px;
-  font-variant: small-caps;
-  height: 25%;
-  justify-content: center;
-  letter-spacing: 2px;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-  }
-#alertTitle {
   cursor: pointer;
-  font-size: 36px;
-  margin: auto;
-  }
-#alertCenter {
-  background-color: #666;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 45%;
-  overflow: scroll;
-  position: relative;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-  }
-.alertLink {
-  cursor: pointer;
-  font-size: 24px;
+  flex: 1 1 0;
+  font-size: 15px;
   font-variant: small-caps;
-  letter-spacing: 2px;
-  margin: auto;
-  white-space: pre;
-  width: auto;
+  font-weight: bold;
+  height: 100%;
+  letter-spacing: 3px;
+  margin: 0px;
+  outline: 0px;
+  padding: 0px;
   }
-.alertLink:hover {
-  color: #FFAFAF;
-  }
-#alertFooter {
-  background-color: #444;
-  border-radius: 0 0 5px 5px;
-  box-sizing: border-box;
-  display: block;
-  height: 30%;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-  }
-#alertButton {
-  background-color: #999;
-  border-radius: 25px;
-  border: 1px solid #000;
-  bottom: 0;
-  box-sizing: border-box;
+#buttons *.active {
+  background-color: #777;
   color: #000;
-  cursor: pointer;
-  height: 50%;
-  justify-content: center;
-  left: 0;
-  margin: auto;
-  overflow: hidden;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 0;
-  width: 50%;
   }
+/**/

@@ -1,4 +1,4 @@
-( function () {
+// ( function () {
 
   var booleans = {
     lefttoright: !true,
@@ -16,8 +16,13 @@
     count: 0,
     max: 0,
     }
+  var elements = {
+    alert: document.getElementById( 'alert' ),
+    buttons: document.getElementById( 'buttons' ),
+    shows: document.getElementById( 'shows' ),
+    }
   var maininfo = {
-    buttonsheight: 0,
+    buttonsheight: 50,
     showsheight: 0,
     showswidth: 0,
     }
@@ -26,7 +31,7 @@
     max: 0,
     }
   var showinfo = {
-    all: document.getElementsByTagName( 'show' ),
+    all: document.getElementById( 'shows' ).children,
     baseheight: 80,
     basewidth: 300,
     display: [],
@@ -38,12 +43,9 @@
     visible: [],
     width: 0,
     }
-  var stylesheets = {
-    sheet1: 1,
-    sheet2: 2,
-    }
-  var storage
   var showlist
+  var storage
+  var stylesheet
 
   Array.prototype.has = function( string ){
     var bool = false
@@ -53,22 +55,6 @@
         }
       }
     return bool
-    }
-  Number.prototype.pad = function( size , text ){
-    var i = 0
-    var n = this < 0
-    var s = ''
-    var t = text || '0'
-    var z = Math.max( size , this.toString().length )
-    while( s.length < z - 1 ){
-      s += t[ i ]
-      i = i + 1 == t.length ? 0 : i + 1
-      }
-    s = t == '0' && n ? '-' + s : t + s
-    s = t == '0'
-      ? s.slice( 0 , z - Math.abs( this ).toString().length ) + Math.abs( this )
-      : s.slice( 0 , z - this.toString().length ) + this
-    return s
     }
   String.prototype.has = function( string ){
     return this.match( string ) !== null
@@ -123,27 +109,30 @@
         }
       }
     }
-  var CreateInputs = function () {
-    var e1 = document.querySelector( '#buttons' )
-    RemoveChildNodes( e1 )
-    var e1e1 = document.createElement( 'input' )
-    e1.appendChild( e1e1 )
-    e1e1.id = 'level0'
-    e1e1.onmousedown = OnConfigureClick
-    e1e1.type = 'button'
-    e1e1.value = storage.user !== 'advanced' ? 'Configure' : ''
+  var CreateAlert = function () {
+    elements.alert.querySelector( 'input' ).addEventListener( 'click' , function ( event ) {
+      elements.alert.removeAttribute( 'style' )
+      } )
+    }
+  var CreateButtons = function () {
+    RemoveChildNodes( elements.buttons )
+    var e1 = document.createElement( 'input' )
+    elements.buttons.appendChild( e1 )
+    e1.id = 'level0'
+    e1.onmousedown = OnConfigureClick
+    e1.type = 'button'
+    e1.value = storage.user !== 'advanced' ? 'Configure' : ''
     for ( var iter1 = 0 ; iter1 < showinfo.levels.length && showinfo.levels.length > 1 ; iter1++ ) {
-      var e1e1 = document.createElement( 'input' )
-      e1.appendChild( e1e1 )
-      e1e1.id = showinfo.levels[ iter1 ]
-      e1e1.onmousedown = OnLevelClick
-      e1e1.type = 'button'
-      e1e1.value = storage.user !== 'advanced' ? 'Level ' + ( iter1 + 1 ) : ''
+      var e1 = document.createElement( 'input' )
+      elements.buttons.appendChild( e1 )
+      e1.id = showinfo.levels[ iter1 ]
+      e1.onmousedown = OnLevelClick
+      e1.type = 'button'
+      e1.value = storage.user !== 'advanced' ? 'Level ' + ( iter1 + 1 ) : ''
       }
     }
-  var CreateShowList = function () {
-    var shows = document.querySelector( '#shows' )
-    RemoveChildNodes( shows )
+  var CreateShows = function () {
+    RemoveChildNodes( elements.shows )
     var AddData = function ( title , data , link , search ) {
       if ( data ) {
         if ( data.has( /^http/ ) ) {
@@ -168,8 +157,8 @@
     var wikipedialink = 'http://en.wikipedia.org/wiki/REPLACE'
     var wikipediasearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
     for ( var iter1 = 0 ; iter1 < showlist.length ; iter1++ ) {
-      var show = document.createElement( 'show' )
-      shows.appendChild( show )
+      var show = document.createElement( 'input' )
+      elements.shows.appendChild( show )
       show.classList.add( 'level' + showlist[ iter1 ].level )
       show.dataset.amazon = AddData( showlist[ iter1 ].title , showlist[ iter1 ].amazon , amazonlink , amazonsearch )
       show.dataset.imdb = AddData( showlist[ iter1 ].title , showlist[ iter1 ].imdb , imdblink , imdbsearch )
@@ -178,16 +167,17 @@
       show.dataset.wikipedia = AddData( showlist[ iter1 ].title , showlist[ iter1 ].wikipedia , wikipedialink , wikipediasearch )
       show.id = showlist[ iter1 ].title
       show.onmousedown = OnShowClick
-      show.textContent = showlist[ iter1 ].title
+      show.value = showlist[ iter1 ].title
+      show.type = 'button'
       }
     if ( storage.user !== 'advanced' || showinfo.levels.length === 1 ) {
-      EditStyle( stylesheets.sheet2 , '.level1' , 'display' , 'block' )
+      EditStyle( '#shows .level1' , 'display' , 'block' )
       if ( document.querySelector( '#level1' ) ) {
         document.querySelector( '#level1' ).classList.add( 'active' )
         }
       }
     else {
-      EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+      EditStyle( '#shows .perm' , 'display' , 'block' )
       if ( storage.permanent !== '' ) {
         showinfo.permanent = storage.permanent.split( '|' )
         }
@@ -200,25 +190,20 @@
       }
     }
   var DeclareStyleSheet = function () {
-    document.styleSheets[ stylesheets.sheet1 ].addRule( 'body' )
-    document.styleSheets[ stylesheets.sheet1 ].addRule( 'input' )
-    document.styleSheets[ stylesheets.sheet1 ].addRule( 'show' )
-    document.styleSheets[ stylesheets.sheet1 ].addRule( '#alertButton' )
-    document.styleSheets[ stylesheets.sheet1 ].addRule( '#buttons' )
-    document.styleSheets[ stylesheets.sheet1 ].addRule( '#shows' )
+    stylesheet = document.createElement( 'style' )
+    document.head.appendChild( stylesheet )
+    stylesheet.sheet.addRule( '#shows *' )
 
     for ( var iter1 = 0 ; iter1 < showinfo.levels.length ; iter1++ ) {
-      document.styleSheets[ stylesheets.sheet2 ].addRule( '.' + showinfo.levels[ iter1 ] )
+      stylesheet.sheet.addRule( '#shows .' + showinfo.levels[ iter1 ] )
       }
 
-    document.styleSheets[ stylesheets.sheet2 ].addRule( '.perm' )
-    document.styleSheets[ stylesheets.sheet2 ].addRule( '.hide' )
+    stylesheet.sheet.addRule( '#shows .perm' )
     }
-  var EditStyle = function ( sheet , selector , property , value ) {
+  var EditStyle = function ( selector , property , value ) {
     var selector = selector.toLowerCase()
     var value = typeof value === 'number' ? value.toString() : value
-    var sheet = typeof sheet === 'number' ? document.styleSheets[ sheet ] : sheet
-    var rules = sheet.cssRules || sheet.rules
+    var rules = stylesheet.sheet.cssRules || stylesheet.sheet.rules
     for ( var iter1 = 0 ; iter1 < rules.length ; iter1++ ) {
       if ( rules[ iter1 ].type === 1 ) {
         if ( selector === rules[ iter1 ].selectorText.toLowerCase() ) {
@@ -228,20 +213,13 @@
         }
       }
     try {
-      sheet.insertRule( selector + '{  }' , rules.length )
+      stylesheet.sheet.insertRule( selector + '{  }' , rules.length )
       }
     catch ( error ) {
-      sheet.addRule( selector , '' , rules.length )
+      stylesheet.sheet.addRule( selector , '' , rules.length )
       }
     rules[ rules.length - 1 ].selectorText = selector
     rules[ rules.length - 1 ].style[ property ] = value
-    }
-  var GetCR = function () {
-    var temp1 = colsinfo.count.pad( 2 , ' ' )
-    var temp2 = rowsinfo.count.pad( 2 , ' ' )
-    var temp3 = colsinfo.max.pad( 2 , ' ' )
-    var temp4 = rowsinfo.max.pad( 2 , ' ' )
-    console.log( '\tCount:\t%s x %s\n\tMax:\t%s x %s' , temp1 , temp2 , temp3 , temp4 )
     }
   var HideAllShows = function () {
     var inputs = document.getElementsByTagName( 'input' )
@@ -249,7 +227,7 @@
       inputs[ iter1 ].classList.remove( 'active' )
       }
     for ( var iter1 = 0 ; iter1 < showinfo.levels.length ; iter1++ ) {
-      EditStyle( stylesheets.sheet2 , '.' + showinfo.levels[ iter1 ] , 'display' , '' )
+      EditStyle( '#shows .' + showinfo.levels[ iter1 ] , 'display' , '' )
       }
     }
   var MainDisplayFunctions = function () {
@@ -265,17 +243,8 @@
     }
   var OnChange = function () {
     scrollTo( 0 , 0 )
-    var temp1 = document.getElementsByTagName( 'input' ).length
-    var temp2 = document.getElementById( 'alertButton' )
-    maininfo.buttonsheight = temp1 && 50 || Math.ceil( innerWidth / ( temp1 * 5 ) )
     maininfo.showsheight = innerHeight - maininfo.buttonsheight
     maininfo.showswidth = innerWidth
-    if ( temp2 ) {
-      EditStyle( stylesheets.sheet1 , '#alertButton' , 'fontSize' , temp2.offsetHeight / 2 + 'px' )
-      EditStyle( stylesheets.sheet1 , '#alertButton' , 'lineHeight' , temp2.offsetHeight - 2 + 'px' )
-      }
-    EditStyle( stylesheets.sheet1 , '#buttons' , 'height' , maininfo.buttonsheight + 'px' )
-    EditStyle( stylesheets.sheet1 , 'input' , 'width' , innerWidth / temp1 + 'px' )
     MainDisplayFunctions()
     }
   var OnConfigureClick = function () {
@@ -283,7 +252,6 @@
       window.open( 'config.html' )
       }
     else if ( event.button === 0 ) {
-      // booleans.minimunsize = !booleans.minimunsize
       booleans.maintainsize = !booleans.maintainsize
       MainDisplayFunctions()
       }
@@ -309,14 +277,14 @@
         this.classList.toggle( 'active' )
         if ( this.classList.contains( 'active' ) ) {
           if ( !booleans.permanent ) {
-            EditStyle( stylesheets.sheet2 , '.perm' , 'display' , '' )
+            EditStyle( '#shows .perm' , 'display' , '' )
             }
-          EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , 'block' )
+          EditStyle( '#shows .' + this.id , 'display' , 'block' )
           }
         else {
-          EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , '' )
+          EditStyle( '#shows .' + this.id , 'display' , '' )
           if ( document.getElementsByClassName( 'active' ).length === 0 ) {
-            EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+            EditStyle( '#shows .perm' , 'display' , 'block' )
             }
           }
         booleans.maintainsize = !true
@@ -326,16 +294,16 @@
         HideAllShows()
         this.classList.add( 'active' )
         if ( !booleans.permanent ) {
-          EditStyle( stylesheets.sheet2 , '.perm' , 'display' , '' )
+          EditStyle( '#shows .perm' , 'display' , '' )
           }
-        EditStyle( stylesheets.sheet2 , '.' + this.id , 'display' , 'block' )
+        EditStyle( '#shows .' + this.id , 'display' , 'block' )
         booleans.maintainsize = !true
         MainDisplayFunctions()
         break
       case 2 :
         HideAllShows()
         if ( !booleans.permanent ) {
-          EditStyle( stylesheets.sheet2 , '.perm' , 'display' , 'block' )
+          EditStyle( '#shows .perm' , 'display' , 'block' )
           }
         booleans.maintainsize = !true
         MainDisplayFunctions()
@@ -385,8 +353,9 @@
   var OnStart = function () {
     CheckLocalStorage()
     DeclareStyleSheet()
-    CreateInputs()
-    CreateShowList()
+    CreateAlert()
+    CreateButtons()
+    CreateShows()
     OnChange()
     window.addEventListener( 'resize' , OnChange )
     document.body.addEventListener( 'contextmenu' , PreventActions )
@@ -436,70 +405,16 @@
         }
       }
     }
-  var SetCR = function ( cols , rows ) {
-    colsinfo.count = cols || Math.ceil( showinfo.visible.length / rows )
-    rowsinfo.count = rows || Math.ceil( showinfo.visible.length / cols )
-    StyleElements()
-    }
   var ShowLinks = function ( show ) {
-    var e1 = document.createElement( 'div' )
-    var e1e1 = document.createElement( 'div' )
-    var e1e1e1 = document.createElement( 'div' )
-    var e1e1e1e1 = document.createElement( 'div' )
-    var e1e1e1e2 = document.createElement( 'div' )
-    var e1e1e1e3 = document.createElement( 'div' )
-    var e1e1e1e1e1 = document.createElement( 'div' )
-    var e1e1e1e2e1 = document.createElement( 'div' )
-    var e1e1e1e2e2 = document.createElement( 'div' )
-    var e1e1e1e2e3 = document.createElement( 'div' )
-    var e1e1e1e2e4 = document.createElement( 'div' )
-    var e1e1e1e2e5 = document.createElement( 'div' )
-    var e1e1e1e3e1 = document.createElement( 'div' )
+    elements.alert.children[ 0 ].textContent = show.id
+    elements.alert.children[ 0 ].href = 'https://www.google.com/search?q=' + ToHyperLink( show.id )
+    elements.alert.children[ 1 ].href = show.dataset.amazon
+    elements.alert.children[ 2 ].href = show.dataset.imdb
+    elements.alert.children[ 3 ].href = show.dataset.netflix
+    elements.alert.children[ 4 ].href = show.dataset.watchseries
+    elements.alert.children[ 5 ].href = show.dataset.wikipedia
 
-    document.body.appendChild( e1 )
-    e1.appendChild( e1e1 )
-    e1e1.appendChild( e1e1e1 )
-    e1e1e1.appendChild( e1e1e1e1 )
-    e1e1e1.appendChild( e1e1e1e2 )
-    e1e1e1.appendChild( e1e1e1e3 )
-    e1e1e1e1.appendChild( e1e1e1e1e1 )
-    e1e1e1e2.appendChild( e1e1e1e2e1 )
-    e1e1e1e2.appendChild( e1e1e1e2e2 )
-    e1e1e1e2.appendChild( e1e1e1e2e3 )
-    e1e1e1e2.appendChild( e1e1e1e2e4 )
-    e1e1e1e2.appendChild( e1e1e1e2e5 )
-    e1e1e1e3.appendChild( e1e1e1e3e1 )
-
-    e1.id = 'alertFiller'
-    e1e1.id = 'alertBorder'
-    e1e1e1.id = 'alertHolder'
-    e1e1e1e1.id = 'alertHeader'
-    e1e1e1e1e1.addEventListener( 'click' , function ( event ) { window.open( 'https://www.google.com/search?q=' + ToHyperLink( show.id ) ) } )
-    e1e1e1e1e1.id = 'alertTitle'
-    e1e1e1e1e1.textContent = show.id
-    e1e1e1e2.id = 'alertCenter'
-    e1e1e1e2e1.addEventListener( 'click' , function ( event ) { window.open( show.dataset.amazon ) } )
-    e1e1e1e2e1.className = 'alertLink'
-    e1e1e1e2e1.textContent = 'Amazon Prime'
-    e1e1e1e2e2.addEventListener( 'click' , function ( event ) { window.open( show.dataset.imdb ) } )
-    e1e1e1e2e2.className = 'alertLink'
-    e1e1e1e2e2.textContent = 'IMDB'
-    e1e1e1e2e3.addEventListener( 'click' , function ( event ) { window.open( show.dataset.netflix ) } )
-    e1e1e1e2e3.className = 'alertLink'
-    e1e1e1e2e3.textContent = 'Netflix'
-    e1e1e1e2e4.addEventListener( 'click' , function ( event ) { window.open( show.dataset.watchseries ) } )
-    e1e1e1e2e4.className = 'alertLink'
-    e1e1e1e2e4.textContent = 'Watch Series'
-    e1e1e1e2e5.addEventListener( 'click' , function ( event ) { window.open( show.dataset.wikipedia ) } )
-    e1e1e1e2e5.className = 'alertLink'
-    e1e1e1e2e5.textContent = 'Wikipedia'
-    e1e1e1e3.id = 'alertFooter'
-    e1e1e1e3e1.addEventListener( 'click' , function ( event ) { document.body.removeChild( document.getElementById( 'alertFiller' ) ) } )
-    e1e1e1e3e1.id = 'alertButton'
-    e1e1e1e3e1.textContent = 'Exit'
-
-    EditStyle( stylesheets.sheet1 , '#alertButton' , 'fontSize' , document.getElementById( 'alertButton' ).offsetHeight / 2 + 'px' )
-    EditStyle( stylesheets.sheet1 , '#alertButton' , 'lineHeight' , document.getElementById( 'alertButton' ).offsetHeight - 2 + 'px' )
+    elements.alert.style.display = 'flex'
     }
   var StyleElements = function () {
     showinfo.height = Math.floor( maininfo.showsheight / Math.min( rowsinfo.count , rowsinfo.max ) )
@@ -507,23 +422,15 @@
 
     var margin = ( maininfo.showsheight - showinfo.height * Math.min( rowsinfo.count , rowsinfo.max ) ) / 2
 
-    EditStyle( stylesheets.sheet1 , 'show' , 'height' , showinfo.height + 'px' )
-    EditStyle( stylesheets.sheet1 , 'show' , 'lineHeight' , showinfo.height + 'px' )
-    EditStyle( stylesheets.sheet1 , 'show' , 'width' , showinfo.width  + 'px' )
+    EditStyle( '#shows *' , 'height' , showinfo.height + 'px' )
+    EditStyle( '#shows *' , 'lineHeight' , showinfo.height + 'px' )
+    EditStyle( '#shows *' , 'width' , showinfo.width  + 'px' )
 
-    EditStyle( stylesheets.sheet1 , '#shows' , 'height' , showinfo.height * rowsinfo.count + 'px' )
-    EditStyle( stylesheets.sheet1 , '#shows' , 'marginBottom' , margin + maininfo.buttonsheight + 'px' )
-    EditStyle( stylesheets.sheet1 , '#shows' , 'marginTop' , margin + 'px' )
-    EditStyle( stylesheets.sheet1 , '#shows' , 'width' , showinfo.width  * colsinfo.count + 'px' )
-
-    if ( booleans.lefttoright ) {
-      EditStyle( stylesheets.sheet1 , '#shows' , 'webkitColumnCount' , '' )
-      // EditStyle( stylesheets.sheet1 , '#shows' , 'columnFill' , '' )
-      }
-    else {
-      EditStyle( stylesheets.sheet1 , '#shows' , 'webkitColumnCount' , colsinfo.count )
-      // EditStyle( stylesheets.sheet1 , '#shows' , 'columnFill' , 'auto' )
-      }
+    elements.shows.style.height = showinfo.height * rowsinfo.count + 'px'
+    elements.shows.style.marginBottom = margin + maininfo.buttonsheight + 'px'
+    elements.shows.style.marginTop = margin + 'px'
+    elements.shows.style.width = showinfo.width  * colsinfo.count + 'px'
+    elements.shows.style.webkitColumnCount = booleans.lefttoright ? '' : colsinfo.count
 
     CountVisible()
 
@@ -558,4 +465,4 @@
     }
   
   OnStart()
-  }() )
+  // }() )
