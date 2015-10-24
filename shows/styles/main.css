@@ -69,7 +69,7 @@ body {
   padding: 0px;
   width: 100%;
   }
-#shows * {
+#shows input {
   background-color: #000000;
   border: 0 solid rgba(0,0,0,0);
   border-width: 0 25px;
@@ -86,7 +86,7 @@ body {
   padding: 0px;
   white-space: nowrap;
   }
-#shows *:hover {
+#shows input:hover {
   color: #FFAFAF;
   }
 #shows .perm {

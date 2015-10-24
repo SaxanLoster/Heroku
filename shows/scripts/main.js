@@ -422,9 +422,9 @@
 
     var margin = ( maininfo.showsheight - showinfo.height * Math.min( rowsinfo.count , rowsinfo.max ) ) / 2
 
-    EditStyle( '#shows *' , 'height' , showinfo.height + 'px' )
-    EditStyle( '#shows *' , 'lineHeight' , showinfo.height + 'px' )
-    EditStyle( '#shows *' , 'width' , showinfo.width  + 'px' )
+    EditStyle( '#shows input' , 'height' , showinfo.height + 'px' )
+    EditStyle( '#shows input' , 'lineHeight' , showinfo.height + 'px' )
+    EditStyle( '#shows input' , 'width' , showinfo.width  + 'px' )
 
     elements.shows.style.height = showinfo.height * rowsinfo.count + 'px'
     elements.shows.style.marginBottom = margin + maininfo.buttonsheight + 'px'
