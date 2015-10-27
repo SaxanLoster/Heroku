@@ -155,7 +155,7 @@
     var watchserieslink = 'http://' + storage.watchseries + '/serie/REPLACE'
     var watchseriessearch = 'http://' + storage.watchseries + '/search/REPLACE'
     var wikipedialink = 'http://en.wikipedia.org/wiki/REPLACE'
-    var wikipediasearch = 'http://en.wikipedia.org/w/index.php?search=REPLACE%20TV&title=Special%3ASearch&fulltext=1'
+    var wikipediasearch = 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1'
     for ( var iter1 = 0 ; iter1 < showlist.length ; iter1++ ) {
       var show = document.createElement( 'input' )
       elements.shows.appendChild( show )
