@@ -9,31 +9,7 @@
 body {
   margin: 0;
   }
-input {
-  border-radius: 5px;
-  border-style: solid;
-  font-family: 'Courier New';
-  height: 28px;
-  padding: 2px 5px;
-  text-align: left;
-  width: 95%;
-  }
-table {
-  width: 100%;
-  }
-td {
-  text-align: center;
-  }
-th {
-  text-align: center;
-  white-space: pre;
-  }
-tr {
-  height: 30px;
-  }
-.centered {
-  text-align: center;
-  }
+
 #buttons {
   height: 30px;
   left: 0;
@@ -52,6 +28,41 @@ tr {
   text-align: center;
   width: calc( 100% / 6 - 24px );
   }
-#table {
+
+table {
+  counter-reset: mycounter;
   padding-top: 50px;
+  width: 100%;
+  }
+tr {
+  height: 30px;
+  }
+tr:before {
+  content: counter( mycounter , decimal );
+  counter-increment: mycounter;
+  display: block;
+  line-height: 28px;
+  padding: 0px 5px;
+  text-align: right;
+  width: 30px;
+  }
+th {
+  text-align: center;
+  white-space: pre;
+  }
+td {
+  text-align: center;
+  }
+input {
+  border-radius: 5px;
+  border-style: solid;
+  font-family: 'Courier New';
+  height: 28px;
+  padding: 2px 5px;
+  text-align: left;
+  width: 95%;
+  }
+
+.centered {
+  text-align: center;
   }
