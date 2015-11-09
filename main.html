@@ -45,8 +45,8 @@
         -webkit-align-items: center;
         display: flex;
         display: -webkit-flex;
-        flex-flow: row wrap;
-        -webkit-flex-flow: row wrap;
+        flex-flow: column nowrap;
+        -webkit-flex-flow: column nowrap;
         height: calc( 100% - 8rem );
         justify-content: space-around;
         -webkit-justify-content: space-around;
@@ -55,11 +55,12 @@
       #Links > A {
         border: 1px #afafaf solid;
         display: inline-block;
-        height: 45%;
+        flex: 1 1 auto;
         overflow-y: auto;
         padding: 25px;
+        margin: 15px 0;
         vertical-align: top;
-        width: 45%;
+        width: 95%;
         }
       #Links > A > Span {
         border-bottom: 1px solid #afafaf;
@@ -83,7 +84,7 @@
     <Div id="Links">
       <A href="cards/main.html" class="">
         <Span>Card Game</Span>
-        <P>An HTML5 simulation of 5 card draw. Made with phaser.<BR><BR>Added AI.<BR><BR>Last updated on 8/25/15.</P>
+        <P>An HTML5 simulation of 5 card draw. Made with phaser. Added AI.<BR><BR>Last updated on 8/25/15.</P>
         </A>
       <A href="maze/main.html" class="">
         <Span>Maze Game</Span>
