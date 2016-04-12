@@ -1,16 +1,19 @@
 ::-webkit-scrollbar {
   display: none;
   }
+
 * {
   background-color: #000;
   border-color: #777;
   color: #FFF;
   }
+
 body {
   margin: 0;
   }
 
 #buttons {
+  font-size: 0;
   height: 30px;
   left: 0;
   margin: auto;
@@ -21,12 +24,13 @@ body {
   width: 100%;
   z-index: 100;
   }
+
 #buttons input {
   background-color: #666;
   border-color: #333;
   margin: 0 10px;
   text-align: center;
-  width: calc( 100% / 6 - 24px );
+  width: calc(100% / 6 - 24px);
   }
 
 table {
@@ -34,11 +38,13 @@ table {
   padding-top: 50px;
   width: 100%;
   }
+
 tr {
   height: 30px;
   }
+
 tr:before {
-  content: counter( mycounter , decimal );
+  content: counter(mycounter, decimal);
   counter-increment: mycounter;
   display: block;
   line-height: 28px;
@@ -46,13 +52,16 @@ tr:before {
   text-align: right;
   width: 30px;
   }
+
 th {
   text-align: center;
   white-space: pre;
   }
+
 td {
   text-align: center;
   }
+
 input {
   border-radius: 5px;
   border-style: solid;
