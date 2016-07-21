@@ -20,6 +20,7 @@
     names = [
       'Title' ,
       'Level' ,
+      'Alluc' ,
       'Amazon Prime' ,
       'AV Club' ,
       'IMDB' ,

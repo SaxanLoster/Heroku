@@ -159,6 +159,8 @@
       [] ,
       []
       ];
+    urls[ 0 ].push( 'http://www.alluc.ee/stream/REPLACE' );
+    urls[ 1 ].push( 'http://www.alluc.ee/stream/REPLACE' );
     urls[ 0 ].push( 'https://www.amazon.com/gp/product/REPLACE' );
     urls[ 1 ].push( 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE+TV' );
     urls[ 0 ].push( 'http://www.avclub.com/tv/REPLACE' );
@@ -190,8 +192,10 @@
       docfrag.appendChild( newshow );
       SHOWINFO.all.push( newshow );
       }
+
     ELEMENTS.shows.appendChild( docfrag );
     xEditStyle( '#shows .perm' , 'display' , 'block' );
+
     for ( i0 = 0 ; i0 < STORAGE.permanent.length ; i0++ ) {
       try {
         document.getElementById( STORAGE.permanent[ i0 ] ).classList.add( 'perm' );
