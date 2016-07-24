@@ -503,7 +503,7 @@
     }
 
   function xToHyperLink( string ) {
-    return encodeURIComponent( string ).replace( /'/g , '\\\'' ).replace( / /g , '\+' );
+    return encodeURIComponent( string.replace( / /g , '\+' ) ).replace( /'/g , '\\\'' );
     }
 
   xOnStart();
