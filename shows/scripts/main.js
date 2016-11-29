@@ -1,4 +1,6 @@
-( function () {
+var UTILITY;
+
+UTILITY = ( function () {
 
   'use strict';
 
@@ -507,4 +509,24 @@
     }
 
   xOnStart();
+  
+  return {
+    xGetGlobals: function () {
+      return {
+        BOOLEANS: BOOLEANS,
+        CLICKINFO: CLICKINFO,
+        COLSINFO: COLSINFO,
+        ELEMENTS: ELEMENTS,
+        MAININFO: MAININFO,
+        ROWSINFO: ROWSINFO,
+        SHOWINFO: SHOWINFO,
+        STORAGE: STORAGE,
+        STYLESHEET: STYLESHEET,
+        }
+      },
+    xToggleDebug: function () {
+      DEBUGMODE = !DEBUGMODE;
+      console.log( 'Debug is %s' , DEBUGMODE )
+      },
+    };
   }() );
