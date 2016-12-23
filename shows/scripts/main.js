@@ -7,6 +7,7 @@ UTILITY = ( function () {
   var BOOLEANS , CLICKINFO , COLSINFO , ELEMENTS , MAININFO , ROWSINFO , SHOWINFO , STORAGE , STYLESHEET;
 
   BOOLEANS = {
+    debugmode: !true ,
     lefttoright: !true ,
     minimunsize: !true ,
     maintainsize: !true ,
@@ -97,18 +98,26 @@ UTILITY = ( function () {
     }
 
   function xCountVisible() {
-    var i0;
+    var e0 , i0 , i1;
 
     SHOWINFO.visible = [];
 
-    for ( i0 = 0 ; i0 < SHOWINFO.display.length ; i0++ ) {
+    /*for ( i0 = 0 ; i0 < SHOWINFO.display.length ; i0++ ) {
       var temp1 = SHOWINFO.display[ i0 ].offsetLeft >= window.scrollX;
       var temp2 = SHOWINFO.display[ i0 ].offsetTop >= window.scrollY;
       var temp3 = SHOWINFO.display[ i0 ].offsetLeft <= window.scrollX + MAININFO.showswidth;
       var temp4 = SHOWINFO.display[ i0 ].offsetTop <= window.scrollY + MAININFO.showsheight;
       if ( temp1 && temp2 && temp3 && temp4 ) {
         SHOWINFO.visible.push( SHOWINFO.display[ i0 ] );
+        break;
         }
+      }*/
+
+
+    i0 = !BOOLEANS.lefttoright ? Math.round( window.scrollX / SHOWINFO.width ) * ROWSINFO.count : Math.round( window.scrollY / SHOWINFO.height ) * COLSINFO.count;
+
+    for ( i0 , i1 = 0 ; i0 < SHOWINFO.display.length && i1 < SHOWINFO.max ; i0++ , i1++ ) {
+      SHOWINFO.visible.push( SHOWINFO.display[ i0 ] );
       }
     }
 
@@ -171,8 +180,8 @@ UTILITY = ( function () {
     urls[ 1 ].push( 'http://www.imdb.com/find?q=REPLACE&s=tt&ttype=tv&ref_=fn_tv' );
     urls[ 0 ].push( 'http://www.netflix.com/title/REPLACE' );
     urls[ 1 ].push( 'http://www.netflix.com/search/REPLACE' );
-    urls[ 0 ].push( 'http://thewatchseries.to/serie/REPLACE' );
-    urls[ 1 ].push( 'http://thewatchseries.to/search/REPLACE' );
+    urls[ 0 ].push( 'http://watchseriesgo.to/serie/REPLACE' );
+    urls[ 1 ].push( 'http://watchseriesgo.to/search/REPLACE' );
     urls[ 0 ].push( 'http://en.wikipedia.org/wiki/REPLACE' );
     urls[ 1 ].push( 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1' );
 
@@ -525,8 +534,8 @@ UTILITY = ( function () {
         }
       },
     xToggleDebug: function () {
-      DEBUGMODE = !DEBUGMODE;
-      console.log( 'Debug is %s' , DEBUGMODE )
+      BOOLEANS.debugmode = !BOOLEANS.debugmode;
+      console.log( 'Debug is %s' , BOOLEANS.debugmode )
       },
     };
   }() );
