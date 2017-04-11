@@ -1,6 +1,4 @@
 ( function () {
-  var alert , i0 , links , show , storage , title , url;
-
   String.prototype.has = function ( string ) {
     return this.match( string ) !== null;
     };
@@ -23,10 +21,9 @@
     return encodeURI( string.replace( / /g , '\+' ) ).replace( /'/g , '\\\'' );
     }
 
-  alert = document.getElementById( 'alert' );
-  i0 = 0;
-  links = document.getElementsByClassName( 'link' ).length;
-  storage = JSON.parse( localStorage.Shows );
+  STORAGE  = JSON.parse( localStorage.Shows );
+
+  links = [].slice.call( document.getElementsByClassName( 'link' ) );
   title = location.hash.slice( 1 );
   urls = [
     [] ,
@@ -47,15 +44,39 @@
     urls[ 0 ].push( 'http://en.wikipedia.org/wiki/REPLACE' );
     urls[ 1 ].push( 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1' );
 
-  show = storage.showlist.find( value => value.title === title );
+  show = STORAGE.showlist.find( value => value.title === title );
 
   document.title = show.title;
 
-  alert.children[ 0 ].textContent = show.title;
-  alert.children[ 0 ].href = 'https://www.google.com/search?q=' + xToHyperLink( show.title );
+  document.body.children[ 0 ].textContent = show.title;
+  document.body.children[ 0 ].href = 'https://www.google.com/search?q=' + xToHyperLink( show.title );
 
-  while ( i0 < links ) {
-    alert.children[ i0 + 1 ].href = xAddData( show.title , show[ 'link' + i0 ] , urls[ 0 ][ i0 ] , urls[ 1 ][ i0++ ] );
-    }
+  document.querySelector( '#season' ).value = show.season || 0;
+  document.querySelector( '#episode' ).value = show.episode || 0;
+
+  links.forEach( function ( link , i ) {
+    link.href = xAddData( show.title , show[ 'link' + i ] , urls[ 0 ][ i ] , urls[ 1 ][ i ] );
+    } );
+
+  document.querySelector( '#season' ).addEventListener( 'change' , function ( event ) {
+    if( event.srcElement.value >= 0 ) {
+      STORAGE.showlist.find( function ( v ) {
+        if ( v.title === title ) {
+          v.season = event.srcElement.value;
+          localStorage.Shows = JSON.stringify( STORAGE );
+          }
+        } );
+      }
+    } );
+  document.querySelector( '#episode' ).addEventListener( 'change' , function ( event ) {
+    if( event.srcElement.value >= 0 ) {
+      STORAGE.showlist.find( function ( v ) {
+        if ( v.title === title ) {
+          v.episode = event.srcElement.value;
+          localStorage.Shows = JSON.stringify( STORAGE );
+          }
+        } );
+      }
+    } );
 
   } () );
