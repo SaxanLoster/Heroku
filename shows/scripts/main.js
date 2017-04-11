@@ -24,7 +24,6 @@ UTILITY = ( function () {
     max: 0 ,
     };
   ELEMENTS = {
-    alert: document.getElementById( 'alert' ) ,
     buttons: document.getElementById( 'buttons' ) ,
     shows: document.getElementById( 'shows' ) ,
     };
@@ -121,12 +120,6 @@ UTILITY = ( function () {
       }
     }
 
-  function xCreateAlert() {
-    ELEMENTS.alert.querySelector( 'input' ).addEventListener( 'click' , function () {
-      ELEMENTS.alert.removeAttribute( 'style' );
-      } );
-    }
-
   function xCreateButtons() {
     var docfrag , i0 , newbutton;
 
@@ -150,56 +143,19 @@ UTILITY = ( function () {
     }
 
   function xCreateShows() {
-    var docfrag , i0 , i1 , newshow , urls;
-
-    function xAddData( title , data , link , search ) {
-      if ( data ) {
-        if ( data.has( /^http/ ) ) {
-          return data;
-          }
-        else {
-          return link.replace( /REPLACE/ , xToHyperLink( data ) );
-          }
-        }
-      else {
-        return search.replace( /REPLACE/ , xToHyperLink( title ) );
-        }
-      }
-
-    urls = [
-      [] ,
-      []
-      ];
-    urls[ 0 ].push( 'http://www.alluc.ee/stream/REPLACE' );
-    urls[ 1 ].push( 'http://www.alluc.ee/stream/REPLACE' );
-    urls[ 0 ].push( 'https://www.amazon.com/gp/product/REPLACE' );
-    urls[ 1 ].push( 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dinstant-video&field-keywords=REPLACE+TV' );
-    urls[ 0 ].push( 'http://www.avclub.com/tv/REPLACE' );
-    urls[ 1 ].push( 'http://www.avclub.com/search/?q=REPLACE&feature_type=tv-club' );
-    urls[ 0 ].push( 'http://www.imdb.com/title/REPLACE' );
-    urls[ 1 ].push( 'http://www.imdb.com/find?q=REPLACE&s=tt&ttype=tv&ref_=fn_tv' );
-    urls[ 0 ].push( 'http://www.netflix.com/title/REPLACE' );
-    urls[ 1 ].push( 'http://www.netflix.com/search/REPLACE' );
-    urls[ 0 ].push( 'http://watchseriesgo.to/serie/REPLACE' );
-    urls[ 1 ].push( 'http://watchseriesgo.to/search/REPLACE' );
-    urls[ 0 ].push( 'http://en.wikipedia.org/wiki/REPLACE' );
-    urls[ 1 ].push( 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1' );
+    var docfrag , i0 , newshow , urls;
 
     docfrag = document.createDocumentFragment();
 
     for ( i0 = 0 ; i0 < STORAGE.showlist.length ; i0++ ) {
-      i1 = 0;
-      newshow = document.createElement( 'input' );
-      newshow.className = 'level' + STORAGE.showlist[ i0 ].level;
-
-      while ( i1 < MAININFO.links ) {
-        newshow.dataset[ 'link' + i1 ] = xAddData( STORAGE.showlist[ i0 ].title , STORAGE.showlist[ i0 ][ 'link' + i1 ] , urls[ 0 ][ i1 ] , urls[ 1 ][ i1++ ] );
-        }
-
+      newshow = document.createElement( 'a' );
+      newshow.className = 'show level' + STORAGE.showlist[ i0 ].level;
       newshow.id = STORAGE.showlist[ i0 ].title;
+      newshow.href = 'show.html#' + STORAGE.showlist[ i0 ].title;
       newshow.onmousedown = xOnShowClick;
+      newshow.onclick = function( event ) { event.preventDefault(); }
       newshow.type = 'button';
-      newshow.value = STORAGE.showlist[ i0 ].title;
+      newshow.value = newshow.textContent = STORAGE.showlist[ i0 ].title;
       docfrag.appendChild( newshow );
       SHOWINFO.all.push( newshow );
       }
@@ -343,27 +299,25 @@ UTILITY = ( function () {
   function xOnScroll() {
     var direction;
 
-    if ( event.srcElement.id === 'AlertCenter' || event.srcElement.parentNode.id === 'AlertCenter' ) {}
-    else {
-      if ( !event.ctrlKey ) {
-        event.preventDefault();
-        direction = event.deltaY > 0 ? 1 : -1;
-        if ( BOOLEANS.lefttoright ) {
-          scrollBy( 0 , direction * SHOWINFO.height );
-          }
-        else {
-          scrollBy( direction * SHOWINFO.width , 0 );
-          }
+    if ( !event.ctrlKey ) {
+      event.preventDefault();
+      direction = event.deltaY > 0 ? 1 : -1;
+      if ( BOOLEANS.lefttoright ) {
+        scrollBy( 0 , direction * SHOWINFO.height );
         }
-      xStyleElements();
+      else {
+        scrollBy( direction * SHOWINFO.width , 0 );
+        }
       }
+    xStyleElements();
     }
 
-  function xOnShowClick() {
+  function xOnShowClick( event ) {
     if ( event.button === 1 || ( event.button === 0 && event.ctrlKey ) ) {
-      xShowLinks( this );
+      // window.open( 'show.html#' + this.id );
       }
     else if ( event.button === 0 ) {
+      event.preventDefault();
       CLICKINFO.elem1 = CLICKINFO.elem2;
       CLICKINFO.elem2 = event.toElement;
       CLICKINFO.time1 = CLICKINFO.time2;
@@ -392,7 +346,6 @@ UTILITY = ( function () {
   function xOnStart() {
     xCheckLocalStorage();
     xDeclareStyleSheet();
-    xCreateAlert();
     xCreateButtons();
     xCreateShows();
     xOnResize();
@@ -449,19 +402,6 @@ UTILITY = ( function () {
       }
     }
 
-  function xShowLinks( show ) {
-    var i0 = 0;
-
-    ELEMENTS.alert.children[ 0 ].textContent = show.id;
-    ELEMENTS.alert.children[ 0 ].href = 'https://www.google.com/search?q=' + xToHyperLink( show.id );
-
-    while ( i0 < MAININFO.links ) {
-      ELEMENTS.alert.children[ i0 + 1 ].href = show.dataset[ 'link' + ( i0++ ) ];
-      }
-
-    ELEMENTS.alert.style.display = 'flex';
-    }
-
   function xStyleElements() {
     var columns , i0 , leftright , margin , middle , order;
 
@@ -470,9 +410,9 @@ UTILITY = ( function () {
 
     margin = ( MAININFO.showsheight - SHOWINFO.height * Math.min( ROWSINFO.count , ROWSINFO.max ) ) / 2;
 
-    xEditStyle( '#shows input' , 'height' , SHOWINFO.height + 'px' );
-    xEditStyle( '#shows input' , 'lineHeight' , SHOWINFO.height + 'px' );
-    xEditStyle( '#shows input' , 'width' , SHOWINFO.width + 'px' );
+    xEditStyle( '#shows .show' , 'height' , SHOWINFO.height + 'px' );
+    xEditStyle( '#shows .show' , 'lineHeight' , SHOWINFO.height + 'px' );
+    xEditStyle( '#shows .show' , 'width' , SHOWINFO.width + 'px' );
 
     ELEMENTS.shows.style.height = SHOWINFO.height * ROWSINFO.count + 'px';
     ELEMENTS.shows.style.marginBottom = margin + MAININFO.buttonsheight + 'px';
@@ -511,10 +451,6 @@ UTILITY = ( function () {
         SHOWINFO.visible[ i0 ].style.textAlign = order[ Math.floor( i0 / ROWSINFO.count ) ];
         }
       }
-    }
-
-  function xToHyperLink( string ) {
-    return encodeURI( string.replace( / /g , '\+' ) ).replace( /'/g , '\\\'' );
     }
 
   xOnStart();
