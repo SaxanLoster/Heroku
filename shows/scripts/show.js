@@ -51,15 +51,15 @@
   document.body.children[ 0 ].textContent = show.title;
   document.body.children[ 0 ].href = 'https://www.google.com/search?q=' + xToHyperLink( show.title );
 
-  document.querySelector( '#season' ).value = show.season || 0;
-  document.querySelector( '#episode' ).value = show.episode || 0;
+  document.querySelector( '#season' ).value = show.season || 1;
+  document.querySelector( '#episode' ).value = show.episode || 1;
 
   links.forEach( function ( link , i ) {
     link.href = xAddData( show.title , show[ 'link' + i ] , urls[ 0 ][ i ] , urls[ 1 ][ i ] );
     } );
 
   document.querySelector( '#season' ).addEventListener( 'change' , function ( event ) {
-    if( event.srcElement.value >= 0 ) {
+    if( event.srcElement.value > 0 ) {
       STORAGE.showlist.find( function ( v ) {
         if ( v.title === title ) {
           v.season = event.srcElement.value;
@@ -69,7 +69,7 @@
       }
     } );
   document.querySelector( '#episode' ).addEventListener( 'change' , function ( event ) {
-    if( event.srcElement.value >= 0 ) {
+    if( event.srcElement.value > 0 ) {
       STORAGE.showlist.find( function ( v ) {
         if ( v.title === title ) {
           v.episode = event.srcElement.value;
