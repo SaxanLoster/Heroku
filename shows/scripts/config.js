@@ -27,13 +27,15 @@
       'Netflix' ,
       'Watch Series' ,
       'Wikipedia' ,
+      'Season',
+      'Episode',
       ];
 
     cells = [];
     inputs = [];
     row = document.createElement( 'tr' );
 
-    for ( i0 = 0 ; i0 < ( LINKS + 2 ) ; i0++ ) {
+    for ( i0 = 0 ; i0 < names.length ; i0++ ) {
       cells.push( document.createElement( 'td' ) );
       inputs.push( document.createElement( 'input' ) );
       row.appendChild( cells[ i0 ] );
@@ -51,6 +53,12 @@
     for ( i0 = 0 ; i0 < LINKS ; i0++ ) {
       inputs[ 2 + i0 ].value = data[ 'link' + ( i0 ) ] || '';
       }
+
+    inputs[ 3 + i0 ].className = 'centered';
+    inputs[ 3 + i0 ].value = data.level || '1';
+
+    inputs[ 4 + i0 ].className = 'centered';
+    inputs[ 4 + i0 ].value = data.level || '1';
 
     return row;
     }
@@ -198,6 +206,8 @@
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ';
+      data += ' "season": "' + cells[ i1++ ].firstChild.value + '" ';
+      data += ' "episode": "' + cells[ i1++ ].firstChild.value + '" ';
       data += i0 < ROWCOUNT - 1 ? '},\n' : '}\n';
       }
 
@@ -211,6 +221,7 @@
     }
 
   function xSaveLocal() {
+    STORAGE = JSON.parse( localStorage.Shows );
     STORAGE.showlist = JSON.parse( xSaveData() );
     localStorage.Shows = JSON.stringify( STORAGE );
     }

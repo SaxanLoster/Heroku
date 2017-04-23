@@ -21,7 +21,7 @@
     return encodeURI( string.replace( / /g , '\+' ) ).replace( /'/g , '\\\'' );
     }
 
-  STORAGE  = JSON.parse( localStorage.Shows );
+  STORAGE = JSON.parse( localStorage.Shows );
 
   links = [].slice.call( document.getElementsByClassName( 'link' ) );
   title = location.hash.slice( 1 );

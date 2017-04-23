@@ -364,7 +364,7 @@ UTILITY = ( function () {
       STORAGE.permanent.push( show );
       }
     STORAGE.permanent.sort();
-    localStorage.Shows = JSON.stringify( STORAGE );
+    localStorage.Shows = localStorage.Shows.replace( /\[.+?\]/ , JSON.stringify( STORAGE.permanent ) );
     }
 
   function xPreventActions( event ) {
