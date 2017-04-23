@@ -55,10 +55,10 @@
       }
 
     inputs[ 3 + i0 ].className = 'centered';
-    inputs[ 3 + i0 ].value = data.level || '1';
+    inputs[ 3 + i0 ].value = data.season || '1';
 
     inputs[ 4 + i0 ].className = 'centered';
-    inputs[ 4 + i0 ].value = data.level || '1';
+    inputs[ 4 + i0 ].value = data.episode || '1';
 
     return row;
     }
