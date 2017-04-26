@@ -205,8 +205,8 @@
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
-      data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ';
-      data += ' "season": "' + cells[ i1++ ].firstChild.value + '" ';
+      data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
+      data += ' "season": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "episode": "' + cells[ i1++ ].firstChild.value + '" ';
       data += i0 < ROWCOUNT - 1 ? '},\n' : '}\n';
       }
