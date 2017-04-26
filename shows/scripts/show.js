@@ -79,4 +79,8 @@
       }
     } );
 
+  window.addEventListener( 'storage' , function () {
+    STORAGE = JSON.parse( localStorage.Shows );
+    } );
+
   } () );
