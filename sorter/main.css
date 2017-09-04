@@ -63,8 +63,24 @@ body {
   width: calc( 75vw - 22px );
   }
 
-#resultbox * {
+#resultbox .choice {
   flex: 1 1 0;
   font-size: 24px;
   margin: 5px;
+  }
+
+#resultbox input.result {
+  height: 50px;
+  font-size: 24px;
+  margin: 5px;
+  text-align: center;
+  }
+#resultbox div.result {
+  flex: 1 1 0;
+  font-size: 24px;
+  text-align: center;
+  white-space: pre;
+  }
+#resultbox button.result {
+  height: 50px;
   }

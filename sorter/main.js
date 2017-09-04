@@ -25,43 +25,85 @@ E.preset.addEventListener( 'change' , function( e ) {
   E.list.value = this.selectedOptions[ 0 ].value.split( ',' ).join( '\n' );
   } );
 
-var xSort = function () {
-  var list = E.list.value && E.list.value.split( '\n' );
-  if ( list.length == 0 ) return false;
-  var result = [];
+var gList , gLow , gHigh , gIndex1 , gIndex2 , gStack;
 
-  var xSetCompare = function ( v1 , v2 ) {
-    if ( i == 0 ) f = false;
-    while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
-    e = document.createElement( 'button' );
-    e.textContent = v1;
-    e.addEventListener( 'click' , function ( event ) {
-      i++;
-      if ( i >= list.length -1 ) i = 0;
-      if ( i === 0 && !f ) {
-        E.list.value = list.join( '\n' );
-        while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
-        }
-      else xSetCompare( list[ i ] , list[ i + 1 ] );
-      } );
-    E.resultbox.appendChild( e );
-    e = document.createElement( 'button' );
-    e.textContent = v2;
-    e.addEventListener( 'click' , function ( event ) {
-      var t = list[ i ];
-      list[ i ] = list[ i + 1 ];
-      list[ i + 1 ] = t;
-      i++;
-      f = true;
-      if ( i >= list.length - 1 ) i = 0;
-      xSetCompare( list[ i ] , list[ i + 1 ] );
-      } );
-    E.resultbox.appendChild( e );
-    };
+var xSetResults = function () {
+  while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
+  var e = document.createElement( 'input' );
+  e.placeholder = 'Title';
+  e.className = 'result';
+  E.resultbox.appendChild( e )
+  var e = document.createElement( 'div' );
+  e.textContent = gList.join( '\n' );
+  e.className = 'result';
+  E.resultbox.appendChild( e );
+  var e = document.createElement( 'button' );
+  e.textContent = 'Save';
+  e.className = 'result';
+  E.resultbox.appendChild( e );
 
-  var i = 0 , f = false;
-
-  xSetCompare( list[ i ] , list[ i + 1 ] );
+  }
+var xSwap = function ( v1 , v2 ) {
+  var t = gList[ v1 ];
+  gList[ v1 ] = gList[ v2 ];
+  gList[ v2 ] = t;
   };
+var xSort = function ( low , high ) {
+  gLow = low;
+  gHigh = high;
+  gIndex1 = low - 1;
+  gIndex2 = low
+  xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+  }
+var xPopStack = function () {
+  var s;
+  do {
+    s = gStack.pop();
+    if ( s[ 0 ] >= s[ 1 ] ) s = null;
+    } while ( gStack.length > 0 && !s )
+  if ( s ) xSort( s[ 0 ] , s[ 1 ] );
+  else xSetResults();
+  };
+var xSetCompare = function ( v1 , v2 ) {
+  while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
+  var e = document.createElement( 'button' );
+  e.textContent = v1;
+  e.className = 'choice';
+  e.addEventListener( 'click' , function ( event ) {
+    gIndex1++;
+    xSwap( gIndex1 , gIndex2 );
+    gIndex2++;
+    if ( gIndex2 <= gHigh - 1 ) {
+      xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+      }
+    else {
+      xSwap( gIndex1 + 1 , gHigh );
+      gStack.push( [ gIndex1 + 2 , gHigh ] );
+      gStack.push( [ gLow , gIndex1 ] );
+      xPopStack();
+      }
+    } );
+  E.resultbox.appendChild( e );
+  var e = document.createElement( 'button' );
+  e.textContent = v2;
+  e.className = 'choice';
+  e.addEventListener( 'click' , function ( event ) {
+    gIndex2++;
+    if ( gIndex2 <= gHigh - 1 ) {
+      xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+      }
+    else {
+      xSwap( gIndex1 + 1 , gHigh );
+      gStack.push( [ gIndex1 + 2 , gHigh ] );
+      gStack.push( [ gLow , gIndex1 ] );
+      xPopStack();
+      }
+    } );
+  E.resultbox.appendChild( e );
+  }
 
-E.sortbutton.addEventListener( 'click' , xSort );
+E.sortbutton.addEventListener( 'click' , function ( e ) {
+  gList = E.list.value.split( '\n' );
+  gStack = [];
+  xSort( 0 , gList.length - 1 );
+  } );
