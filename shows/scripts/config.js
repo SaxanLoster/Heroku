@@ -22,7 +22,7 @@
       'Level' ,
       'Alluc' ,
       'Amazon Prime' ,
-      'AV Club' ,
+      'Hulu' ,
       'IMDB' ,
       'Netflix' ,
       'Watch Series' ,
@@ -54,11 +54,11 @@
       inputs[ 2 + i0 ].value = data[ 'link' + ( i0 ) ] || '';
       }
 
-    inputs[ 3 + i0 ].className = 'centered';
-    inputs[ 3 + i0 ].value = data.season || '1';
+    inputs[ 2 + i0 ].className = 'centered';
+    inputs[ 2 + i0 ].value = data.season || '1';
 
-    inputs[ 4 + i0 ].className = 'centered';
-    inputs[ 4 + i0 ].value = data.episode || '1';
+    inputs[ 3 + i0 ].className = 'centered';
+    inputs[ 3 + i0 ].value = data.episode || '1';
 
     return row;
     }
@@ -200,6 +200,7 @@
       data += '\t{';
       data += ' "title": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "level": "' + cells[ i1++ ].firstChild.value + '" ,';
+      data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';
       data += ' "link' + ( i1 - 2 ) + '": "' + cells[ i1++ ].firstChild.value + '" ,';

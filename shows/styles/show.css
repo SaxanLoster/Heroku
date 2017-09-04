@@ -44,20 +44,21 @@ body > *:hover {
   font-size: 32px;
   }
 
-.progress {
-  font-size: 24px;
-  }
-
-.progress .number {
+.number {
+  color: #ffffff;
   display: inline-block;
+  font-size: 24px;
   margin: 0 25px;
   }
-
-.progress .number input {
+.number label {
+  margin-right: 5px;
+  }
+.number input {
   background: #3f3f3f;
   border: solid 1px #efefef;
   border-radius: 5px;
   color: #ffffff;
+  height: 38px;
   padding: 2px 5px;
   text-align: center;
   width: 100px;
