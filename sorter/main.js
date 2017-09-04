@@ -9,9 +9,9 @@ var E = {
   };
 
 var presets = [
-  { label: 'None' , value: [ '' ] },
-  { label: 'Rainbow Six Attackers' , value: 'ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,FUZE,GLAZ,HIBANA,IQ,JACKAL,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH' },
-  { label: 'Rainbow Six Defenders' , value: 'BANDIT,CASTLE,CAVEIRA,DOC,ECHO,FROST,JAEGER,KAPKAN,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE' },
+  { title: 'None' , value: [ '' ] },
+  { title: 'Rainbow Six Attackers' , value: 'ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,FUZE,GLAZ,HIBANA,IQ,JACKAL,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH' },
+  { title: 'Rainbow Six Defenders' , value: 'BANDIT,CASTLE,CAVEIRA,DOC,ECHO,FROST,JAEGER,KAPKAN,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE' },
   ];
 
 if ( !localStorage.sorter ) localStorage.sorter = "[]";
@@ -20,7 +20,7 @@ presets = presets.concat( JSON.parse( localStorage.sorter ) );
 presets.forEach( function( v ) {
   var e = document.createElement( 'option' );
   e.value = v.value;
-  e.textContent = v.label;
+  e.textContent = v.title;
   E.preset.appendChild( e );
   } );
 
@@ -45,7 +45,7 @@ var xSetResults = function () {
   e.className = 'result';
   e.addEventListener( 'click' , function ( event ) {
     var s = JSON.parse( localStorage.sorter );
-    var t = document.querySelector( '#resultbox input.result' ) || '';
+    var t = document.querySelector( '#resultbox input.result' ).value || '';
     var v = document.querySelector( '#resultbox div.result' ).textContent.split( '\n' ).join( ',' );
     var i = s.findIndex( v => v.title === t );
     if ( i > -1 ) s[ i ].value = v
