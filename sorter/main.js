@@ -14,6 +14,9 @@ var presets = [
   { label: 'Rainbow Six Defenders' , value: 'BANDIT,CASTLE,CAVEIRA,DOC,ECHO,FROST,JAEGER,KAPKAN,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE' },
   ];
 
+if ( !localStorage.sorter ) localStorage.sorter = "[]";
+presets = presets.concat( JSON.parse( localStorage.sorter ) );
+
 presets.forEach( function( v ) {
   var e = document.createElement( 'option' );
   e.value = v.value;
@@ -40,8 +43,16 @@ var xSetResults = function () {
   var e = document.createElement( 'button' );
   e.textContent = 'Save';
   e.className = 'result';
+  e.addEventListener( 'click' , function ( event ) {
+    var s = JSON.parse( localStorage.sorter );
+    var t = document.querySelector( '#resultbox input.result' ) || '';
+    var v = document.querySelector( '#resultbox div.result' ).textContent.split( '\n' ).join( ',' );
+    var i = s.findIndex( v => v.title === t );
+    if ( i > -1 ) s[ i ].value = v
+    else s.push( { title: t , value: v } );
+    localStorage.sorter = JSON.stringify( s );
+    } );
   E.resultbox.appendChild( e );
-
   }
 var xSwap = function ( v1 , v2 ) {
   var t = gList[ v1 ];
