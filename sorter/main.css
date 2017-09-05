@@ -70,6 +70,7 @@ body {
   }
 
 #resultbox input.result {
+  border-style: solid;
   height: 50px;
   font-size: 24px;
   margin: 5px;
@@ -79,8 +80,10 @@ body {
   flex: 1 1 0;
   font-size: 24px;
   text-align: center;
+  overflow: scroll;
   white-space: pre;
   }
 #resultbox button.result {
   height: 50px;
+  margin: 5px;
   }

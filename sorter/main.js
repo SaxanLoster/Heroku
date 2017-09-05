@@ -63,20 +63,24 @@ var xSort = function ( low , high ) {
   gIndex2 = low
   gLow = low;
   gPivot = Math.floor( ( gHigh + gLow ) / 2 );
+  // gPivot = high;
   if ( gIndex1 === gPivot ) gIndex1++;
   if ( gIndex2 === gPivot ) gIndex2++;
   xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
   }
 var xPopStack = function () {
   var s;
+  console.log( gList , gStack.join( ' | ' ) );
   do {
     s = gStack.pop();
     if ( s[ 0 ] >= s[ 1 ] ) s = null;
     } while ( gStack.length > 0 && !s )
+  console.log( s );
   if ( s ) xSort( s[ 0 ] , s[ 1 ] );
   else xSetResults();
   };
 var xSetCompare = function ( v1 , v2 ) {
+  console.log( gIndex1 , gIndex2 , gPivot , gLow , gHigh );
   while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
   var e = document.createElement( 'button' );
   e.textContent = v1;
@@ -84,41 +88,36 @@ var xSetCompare = function ( v1 , v2 ) {
   e.addEventListener( 'click' , function ( event ) {
     gIndex1++;
     if ( gIndex1 === gPivot ) gIndex1++;
-    xSwap( gIndex1 , gIndex2 );
-    gIndex2++;
-    if ( gIndex2 == gPivot ) gIndex2++;
-    if ( gIndex2 <= gHigh ) {
-      xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
-      }
-    else {
-      xSwap( gIndex1 + 1 , gPivot );
-      gStack.push( [ gIndex1 + 2 , gHigh ] );
-      gStack.push( [ gLow , gIndex1 ] );
-      xPopStack();
-      }
+    if ( gIndex1 !== gIndex2 ) xSwap( gIndex1 , gIndex2 );
+    console.log( gList );
+    xClickEvent();
     } );
   E.resultbox.appendChild( e );
   var e = document.createElement( 'button' );
   e.textContent = v2;
   e.className = 'choice';
   e.addEventListener( 'click' , function ( event ) {
-    gIndex2++;
-    if ( gIndex2 == gPivot ) gIndex2++;
-    if ( gIndex2 <= gHigh ) {
-      xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
-      }
-    else {
-      xSwap( gIndex1 + 1 , gPivot );
-      gStack.push( [ gIndex1 + 2 , gHigh ] );
-      gStack.push( [ gLow , gIndex1 ] );
-      xPopStack();
-      }
+    xClickEvent()
     } );
   E.resultbox.appendChild( e );
   }
+var xClickEvent = function () {
+  gIndex2++;
+  if ( gIndex2 == gPivot ) gIndex2++;
+  if ( gIndex2 <= gHigh ) {
+    xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
+    }
+  else {
+    if ( gIndex1 > gPivot ) gIndex1--;
+    xSwap( gIndex1 + 1 , gPivot );
+    if ( gLow !== gIndex1 + 2 ) gStack.push( [ gIndex1 + 2 , gHigh ] );
+    if ( gHigh !== gIndex1 ) gStack.push( [ gLow , gIndex1 ] );
+    xPopStack();
+    }
+  };
 
 E.sortbutton.addEventListener( 'click' , function ( e ) {
   gList = E.list.value.split( '\n' );
-  gStack = [];
-  xSort( 0 , gList.length - 1 );
+  gStack = [ [ 0 , gList.length - 1 ] ];
+  xPopStack();
   } );
