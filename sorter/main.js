@@ -1,5 +1,3 @@
-// list.sort( ( v1 , v2 ) => confirm( "Press okay for " + v1 + " or cancel for " + v2 ) ? -1 : +1; );
-
 var E = {
   listbox: document.getElementById( 'listbox' ),
   preset: document.getElementById( 'preset' ),
@@ -28,7 +26,7 @@ E.preset.addEventListener( 'change' , function( e ) {
   E.list.value = this.selectedOptions[ 0 ].value.split( ',' ).join( '\n' );
   } );
 
-var gList , gLow , gHigh , gIndex1 , gIndex2 , gStack;
+var gHigh , gIndex1 , gIndex2 , gList , gLow , gPivot , gStack ;
 
 var xSetResults = function () {
   while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
@@ -60,11 +58,14 @@ var xSwap = function ( v1 , v2 ) {
   gList[ v2 ] = t;
   };
 var xSort = function ( low , high ) {
-  gLow = low;
   gHigh = high;
   gIndex1 = low - 1;
   gIndex2 = low
-  xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+  gLow = low;
+  gPivot = Math.floor( ( gHigh + gLow ) / 2 );
+  if ( gIndex1 === gPivot ) gIndex1++;
+  if ( gIndex2 === gPivot ) gIndex2++;
+  xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
   }
 var xPopStack = function () {
   var s;
@@ -82,13 +83,15 @@ var xSetCompare = function ( v1 , v2 ) {
   e.className = 'choice';
   e.addEventListener( 'click' , function ( event ) {
     gIndex1++;
+    if ( gIndex1 === gPivot ) gIndex1++;
     xSwap( gIndex1 , gIndex2 );
     gIndex2++;
-    if ( gIndex2 <= gHigh - 1 ) {
-      xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+    if ( gIndex2 == gPivot ) gIndex2++;
+    if ( gIndex2 <= gHigh ) {
+      xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
       }
     else {
-      xSwap( gIndex1 + 1 , gHigh );
+      xSwap( gIndex1 + 1 , gPivot );
       gStack.push( [ gIndex1 + 2 , gHigh ] );
       gStack.push( [ gLow , gIndex1 ] );
       xPopStack();
@@ -100,11 +103,12 @@ var xSetCompare = function ( v1 , v2 ) {
   e.className = 'choice';
   e.addEventListener( 'click' , function ( event ) {
     gIndex2++;
-    if ( gIndex2 <= gHigh - 1 ) {
-      xSetCompare( gList[ gIndex2 ] , gList[ gHigh ] );
+    if ( gIndex2 == gPivot ) gIndex2++;
+    if ( gIndex2 <= gHigh ) {
+      xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
       }
     else {
-      xSwap( gIndex1 + 1 , gHigh );
+      xSwap( gIndex1 + 1 , gPivot );
       gStack.push( [ gIndex1 + 2 , gHigh ] );
       gStack.push( [ gLow , gIndex1 ] );
       xPopStack();
