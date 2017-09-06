@@ -26,12 +26,13 @@ E.preset.addEventListener( 'change' , function( e ) {
   E.list.value = this.selectedOptions[ 0 ].value.split( ',' ).join( '\n' );
   } );
 
-var gHigh , gIndex1 , gIndex2 , gList , gLow , gPivot , gStack ;
+var gHigh , gIndex1 , gIndex2 , gList , gLow , gPivot , gStack , gTitle;
 
 var xSetResults = function () {
   while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
   var e = document.createElement( 'input' );
   e.placeholder = 'Title';
+  e.value = gTitle;
   e.className = 'result';
   E.resultbox.appendChild( e )
   var e = document.createElement( 'div' );
@@ -119,5 +120,6 @@ var xClickEvent = function () {
 E.sortbutton.addEventListener( 'click' , function ( e ) {
   gList = E.list.value.split( '\n' );
   gStack = [ [ 0 , gList.length - 1 ] ];
+  gTitle = E.preset.selectedOptions[ 0 ].textContent;
   xPopStack();
   } );
