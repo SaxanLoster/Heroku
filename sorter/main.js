@@ -7,9 +7,10 @@ var E = {
   };
 
 var presets = [
-  { title: 'None' , value: [ '' ] },
-  { title: 'Rainbow Six Attackers' , value: 'ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,FUZE,GLAZ,HIBANA,IQ,JACKAL,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH' },
-  { title: 'Rainbow Six Defenders' , value: 'BANDIT,CASTLE,CAVEIRA,DOC,ECHO,FROST,JAEGER,KAPKAN,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE' },
+  { title: "None" , value: "" },
+  { title: "Fast Food" , value: "In N Out,McDonalds,Carl\'s Jr,Subway,Tommy\'s,The Hat,Wingstop,Jack In The Box,Del Taco,Wendy's,Burger King,Chipotle,Panda Express" },
+  { title: "Rainbow Six Attackers" , value: "ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,FUZE,GLAZ,HIBANA,IQ,JACKAL,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH" },
+  { title: "Rainbow Six Defenders" , value: "BANDIT,CASTLE,CAVEIRA,DOC,ECHO,FROST,JAEGER,KAPKAN,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE" },
   ];
 
 if ( !localStorage.sorter ) localStorage.sorter = "[]";
@@ -71,17 +72,14 @@ var xSort = function ( low , high ) {
   }
 var xPopStack = function () {
   var s;
-  console.log( gList , gStack.join( ' | ' ) );
   do {
     s = gStack.pop();
     if ( s[ 0 ] >= s[ 1 ] ) s = null;
     } while ( gStack.length > 0 && !s )
-  console.log( s );
   if ( s ) xSort( s[ 0 ] , s[ 1 ] );
   else xSetResults();
   };
 var xSetCompare = function ( v1 , v2 ) {
-  console.log( gIndex1 , gIndex2 , gPivot , gLow , gHigh );
   while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
   var e = document.createElement( 'button' );
   e.textContent = v1;
@@ -90,7 +88,6 @@ var xSetCompare = function ( v1 , v2 ) {
     gIndex1++;
     if ( gIndex1 === gPivot ) gIndex1++;
     if ( gIndex1 !== gIndex2 ) xSwap( gIndex1 , gIndex2 );
-    console.log( gList );
     xClickEvent();
     } );
   E.resultbox.appendChild( e );
