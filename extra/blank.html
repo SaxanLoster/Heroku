@@ -1,11 +1,11 @@
 <html>
   <head>
     <style>
-      * {
+      body  {
         border: 0;
         font-size: 24px;
         margin: 0;
-        padding: 10px;
+        padding: 20px;
         background: black;
         color: white;
         font-family: monospace;
@@ -13,6 +13,8 @@
         white-space: pre-wrap;
         }
       </style>
+    </head>
+  <body>
     <script>
       var round = 1;
 
@@ -20,7 +22,8 @@
         this.knight = {
           defense: Math.floor( Math.random() * 5 + 5 ),
           endurance: 100,
-          power: Math.floor( Math.random() * 5 + 5 ),
+          health: 100,
+          power: Math.floor( Math.random() * 20 + 80 ),
           }
         this.equipment = {
           chest: {
@@ -32,7 +35,7 @@
             weight: Math.floor( Math.random() * 3 + 1 ),
             },
           lance: {
-            bonus: Math.floor( Math.random() * 5 + 2 ),
+            bonus: Math.floor( Math.random() * 10 + 5 ),
             weight: Math.floor( Math.random() * 3 + 2 ),
             },
           leg: {
@@ -46,7 +49,7 @@
           }
         this.horse = {
           endurance: 100,
-          speed: Math.floor( Math.random() * 5 + 5 ),
+          speed: Math.floor( Math.random() * 20 + 40 ),
           }
         }
 
@@ -68,35 +71,43 @@
       xPlayer.prototype.xGetHorseEndurance = function () {
         return this.horse.endurance - ( this.xGetEquipmentWeight() * round );
         };
-      xPlayer.prototype.xShowStats = function () {
-        document.write( 'player\n' );
-        document.write( ( 'knight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.knight ) + '\n' );
-        document.write( ( 'chest' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.chest ) + '\n' );
-        document.write( ( 'helmet' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.helmet ) + '\n' );
-        document.write( ( 'lance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.lance ) + '\n' );
-        document.write( ( 'leg' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.leg ) + '\n' );
-        document.write( ( 'shield' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.shield ) + '\n' );
-        document.write( ( 'horse' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.horse ) + '\n' );
-        document.write( ( 'xGetEquipmentWeight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetEquipmentWeight().toFixed( 2 ) + '\n' );
-        document.write( ( 'xGetPlayerDefense' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerDefense().toFixed( 2 ) + '\n' );
-        document.write( ( 'xGetPlayerEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerEndurance().toFixed( 2 ) + '\n' );
-        document.write( ( 'xGetPlayerPower' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerPower().toFixed( 2 ) + '\n' );
-        document.write( ( 'xGetHorseSpeed' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetHorseSpeed().toFixed( 2 ) + '\n' );
-        document.write( ( 'xGetHorseEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetHorseEndurance().toFixed( 2 ) + '\n' );
-        document.write( '\n' );
+      xPlayer.prototype.xShowStats = function ( name ) {
+        document.body.textContent += 'player ' + name + '\n';
+        document.body.textContent += ( 'knight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.knight ) + '\n';
+        document.body.textContent += ( 'chest' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.chest ) + '\n';
+        document.body.textContent += ( 'helmet' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.helmet ) + '\n';
+        document.body.textContent += ( 'lance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.lance ) + '\n';
+        document.body.textContent += ( 'leg' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.leg ) + '\n';
+        document.body.textContent += ( 'shield' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.shield ) + '\n';
+        document.body.textContent += ( 'horse' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.horse ) + '\n';
+        document.body.textContent += ( 'xGetEquipmentWeight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetEquipmentWeight().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += ( 'xGetPlayerDefense' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetPlayerDefense().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += ( 'xGetPlayerEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetPlayerEndurance().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += ( 'xGetPlayerPower' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetPlayerPower().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += ( 'xGetHorseSpeed' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetHorseSpeed().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += ( 'xGetHorseEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + ( ' '.repeat( 8 ) + this.xGetHorseEndurance().toFixed( 2 ) ).slice( -8 ) + '\n';
+        document.body.textContent += '\n';
         };
 
-      function xEquipment() {};
+      function xEquipment() {}
 
-      function xHorse() {};
+      function xHorse() {}
 
+      function xFight() {
+        document.body.textContent += '-'.repeat(50) + '\n\nround ' + round + '\n\n';
+        player1.knight.health -= Math.max( player2.xGetPlayerPower() - player1.xGetPlayerDefense() , 0 );
+        player2.knight.health -= Math.max( player1.xGetPlayerPower() - player2.xGetPlayerDefense() , 0 );
+        player1.xShowStats( '1' );
+        player2.xShowStats( '2' );
+        round++;
+        }
+
+      document.body.textContent = '';
       var player1 = new xPlayer();
-      player1.xShowStats();
       var player2 = new xPlayer();
-      player2.xShowStats();
+
+      while ( player1.knight.health > 0 && player2.knight.health > 0 && round < 10 ) xFight()
 
       </script>
-    </head>
-  <body>
-  </body>
+    </body>
 </html>
