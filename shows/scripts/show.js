@@ -39,8 +39,8 @@
     urls[ 1 ].push( 'http://www.imdb.com/find?q=REPLACE&s=tt&ttype=tv&ref_=fn_tv' );
     urls[ 0 ].push( 'http://www.netflix.com/title/REPLACE' );
     urls[ 1 ].push( 'http://www.netflix.com/search/REPLACE' );
-    urls[ 0 ].push( 'http://mywatchseries.to/serie/REPLACE' );
-    urls[ 1 ].push( 'http://mywatchseries.to/search/REPLACE' );
+    urls[ 0 ].push( 'http://xwatchseries.to/serie/REPLACE' );
+    urls[ 1 ].push( 'http://xwatchseries.to/search/REPLACE' );
     urls[ 0 ].push( 'http://en.wikipedia.org/wiki/REPLACE' );
     urls[ 1 ].push( 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1' );
 

@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <style>
+      * {
+        border: 0;
+        font-size: 24px;
+        margin: 0;
+        padding: 10px;
+        background: black;
+        color: white;
+        font-family: monospace;
+        overflow:auto;
+        white-space: pre-wrap;
+        }
+      </style>
+    <script>
+      var round = 1;
+
+      function xPlayer() {
+        this.knight = {
+          defense: Math.floor( Math.random() * 5 + 5 ),
+          endurance: 100,
+          power: Math.floor( Math.random() * 5 + 5 ),
+          }
+        this.equipment = {
+          chest: {
+            bonus: Math.floor( Math.random() * 5 + 4 ),
+            weight: Math.floor( Math.random() * 3 + 3 ),
+            },
+          helmet: {
+            bonus: Math.floor( Math.random() * 5 + 3 ),
+            weight: Math.floor( Math.random() * 3 + 1 ),
+            },
+          lance: {
+            bonus: Math.floor( Math.random() * 5 + 2 ),
+            weight: Math.floor( Math.random() * 3 + 2 ),
+            },
+          leg: {
+            bonus: Math.floor( Math.random() * 5 + 2 ),
+            weight: Math.floor( Math.random() * 3 + 1 ),
+            },
+          shield: {
+            bonus: Math.floor( Math.random() * 5 + 3 ),
+            weight: Math.floor( Math.random() * 3 + 2 ),
+            },
+          }
+        this.horse = {
+          endurance: 100,
+          speed: Math.floor( Math.random() * 5 + 5 ),
+          }
+        }
+
+      xPlayer.prototype.xGetEquipmentWeight = function () {
+        return Object.keys( this.equipment ).reduce( ( t , v ) => t + ( this.equipment[ v ].weight || 0 ) , 0 );
+        };
+      xPlayer.prototype.xGetPlayerDefense = function () {
+        return this.knight.defense + this.equipment.chest.bonus + this.equipment.helmet.bonus + this.equipment.leg.bonus + this.equipment.shield.bonus + this.xGetPlayerEndurance() + this.xGetEquipmentWeight();
+        };
+      xPlayer.prototype.xGetPlayerEndurance = function () {
+        return this.knight.endurance - ( this.xGetEquipmentWeight() * round );
+        };
+      xPlayer.prototype.xGetPlayerPower = function () {
+        return this.knight.power + this.equipment.lance.bonus + this.xGetHorseSpeed() + this.xGetEquipmentWeight();
+        };
+      xPlayer.prototype.xGetHorseSpeed = function () {
+        return Math.max( this.horse.speed - this.xGetEquipmentWeight() , this.horse.speed * .35 );
+        };
+      xPlayer.prototype.xGetHorseEndurance = function () {
+        return this.horse.endurance - ( this.xGetEquipmentWeight() * round );
+        };
+      xPlayer.prototype.xShowStats = function () {
+        document.write( 'player\n' );
+        document.write( ( 'knight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.knight ) + '\n' );
+        document.write( ( 'chest' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.chest ) + '\n' );
+        document.write( ( 'helmet' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.helmet ) + '\n' );
+        document.write( ( 'lance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.lance ) + '\n' );
+        document.write( ( 'leg' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.leg ) + '\n' );
+        document.write( ( 'shield' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.equipment.shield ) + '\n' );
+        document.write( ( 'horse' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + JSON.stringify( this.horse ) + '\n' );
+        document.write( ( 'xGetEquipmentWeight' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetEquipmentWeight().toFixed( 2 ) + '\n' );
+        document.write( ( 'xGetPlayerDefense' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerDefense().toFixed( 2 ) + '\n' );
+        document.write( ( 'xGetPlayerEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerEndurance().toFixed( 2 ) + '\n' );
+        document.write( ( 'xGetPlayerPower' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetPlayerPower().toFixed( 2 ) + '\n' );
+        document.write( ( 'xGetHorseSpeed' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetHorseSpeed().toFixed( 2 ) + '\n' );
+        document.write( ( 'xGetHorseEndurance' + ' '.repeat( 30 ) ).slice( 0 , 30 ) + ': ' + this.xGetHorseEndurance().toFixed( 2 ) + '\n' );
+        document.write( '\n' );
+        };
+
+      function xEquipment() {};
+
+      function xHorse() {};
+
+      var player1 = new xPlayer();
+      player1.xShowStats();
+      var player2 = new xPlayer();
+      player2.xShowStats();
+
+      </script>
+    </head>
+  <body>
+  </body>
+</html>
