@@ -18,17 +18,14 @@
     }
 
   function xToHyperLink( string ) {
-    return encodeURI( string.replace( / /g , '\+' ) ).replace( /'/g , '\\\'' );
+    return encodeURI( string.replace( / /g , '\+' ) ).replace( /'/g , '%27' );
     }
 
   STORAGE = JSON.parse( localStorage.Shows );
 
   links = [].slice.call( document.getElementsByClassName( 'link' ) );
-  title = location.hash.slice( 1 );
-  urls = [
-    [] ,
-    []
-    ];
+  title = decodeURI( location.hash.slice( 1 ) );
+  urls = [ [] , [] ];
     urls[ 0 ].push( 'http://www.alluc.ee/stream/REPLACE' );
     urls[ 1 ].push( 'http://www.alluc.ee/stream/REPLACE' );
     urls[ 0 ].push( 'https://www.amazon.com/gp/product/REPLACE' );
@@ -39,8 +36,8 @@
     urls[ 1 ].push( 'http://www.imdb.com/find?q=REPLACE&s=tt&ttype=tv&ref_=fn_tv' );
     urls[ 0 ].push( 'http://www.netflix.com/title/REPLACE' );
     urls[ 1 ].push( 'http://www.netflix.com/search/REPLACE' );
-    urls[ 0 ].push( 'http://xwatchseries.to/serie/REPLACE' );
-    urls[ 1 ].push( 'http://xwatchseries.to/search/REPLACE' );
+    urls[ 0 ].push( 'http://dwatchseries.to/serie/REPLACE' );
+    urls[ 1 ].push( 'http://dwatchseries.to/search/REPLACE' );
     urls[ 0 ].push( 'http://en.wikipedia.org/wiki/REPLACE' );
     urls[ 1 ].push( 'http://en.wikipedia.org/w/index.php?search=TV%20intitle:"REPLACE"&title=Special%3ASearch&fulltext=1' );
 
