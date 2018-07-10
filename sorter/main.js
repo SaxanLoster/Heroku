@@ -9,8 +9,8 @@ var E = {
 var presets = [
   { title: "None" , value: "" },
   { title: "Fast Food" , value: "In N Out,McDonalds,Carl\'s Jr,Subway,Gandolfos,The Deli,Popeyes,Tommy\'s,The Hat,Wingstop,Jack In The Box,Del Taco,Wendy's,Burger King,Chipotle,Panda Express" },
-  { title: "Rainbow Six Attackers" , value: "ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,FUZE,GLAZ,HIBANA,IQ,JACKAL,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH,YING" },
-  { title: "Rainbow Six Defenders" , value: "BANDIT,CASTLE,CAVEIRA,DOC,ECHO,ELA,FROST,JAEGER,KAPKAN,LESION,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE" },
+  { title: "Rainbow Six Attackers" , value: "ASH,BLACKBEARD,BLITZ,BUCK,CAPITAO,DOKKAEBI,FINKA,FUZE,GLAZ,HIBANA,IQ,JACKAL,LION,MONTAGNE,SLEDGE,THATCHER,THERMITE,TWITCH,YING,ZOFIA" },
+  { title: "Rainbow Six Defenders" , value: "ALIBI,BANDIT,CASTLE,CAVEIRA,DOC,ECHO,ELA,FROST,JAEGER,KAPKAN,LESION,MAESTRO,MIRA,MUTE,PULSE,ROOK,SMOKE,TACHANKA,VALKYRIE,VIGIL" },
   ];
 
 if ( !localStorage.sorter ) localStorage.sorter = "[]";
