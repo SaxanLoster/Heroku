@@ -41,6 +41,7 @@ table {
 
 tr {
   height: 30px;
+  width: 100vw;
   }
 
 tr:before {
@@ -69,9 +70,14 @@ input {
   height: 28px;
   padding: 2px 5px;
   text-align: left;
-  width: 95%;
+  width: 100%;
   }
 
-.centered {
+.level , .season , .episode {
   text-align: center;
+  width: 50px;
+  }
+
+.title {
+  width: 300px;
   }

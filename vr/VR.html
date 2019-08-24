@@ -1,0 +1,18 @@
+<html>
+  <script src="//cdn.delight-vr.com/latest/dl8-365e7d2a4313fc396228599311028907ae467bc9.js" async></script>
+  <title>VR</title>
+  <head>
+    </head>
+  <body>
+    <script>
+      let e = document.createElement( 'dl8-video' );
+      let s = document.createElement( 'source' );
+      let p = location.search.slice( 1 ).split( '=' )[ 1 ];
+      e.title = decodeURIComponent( p );
+      e.setAttribute( 'format' , 'STEREO_180_LR' );
+      s.src = "file:///D:/Other/Opera/" + p;
+      e.appendChild( s );
+      document.body.appendChild( e );
+      </script>
+    </body>
+  <html>
