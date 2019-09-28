@@ -8,7 +8,7 @@ var BOOLEANS , CLICKINFO , COLSINFO , ELEMENTS , MAININFO , ROWSINFO , SHOWINFO 
 
 BOOLEANS = {
   debugmode: !true ,
-  lefttoright: !true ,
+  lefttoright: true ,
   minimunsize: !true ,
   maintainsize: !true ,
   permanent: !true ,
@@ -236,13 +236,13 @@ function xOnConfigureClick() {
       break;
     case 1:
       BOOLEANS.lefttoright = !BOOLEANS.lefttoright;
-      BOOLEANS.maintainsize = !true;
+      // BOOLEANS.maintainsize = !true;
       xMainDisplayFunctions();
       break;
     case 2:
       if ( SHOWINFO.hidden.length > 0 ) {
         SHOWINFO.hidden.pop().classList.remove( 'hide' );
-        BOOLEANS.maintainsize = !true;
+        // BOOLEANS.maintainsize = !true;
         }
       xMainDisplayFunctions();
       break;
@@ -250,6 +250,7 @@ function xOnConfigureClick() {
   }
 
 function xOnLevelClick() {
+  var temp = false;
   switch ( event.button ) {
     case 0:
       this.classList.toggle( 'active' );
@@ -265,8 +266,10 @@ function xOnLevelClick() {
           xEditStyle( '#shows .perm' , 'display' , 'block' );
           }
         }
+      temp = BOOLEANS.maintainsize;
       BOOLEANS.maintainsize = !true;
       xMainDisplayFunctions();
+      BOOLEANS.maintainsize = temp;
       break;
     case 1:
       xHideAllShows();
@@ -275,16 +278,20 @@ function xOnLevelClick() {
         xEditStyle( '#shows .perm' , 'display' , '' );
         }
       xEditStyle( '#shows .' + this.id , 'display' , 'block' );
+      temp = BOOLEANS.maintainsize;
       BOOLEANS.maintainsize = !true;
       xMainDisplayFunctions();
+      BOOLEANS.maintainsize = temp;
       break;
     case 2:
       xHideAllShows();
       if ( !BOOLEANS.permanent ) {
         xEditStyle( '#shows .perm' , 'display' , 'block' );
         }
+      temp = BOOLEANS.maintainsize;
       BOOLEANS.maintainsize = !true;
       xMainDisplayFunctions();
+      BOOLEANS.maintainsize = temp;
       break;
       }
   }

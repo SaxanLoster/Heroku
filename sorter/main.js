@@ -14,9 +14,13 @@ var presets = [
   ];
 
 if ( !localStorage.sorter ) localStorage.sorter = "[]";
-presets = presets.concat( JSON.parse( localStorage.sorter ) );
+JSON.parse( localStorage.sorter ).forEach( function ( v ) {
+  let i = presets.findIndex( vv => vv.title == v.title );
+  if ( i >= 0 ) presets[ i ] = v;
+  else presets.push( v );
+  } );
 
-presets.forEach( function( v ) {
+presets.filter( ( v , i , a ) => a.findIndex( vv => vv.title == v.title ) == i ).forEach( function( v ) {
   var e = document.createElement( 'option' );
   e.value = v.value;
   e.textContent = v.title;
