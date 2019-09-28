@@ -30,9 +30,7 @@ E.preset.addEventListener( 'change' , function( e ) {
 var gHigh , gIndex1 , gIndex2 , gList , gLow , gPivot , gStack , gTitle;
 
 var xSetResults = function () {
-  console.log( 'xSetResults' );
   while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
-  E.resultbox.classList.remove( 'sorting' );
   var e = document.createElement( 'input' );
   e.placeholder = 'Title';
   e.value = gTitle;
@@ -62,90 +60,61 @@ var xSwap = function ( v1 , v2 ) {
   gList[ v2 ] = t;
   };
 var xSort = function ( low , high ) {
-  console.log( 'xSort' , low , high );
   gHigh = high;
   gIndex1 = low - 1;
   gIndex2 = low
   gLow = low;
   gPivot = Math.floor( ( gHigh + gLow ) / 2 );
+  // gPivot = high;
   if ( gIndex1 === gPivot ) gIndex1++;
   if ( gIndex2 === gPivot ) gIndex2++;
-  while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
-  E.fragment = document.createDocumentFragment();
-  for ( let i = gLow ; i <= gHigh ; i++ ) {
-    if ( i !== gPivot ) xSetCompare( gPivot , i );
-    }
-  E.resultbox.appendChild( E.fragment );
+  xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
   }
 var xPopStack = function () {
-  console.log( 'xPopStack' , gStack.length );
   var s;
   do {
     s = gStack.pop();
-    if ( s && s[ 0 ] >= s[ 1 ] ) s = null;
+    if ( s[ 0 ] >= s[ 1 ] ) s = null;
     } while ( gStack.length > 0 && !s )
   if ( s ) xSort( s[ 0 ] , s[ 1 ] );
   else xSetResults();
   };
 var xSetCompare = function ( v1 , v2 ) {
-  let cn = ( '000' + v1 ).slice( -3 ) + '-' + ( '000' + v2 ).slice( -3 );
-  let eh = document.createElement( 'div' );
-    eh.className = 'comparison';
-    eh.id = cn;
-  let r1 = document.createElement( 'input' );
-    r1.id = 'radio' + cn + '=' + ( '000' + v1 ).slice( -3 );
-    r1.name = cn;
-    r1.type = 'radio';
-    r1.value = v1;
-  let l1 = document.createElement( 'label' );
-    l1.htmlFor = 'radio' + cn + '=' + ( '000' + v1 ).slice( -3 );
-    l1.textContent = gList[ v1 ];
-  let r2 = document.createElement( 'input' );
-    r2.id = 'radio' + cn + '=' + ( '000' + v2 ).slice( -3 );
-    r2.name = cn;
-    r2.type = 'radio';
-    r2.value = v2;
-  let l2 = document.createElement( 'label' );
-    l2.htmlFor = 'radio' + cn + '=' + ( '000' + v2 ).slice( -3 );
-    l2.textContent = gList[ v2 ];
-
-  eh.appendChild( r1 );
-  eh.appendChild( l1 );
-  eh.appendChild( document.createElement( 'div' ) );
-  eh.appendChild( r2 );
-  eh.appendChild( l2 );
-  eh.addEventListener( 'click' , xClickEvent );
-  E.fragment.appendChild( eh );
+  while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
+  var e = document.createElement( 'button' );
+  e.textContent = v1;
+  e.className = 'choice';
+  e.addEventListener( 'click' , function ( event ) {
+    gIndex1++;
+    if ( gIndex1 === gPivot ) gIndex1++;
+    if ( gIndex1 !== gIndex2 ) xSwap( gIndex1 , gIndex2 );
+    xClickEvent();
+    } );
+  E.resultbox.appendChild( e );
+  var e = document.createElement( 'button' );
+  e.textContent = v2;
+  e.className = 'choice';
+  e.addEventListener( 'click' , function ( event ) {
+    xClickEvent()
+    } );
+  E.resultbox.appendChild( e );
   }
 var xClickEvent = function () {
-  let list = [].slice.call( document.querySelectorAll( '.comparison' ) );
-  let checked = [].slice.call( document.querySelectorAll( '.comparison > input:checked' ) );
-  if ( checked.length == list.length ) {
-    console.log( list , checked )
-    while( E.resultbox.firstChild ) E.resultbox.removeChild( E.resultbox.firstChild );
-    let newlist = [ gList[ gPivot ] ];
-    let newpivot = gLow;
-    list.forEach( function ( v , i ) {
-      let g = v.id.split( '-' ).map( vv => parseInt( vv.replace( /^0{0,2}/g , '' ) ) );
-      let s = parseInt( checked[ i ].value.replace( /^0{0,2}/g , '' ) );
-      console.log( g , s );
-      if ( s == g[ 0 ] ) newlist.push( gList[ g[ 1 ] ] );
-      else {
-        newlist.unshift( gList[ g[ 1 ] ] );
-        newpivot++;
-        }
-      } );
-    console.log( newlist );
-    for ( let i = gLow , j = 0 ; i <= gHigh ; i++ , j++ ) gList[ i ] = newlist[ j ];
-    console.log( gHigh , newpivot , gLow );
-    if ( gHigh - 1 > newpivot ) gStack.push( [ newpivot + 1 , gHigh ] );
-    if ( gLow  + 1 < newpivot ) gStack.push( [ gLow  , newpivot - 1 ] );
+  gIndex2++;
+  if ( gIndex2 == gPivot ) gIndex2++;
+  if ( gIndex2 <= gHigh ) {
+    xSetCompare( gList[ gIndex2 ] , gList[ gPivot ] );
+    }
+  else {
+    if ( gIndex1 > gPivot ) gIndex1--;
+    xSwap( gIndex1 + 1 , gPivot );
+    if ( gLow !== gIndex1 + 2 ) gStack.push( [ gIndex1 + 2 , gHigh ] );
+    if ( gHigh !== gIndex1 ) gStack.push( [ gLow , gIndex1 ] );
     xPopStack();
     }
   };
 
 E.sortbutton.addEventListener( 'click' , function ( e ) {
-  E.resultbox.classList.add( 'sorting' );
   gList = E.list.value.split( '\n' );
   gStack = [ [ 0 , gList.length - 1 ] ];
   gTitle = E.preset.selectedOptions[ 0 ].textContent;

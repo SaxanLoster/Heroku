@@ -62,46 +62,11 @@ body {
   margin-left: 3px;
   width: calc( 75vw - 22px );
   }
-#resultbox.sorting {
-  overflow: scroll;
-  flex-flow: row wrap;
-  }
 
-#resultbox .comparison {
-  border: 1px solid #3f3f3f;
-  margin: 5px;
-  min-width: 200px;
-  height: 200px;
+#resultbox .choice {
   flex: 1 1 0;
-  display: flex;
-  flex-flow: column nowrap;
-  position: relative;
-  }
-#resultbox .comparison input {
-  display: none;
-  }
-#resultbox .comparison label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 24px;
   margin: 5px;
-  width: calc( 100% - 10px );
-  height: 90px;
-  }
-#resultbox .comparison input:checked + label {
-  background: #3f3f3f;
-  }
-#resultbox .comparison div {
-  background: #3f3f3f;
-  height: 1px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: calc( 100% - 10px );
-  margin: auto;
   }
 
 #resultbox input.result {
