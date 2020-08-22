@@ -1,0 +1,79 @@
+<html>
+  <title>New Tab</title>
+  <head>
+    <link rel="icon" href="D:\Documents\HTML\NewTab.png" type="image/png"/>
+    <style>
+      ::-webkit-scrollbar{display:none}
+      *{box-sizing:border-box;color:#ffffff;font-family:serif;font-size:0;font-variant:small-caps;letter-spacing:3px;margin:0;overflow:hidden;text-align:center}
+      body{
+        background-color:#000;
+        display:flex;
+        flex-flow:column nowrap;
+        height:100%;
+        margin:auto;
+        padding:5px;
+        width:100%;
+        }
+      div {
+        /* height: 30px; */
+        width: 100vw;
+        }
+      body.active div {
+        display: none;
+        }
+      body.active div.active {
+        display: block;
+        }
+      h1 {
+        color: #fff;
+        height: 30px;
+        font-size: 20px;
+        }
+      video {
+        /* height: calc( 100% - 30px ); */
+        width: 100vw;
+        height: calc( 100vh - 30px );
+        }
+      </style>
+      <style id="style"></style>
+    </head>
+  <body>
+    <script>
+        let vids = [
+          'Mike Highlight Reel 1.mp4',
+          'Mike Highlight Reel 2.mp4',
+          'Mike Highlight Reel 3.mp4',
+          ];
+
+        let docfrag = document.createDocumentFragment();
+        vids.forEach( v => {
+          let h = document.createElement( 'div' );
+          let t = document.createElement( 'h1' );
+          docfrag.appendChild( h );
+          h.appendChild( t );
+
+          t.textContent = v.split( '/' ).reverse()[ 0 ].split( '.' )[ 0 ];
+          t.vidinfo = v;
+
+          t.addEventListener( 'click' , function ( e ) {
+            let m = this.parentNode.querySelector( 'video' );
+            if ( m ) {
+              m.parentNode.classList.remove( 'active' );
+              m.parentNode.removeChild( m );
+              document.body.classList.remove( 'active' );
+              }
+            else {
+              m = document.createElement( 'video' );
+              m.src = this.vidinfo;
+
+              this.parentNode.appendChild( m );
+              document.body.classList.add( 'active' );
+              m.parentNode.classList.add( 'active' );
+              }
+            } );
+          } );
+
+        document.body.appendChild( docfrag );
+        </script>
+    </body>
+  <html>
