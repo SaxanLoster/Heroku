@@ -65,6 +65,7 @@
             else {
               m = document.createElement( 'video' );
               m.src = this.vidinfo;
+              m.controls = true;
 
               this.parentNode.appendChild( m );
               document.body.classList.add( 'active' );
