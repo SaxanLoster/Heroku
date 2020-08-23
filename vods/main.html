@@ -3,16 +3,28 @@
   <head>
     <link rel="icon" href="D:\Documents\HTML\NewTab.png" type="image/png"/>
     <style>
-      ::-webkit-scrollbar{display:none}
-      *{box-sizing:border-box;color:#ffffff;font-family:serif;font-size:0;font-variant:small-caps;letter-spacing:3px;margin:0;overflow:hidden;text-align:center}
+      ::-webkit-scrollbar{
+        display:none;
+        }
+      * {
+        box-sizing: border-box;
+        color: #ffffff;
+        /* font-family: serif; */
+        font-size: 0;
+        /* font-variant: small-caps; */
+        letter-spacing: 3px;
+        margin: 0;
+        overflow: hidden;
+        /* text-align: center; */
+        }
       body{
-        background-color:#000;
-        display:flex;
-        flex-flow:column nowrap;
-        height:100%;
-        margin:auto;
-        padding:5px;
-        width:100%;
+        background-color: #000;
+        display: flex;
+        flex-flow: column nowrap;
+        height: 100%;
+        margin: auto;
+        padding: 0px;
+        width: 100%;
         }
       div {
         /* height: 30px; */
@@ -28,8 +40,9 @@
         color: #fff;
         height: 30px;
         font-size: 20px;
+        white-space: pre;
         }
-      video {
+      iframe {
         /* height: calc( 100% - 30px ); */
         width: 100vw;
         height: calc( 100vh - 30px );
@@ -40,11 +53,208 @@
   <body>
     <script>
         let vids = [
-          'Mike\'s Mollies 1.mp4',
-          'Mike\'s Mollies 2.mp4',
-          'Spray And Pray 1.mp4',
-          'Spray And Pray 2.mp4',
+          {
+            "name": "20200614 gatsby lies to colby",
+            "link": "OI57tdSQnXI"
+            },
+          {
+            "name": "20200614 colby long 4k",
+            "link": "7P65FEIx4io"
+            },
+          {
+            "name": "20200614 colby flick",
+            "link": "o8s59DsV2pE"
+            },
+          {
+            "name": "20200613 steven 2v1",
+            "link": "QjEd6PuKE08"
+            },
+          {
+            "name": "20200613 saxan sloppy 3k",
+            "link": "dICW5uFM5HA"
+            },
+          {
+            "name": "20200612 mike stop that",
+            "link": "G-MiinaSeQY"
+            },
+          {
+            "name": "20200612 mike 3v1",
+            "link": "Qi8WSx8Kqxw"
+            },
+          {
+            "name": "20200612 colby buzzsaw",
+            "link": "XIaV-ybK_WY"
+            },
+          {
+            "name": "20200610 saxan 4k",
+            "link": "eFy13noE1rE"
+            },
+          {
+            "name": "20200610 saxan 3k",
+            "link": "bzqeDcQNFp4"
+            },
+          {
+            "name": "20200610 mike fail",
+            "link": "UcCTEZ0YsFo"
+            },
+          {
+            "name": "20200606 saxan triple",
+            "link": "tiwNI254HsY"
+            },
+          {
+            "name": "20200606 mike failure",
+            "link": "U4NavCKc9CQ"
+            },
+          {
+            "name": "20200606 mike 1v3",
+            "link": "4jRefB2LyVI"
+            },
+          {
+            "name": "20200606 mike 1v2",
+            "link": "auRKUiZPs7E"
+            },
+          {
+            "name": "20200603 saxan two good rounds",
+            "link": "0daZ-pdPQw0"
+            },
+          {
+            "name": "20200603 saxan marshall flick",
+            "link": "2gJpHzumkLE"
+            },
+          {
+            "name": "20200603 random kangroos are op",
+            "link": "YzbpP8ozcww"
+            },
+          {
+            "name": "20200603 mike triple 2",
+            "link": "CA6iwCHqKIw"
+            },
+          {
+            "name": "20200603 mike triple 1",
+            "link": "5qgXtdp0e0g"
+            },
+          {
+            "name": "20200603 mike stinger",
+            "link": "XVkxBjNJ6k0"
+            },
+          {
+            "name": "20200603 colby 1v3",
+            "link": "drbnu47Wzn8"
+            },
+          {
+            "name": "202005XX steven ouch",
+            "link": "3p1G7MJrLvE"
+            },
+          {
+            "name": "202005XX steven jett carry",
+            "link": "m9mOVqtiqm8"
+            },
+          {
+            "name": "202005XX steven coming to help",
+            "link": "vJT2qnPD2ic"
+            },
+          {
+            "name": "202005XX saxan standing my ground",
+            "link": "jWzENjqAwI0"
+            },
+          {
+            "name": "202005XX saxan nothing personal kid",
+            "link": "XaZIX8qegMI"
+            },
+          {
+            "name": "202005XX saxan jet ult",
+            "link": "IgARZdefJrE"
+            },
+          {
+            "name": "202005XX saxan jet ult 2",
+            "link": "V2qpKQTM4ds"
+            },
+          {
+            "name": "202005XX saxan genie",
+            "link": "C-XZNWzxcjU"
+            },
+          {
+            "name": "202005XX saxan flick",
+            "link": "iYNYptgf7jQ"
+            },
+          {
+            "name": "202005XX saxan finally doing counterstrafing right",
+            "link": "qhXhp-BHufk"
+            },
+          {
+            "name": "202005XX saxan easy 3k",
+            "link": "v_8tQi5ghjM"
+            },
+          {
+            "name": "202005XX saxan clutch 3k flick",
+            "link": "E9pusqqoV68"
+            },
+          {
+            "name": "202005XX saxan cc hell",
+            "link": "_EsfqjDOzUs"
+            },
+          {
+            "name": "202005XX saxan bulldog 3k",
+            "link": "cOPyRWyP_94"
+            },
+          {
+            "name": "202005XX saxan bucky",
+            "link": "_TSgr_Bzfpg"
+            },
+          {
+            "name": "202005XX saxan boom",
+            "link": "RMmkVkw4clM"
+            },
+          {
+            "name": "202005XX saxan almost clutch 3v1",
+            "link": "ZYJV7PwIpOc"
+            },
+          {
+            "name": "202005XX saxan 4k defense",
+            "link": "IEC8f2toHm4"
+            },
+          {
+            "name": "202005XX random the worst aim ever",
+            "link": "BzoQhW7PiYo"
+            },
+          {
+            "name": "202005XX mike with the flick",
+            "link": "wDAxmhp335A"
+            },
+          {
+            "name": "202005XX mike flick",
+            "link": "vKTCUA9tekg"
+            },
+          {
+            "name": "202005XX mike defense",
+            "link": "N5gFx6TWZi0"
+            },
+          {
+            "name": "202005XX mike 4v1",
+            "link": "NK-gLiFl1UI"
+            },
+          {
+            "name": "202005XX kayla welcome to my w",
+            "link": "-Nk6klbHCVg"
+            },
+          {
+            "name": "202005XX gatsby needs more op training",
+            "link": "5s-sUXK1Ul0"
+            },
+          {
+            "name": "202005XX gatsby bucky",
+            "link": "y2kloDLCkLY"
+            },
+          {
+            "name": "202005XX gatsby 3v1",
+            "link": "n7X7UVHU5OU"
+            },
+          {
+            "name": "202005XX gatsby 2v1",
+            "link": "ieDQic6-ZWc"
+            },
           ];
+
 
         let docfrag = document.createDocumentFragment();
         vids.forEach( v => {
@@ -53,24 +263,27 @@
           docfrag.appendChild( h );
           h.appendChild( t );
 
-          t.textContent = v.split( '/' ).reverse()[ 0 ].split( '.' )[ 0 ];
-          t.vidinfo = v;
+          t.textContent = v.name;
 
           t.addEventListener( 'click' , function ( e ) {
-            let m = this.parentNode.querySelector( 'video' );
+            let m = document.body.querySelector( 'iframe' );
             if ( m ) {
-              m.parentNode.classList.remove( 'active' );
-              m.parentNode.removeChild( m );
+              this.parentNode.classList.remove( 'active' );
               document.body.classList.remove( 'active' );
+              document.body.removeChild( m );
               }
             else {
-              m = document.createElement( 'video' );
-              m.src = this.vidinfo;
+              m = document.createElement( 'iframe' );
+              m.src = 'https://www.youtube.com/embed/' + v.link;
               m.controls = true;
+              m.width = null;
+              m.height = null;
+              m.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+              m.allowfullscreen = true;
 
-              this.parentNode.appendChild( m );
+              this.parentNode.classList.add( 'active' );
               document.body.classList.add( 'active' );
-              m.parentNode.classList.add( 'active' );
+              document.body.appendChild( m );
               }
             } );
           } );
