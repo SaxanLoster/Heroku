@@ -8,44 +8,57 @@
         }
       * {
         box-sizing: border-box;
-        color: #ffffff;
-        /* font-family: serif; */
+        background-color: #000;
+        color: #9f9f9f;
         font-size: 0;
-        /* font-variant: small-caps; */
         letter-spacing: 3px;
         margin: 0;
-        /* overflow: hidden; */
-        /* text-align: center; */
+        }
+      html {
+        font-size: 100%;
         }
       body{
-        background-color: #000;
-        display: block;
+        display: flex;
         flex-flow: column nowrap;
         height: 100%;
         margin: auto;
         padding: 0px;
         width: 100%;
         }
-      div {
-        /* height: 30px; */
+      #searchbar {
+        background-color: #1f1f1f;
+        border-radius: 5px;
+        border: 1px solid #afafaf;
+        font-size: 1.5rem;
+        }
+      #videolist {
+        flex: 30px 1 1;
         width: 100vw;
         }
-      body.active div {
+      #videolist li {
+        color: #9f9f9f;
+        font-size: 1.25rem;
+        white-space: pre;
+        margin: .5em 0;
+        }
+      #videolist.active li {
         display: none;
         }
-      body.active div.active {
+      #videolist.active li.active {
         display: block;
         }
-      h1 {
-        color: #7f7f7f;
-        /* height: 20px; */
-        font-size: 20px;
-        padding: 2px 10px;
-        white-space: pre;
+      #videolist li.hide {
+        display: none;
+        }
+      #videolist li span {
+        font-size: 1em;
+        }
+      #videolist li span:hover {
+        background-color: #1f1f1f;
         }
       iframe {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         }
       a {
         display: none !important;
@@ -54,196 +67,209 @@
       <style id="style"></style>
     </head>
   <body>
+    <input id="searchbar" placeholder="Search Text"></div>
+    <ul id="videolist"></ul>
+
     <script>
-        let vids = [
-          { "name": "20200603 saxan two good rounds" , "link": "0daZ-pdPQw0" },
-          { "name": "202005XX gatsby 2v1" , "link": "ieDQic6-ZWc" },
-          { "name": "202005XX gatsby 3v1" , "link": "n7X7UVHU5OU" },
-          { "name": "202005XX gatsby bucky" , "link": "y2kloDLCkLY" },
-          { "name": "202005XX gatsby needs more op training" , "link": "5s-sUXK1Ul0" },
-          { "name": "202005XX mike 4v1" , "link": "NK-gLiFl1UI" },
-          { "name": "202005XX mike defense" , "link": "N5gFx6TWZi0" },
-          { "name": "202005XX random the worst aim ever" , "link": "BzoQhW7PiYo" },
-          { "name": "202005XX saxan 4k defense" , "link": "IEC8f2toHm4" },
-          { "name": "202005XX saxan almost clutch 3v1" , "link": "ZYJV7PwIpOc" },
-          { "name": "202005XX saxan boom" , "link": "RMmkVkw4clM" },
-          { "name": "202005XX saxan bucky" , "link": "_TSgr_Bzfpg" },
-          { "name": "202005XX saxan bulldog 3k" , "link": "cOPyRWyP_94" },
-          { "name": "202005XX saxan cc hell" , "link": "_EsfqjDOzUs" },
-          { "name": "202005XX saxan clutch 3k flick" , "link": "E9pusqqoV68" },
-          { "name": "202005XX saxan easy 3k" , "link": "v_8tQi5ghjM" },
-          { "name": "202005XX saxan finally doing counterstrafing right" , "link": "qhXhp-BHufk" },
-          { "name": "202005XX saxan genie" , "link": "C-XZNWzxcjU" },
-          { "name": "202005XX saxan jet ult 2" , "link": "V2qpKQTM4ds" },
-          { "name": "202005XX saxan jet ult" , "link": "IgARZdefJrE" },
-          { "name": "202005XX saxan nothing personal kid" , "link": "XaZIX8qegMI" },
-          { "name": "202005XX saxan standing my ground" , "link": "jWzENjqAwI0" },
-          { "name": "202005XX steven coming to help" , "link": "vJT2qnPD2ic" },
-          { "name": "202005XX steven jett carry" , "link": "m9mOVqtiqm8" },
-          { "name": "202005XX steven ouch" , "link": "3p1G7MJrLvE" },
-          { "name": "20200603 colby 1v3" , "link": "drbnu47Wzn8" },
-          { "name": "20200603 mike stinger" , "link": "XVkxBjNJ6k0" },
-          { "name": "20200603 mike triple 1" , "link": "5qgXtdp0e0g" },
-          { "name": "20200603 mike triple 2" , "link": "CA6iwCHqKIw" },
-          { "name": "20200603 random kangroos are op" , "link": "YzbpP8ozcww" },
-          { "name": "20200606 mike 1v2" , "link": "auRKUiZPs7E" },
-          { "name": "20200606 mike 1v3" , "link": "4jRefB2LyVI" },
-          { "name": "20200606 mike failure" , "link": "U4NavCKc9CQ" },
-          { "name": "20200606 saxan triple" , "link": "tiwNI254HsY" },
-          { "name": "20200610 mike fail" , "link": "UcCTEZ0YsFo" },
-          { "name": "20200610 saxan 3k" , "link": "bzqeDcQNFp4" },
-          { "name": "20200610 saxan 4k" , "link": "eFy13noE1rE" },
-          { "name": "20200612 mike 3v1" , "link": "Qi8WSx8Kqxw" },
-          { "name": "Lazy reaction" , "link": "G-MiinaSeQY" },
-          { "name": "Warming up to the headshots" , "link": "dICW5uFM5HA" },
-          { "name": "LMG" , "link": "QjEd6PuKE08" },
-          { "name": "20200614 colby long 4k" , "link": "7P65FEIx4io" },
-          { "name": "20200614 gatsby lies to colby" , "link": "OI57tdSQnXI" },
-          { "name": "Flick" , "link": "2gJpHzumkLE" },
-          { "name": "Flick" , "link": "o8s59DsV2pE" },
-          { "name": "Flick" , "link": "vKTCUA9tekg" },
-          { "name": "Flick" , "link": "wDAxmhp335A" },
-          { "name": "Flick" , "link": "XIaV-ybK_WY" },
-          { "name": "Marshall" , "link": "iYNYptgf7jQ" },
-          { "name": "Welcome ta..." , "link": "-Nk6klbHCVg" },
+      let vids = [
+        { "name": "202005XX gatsby 2v1" , "link": "ieDQic6-ZWc" },
+        { "name": "202005XX gatsby 3v1" , "link": "n7X7UVHU5OU" },
+        { "name": "202005XX gatsby bucky" , "link": "y2kloDLCkLY" },
+        { "name": "202005XX gatsby needs more op training" , "link": "5s-sUXK1Ul0" },
+        { "name": "202005XX kayla welcome to my w..." , "link": "-Nk6klbHCVg" },
+        { "name": "202005XX mike 4v1" , "link": "NK-gLiFl1UI" },
+        { "name": "202005XX mike defense" , "link": "N5gFx6TWZi0" },
+        { "name": "202005XX mike flick" , "link": "vKTCUA9tekg" },
+        { "name": "202005XX mike with the flick" , "link": "wDAxmhp335A" },
+        { "name": "202005XX random the worst aim ever" , "link": "BzoQhW7PiYo" },
+        { "name": "202005XX saxan 4k defense" , "link": "IEC8f2toHm4" },
+        { "name": "202005XX saxan almost clutch 3v1" , "link": "ZYJV7PwIpOc" },
+        { "name": "202005XX saxan boom" , "link": "RMmkVkw4clM" },
+        { "name": "202005XX saxan bucky" , "link": "_TSgr_Bzfpg" },
+        { "name": "202005XX saxan bulldog 3k" , "link": "cOPyRWyP_94" },
+        { "name": "202005XX saxan cc hell" , "link": "_EsfqjDOzUs" },
+        { "name": "202005XX saxan clutch 3k flick" , "link": "E9pusqqoV68" },
+        { "name": "202005XX saxan easy 3k" , "link": "v_8tQi5ghjM" },
+        { "name": "202005XX saxan finally doing counterstrafing right" , "link": "qhXhp-BHufk" },
+        { "name": "202005XX saxan flick" , "link": "iYNYptgf7jQ" },
+        { "name": "202005XX saxan genie" , "link": "C-XZNWzxcjU" },
+        { "name": "202005XX saxan jet ult 2" , "link": "V2qpKQTM4ds" },
+        { "name": "202005XX saxan jet ult" , "link": "IgARZdefJrE" },
+        { "name": "202005XX saxan nothing personal kid" , "link": "XaZIX8qegMI" },
+        { "name": "202005XX saxan standing my ground" , "link": "jWzENjqAwI0" },
+        { "name": "202005XX steven coming to help" , "link": "vJT2qnPD2ic" },
+        { "name": "202005XX steven jett carry" , "link": "m9mOVqtiqm8" },
+        { "name": "202005XX steven ouch" , "link": "3p1G7MJrLvE" },
+        { "name": "20200603 colby 1v3" , "link": "drbnu47Wzn8" },
+        { "name": "20200603 mike stinger" , "link": "XVkxBjNJ6k0" },
+        { "name": "20200603 mike triple 1" , "link": "5qgXtdp0e0g" },
+        { "name": "20200603 mike triple 2" , "link": "CA6iwCHqKIw" },
+        { "name": "20200603 random kangroos are op" , "link": "YzbpP8ozcww" },
+        { "name": "20200603 saxan marshall flick" , "link": "2gJpHzumkLE" },
+        { "name": "20200603 saxan two good rounds" , "link": "0daZ-pdPQw0" },
+        { "name": "20200606 mike 1v2" , "link": "auRKUiZPs7E" },
+        { "name": "20200606 mike 1v3" , "link": "4jRefB2LyVI" },
+        { "name": "20200606 mike failure" , "link": "U4NavCKc9CQ" },
+        { "name": "20200606 saxan triple" , "link": "tiwNI254HsY" },
+        { "name": "20200610 mike fail" , "link": "UcCTEZ0YsFo" },
+        { "name": "20200610 saxan 3k" , "link": "bzqeDcQNFp4" },
+        { "name": "20200610 saxan 4k" , "link": "eFy13noE1rE" },
+        { "name": "20200612 colby buzzsaw" , "link": "XIaV-ybK_WY" },
+        { "name": "20200612 mike 3v1" , "link": "Qi8WSx8Kqxw" },
+        { "name": "20200612 mike stop that" , "link": "G-MiinaSeQY" },
+        { "name": "20200612 sawyer 3v1" , "link": "kHKbd2RsbCE" },
+        { "name": "20200612 sawyer balls of steel" , "link": "3gnyczHpzck" },
+        { "name": "20200612 sawyer no fear" , "link": "S7nP476YA0I" },
+        { "name": "20200612 saxan 2k" , "link": "FWYwG1JMSMo" },
+        { "name": "20200612 saxan 2v1" , "link": "Z3K0M7URHng" },
+        { "name": "20200612 saxan 4k" , "link": "aWf5wSRMTXU" },
+        { "name": "20200612 saxan awp" , "link": "dPbyZ3M5vdk" },
+        { "name": "20200612 saxan good round" , "link": "KGozf3tRHiQ" },
+        { "name": "20200612 saxan marshall double" , "link": "JBDWmngcNS0" },
+        { "name": "20200612 saxan marshall" , "link": "PQDRRw4GqoU" },
+        { "name": "20200612 saxan one taps" , "link": "WVV_BtJBjfY" },
+        { "name": "20200612 saxan retake" , "link": "4jnRjravl10" },
+        { "name": "20200612 steven godmode" , "link": "VkUUgUXS_cE" },
+        { "name": "20200613 saxan 3k flawless" , "link": "8ld13wbheNI" },
+        { "name": "20200613 saxan 4k" , "link": "QrS13JXsJg8" },
+        { "name": "20200613 saxan sloppy 3k" , "link": "dICW5uFM5HA" },
+        { "name": "20200613 steven 2v1" , "link": "QjEd6PuKE08" },
+        { "name": "20200614 colby flick" , "link": "o8s59DsV2pE" },
+        { "name": "20200614 colby long 4k" , "link": "7P65FEIx4io" },
+        { "name": "20200614 gatsby lies to colby" , "link": "OI57tdSQnXI" },
+        { "name": "20200614 saxan long 4k" , "link": "Fi_DtVQdJnc" },
+        { "name": "20200618 gatsby wisdom" , "link": "mEB6MZBFxa0" },
+        { "name": "20200618 saxan 3k" , "link": "j67tMFqvSOg" },
+        { "name": "20200618 saxan getting flanked" , "link": "3uXSXmBixZ0" },
+        { "name": "20200618 saxan holding it down" , "link": "SvnPIXxemJg" },
+        { "name": "20200618 saxan op 4k" , "link": "QBTA_myurEA" },
+        { "name": "20200618 saxan pistol 4k" , "link": "J_sdbQkm9uQ" },
+        { "name": "20200619 gatsby 2v1" , "link": "Him1Amd34U0" },
+        { "name": "20200619 mike 2v1" , "link": "os-GESyVOJo" },
+        { "name": "20200619 mike long 4k" , "link": "8Oyj_6y5exA" },
+        { "name": "20200619 mike not great" , "link": "OfVGtYsXNys" },
+        { "name": "20200619 saxan 4k" , "link": "KhSUOrH72K4" },
+        { "name": "20200621 gatsby blind 2k" , "link": "BBj6TkBrz3k" },
+        { "name": "20200621 mike 3k" , "link": "i2LrG097O6I" },
+        { "name": "20200621 saxan awp" , "link": "dLcuc-YJU8I" },
+        { "name": "20200621 saxan marshall" , "link": "qDL3rplE0Do" },
+        { "name": "20200622 saxan 3k awp" , "link": "pN-X9ylQQo8" },
+        { "name": "20200622 saxan gatsby 2v5" , "link": "AM5Rz2gKZxM" },
+        { "name": "20200623 mike shorty god" , "link": "RcADaRA23Cc" },
+        { "name": "20200623 saxan jett 3v1" , "link": "icmbcshojNU" },
+        { "name": "20200625 mike 2v1" , "link": "uEeJTEFPQUc" },
+        { "name": "20200625 saxan 3k 2" , "link": "82AhLf7qaRU" },
+        { "name": "20200625 saxan 3k 3 followed by mike" , "link": "1pYImgLgNqo" },
+        { "name": "20200625 saxan 3k" , "link": "zuVQfwyTViU" },
+        { "name": "20200625 saxan 4k" , "link": "ToxoVpWWzi4" },
+        { "name": "20200625 saxan pistol 3k" , "link": "1d_-4Xp1rI0" },
+        { "name": "20200625 saxan so bad" , "link": "endW0cjjSmY" },
+        { "name": "20200626 mike spray and pray" , "link": "zzTl9bMrlvM" },
+        { "name": "20200626 saxan 3k" , "link": "VnObm4JNPwg" },
+        { "name": "20200626 saxan pistol 3k" , "link": "weM6TZwGJj8" },
+        { "name": "20200626 saxan teleporter" , "link": "rH9v0oFzE6I" },
+        { "name": "20200627 saxan alright triple" , "link": "cvkxdXEqCNg" },
+        { "name": "20200703 saxan almost worked" , "link": "GZvihkT69JI" },
+        { "name": "20200703 saxan mike ks bgm" , "link": "-NjUXS_2dCk" },
+        { "name": "20200703 saxan mikes revenge" , "link": "sCqPvo78r-k" },
+        { "name": "20200703 saxan pistol 3k" , "link": "y9otnMxppBc" },
+        { "name": "20200704 saxan mike tries to get me killed" , "link": "YCp_bQLVHz4" },
+        { "name": "20200704 saxan new crosshair triple" , "link": "nTrStuD3o9I" },
+        { "name": "20200709 saxan 2k bgm" , "link": "aZQJx1zO-Wk" },
+        { "name": "20200709 saxan 3v1" , "link": "evyaoXDCaT0" },
+        { "name": "20200709 saxan bad teammate bgm" , "link": "rV1vPZPWNqQ" },
+        { "name": "20200709 saxan jett things" , "link": "cAxITUBgVYY" },
+        { "name": "20200710 mike 10 iq play bgm" , "link": "KaW9awpvWXk" },
+        { "name": "20200710 mike spooky" , "link": "kSKdzCPhsOM" },
+        { "name": "20200710 mike wtf" , "link": "GOvjK07YXg8" },
+        { "name": "20200710 mike YOU LIKE THAT bgm" , "link": "etl26-UbLiI" },
+        { "name": "20200710 saxan 3k" , "link": "NfIFzq7nkEs" },
+        { "name": "20200710 saxan jett things" , "link": "9RS3i_zlre8" },
+        { "name": "20200712 saxan nice shooting" , "link": "fss6aCLbV9A" },
+        { "name": "20200712 saxan sniper" , "link": "43NQO13PhIE" },
+        { "name": "20200712 saxan wallbang" , "link": "0cR_NAOMYIc" },
+        { "name": "20200725 mike fails to defend his home" , "link": "w8vDWtbdBlI" },
+        { "name": "20200725 mike gets the flank" , "link": "0FxfNe4meSM" },
+        { "name": "20200725 mike tries his best" , "link": "FL_n8wZ0BOI" },
+        { "name": "20200725 random baddy" , "link": "zPhpYPR5yFs" },
+        { "name": "20200725 saxan deagle" , "link": "4CwD0JozA4A" },
+        { "name": "20200725 saxan dirty jumpshot" , "link": "ZuRskvvcMLo" },
+        { "name": "20200725 saxan marshall" , "link": "ivg53XoLe5Y" },
+        { "name": "20200725 saxan op raze ult" , "link": "3YKFb5ImK_o" },
+        { "name": "20200725 saxan op wallbang" , "link": "yTmE2BoBWQM" },
+        { "name": "20200725 saxan pistol round" , "link": "XSrRQRRml60" },
+        { "name": "20200725 saxan scout 3k" , "link": "1qDELAUBdAI" },
+        { "name": "20200725 saxan wallbang pistol" , "link": "CpGG_stACTM" },
+        { "name": "20200728 saxan inhouse 4k" , "link": "mfueao2vQ7A" },
+        { "name": "20200728 saxan inhouse op" , "link": "8-fYwEw3-Yg" },
+        { "name": "20200728 saxan trying" , "link": "EFqyvGtv-BI" },
+        { "name": "20200729 mike flick" , "link": "EmlhYmFsePA" },
+        { "name": "20200729 saxan flick" , "link": "8J1CFL9WJHQ" },
+        { "name": "20200730 mike spray transfer" , "link": "d6IvTeqnv-g" },
+        { "name": "20200730 random outsmarted" , "link": "_VHInV5qplk" },
+        { "name": "20200730 saxan clutch death" , "link": "jUzkFTUE4PI" },
+        { "name": "20200730 saxan headshots" , "link": "vxDPYwCPTow" },
+        { "name": "20200730 saxan knives" , "link": "lI9vS81Sj7A" },
+        { "name": "20200730 saxan op" , "link": "tnmCnNm3vVQ" },
+        { "name": "20200731 mike shot her out of the sky" , "link": "H3dFOVaQFPo" },
+        { "name": "20200731 mike smart plays" , "link": "WB4Li8pJPtU" },
+        { "name": "20200731 saxan flying" , "link": "_gubUCitcUk" },
+        { "name": "20200731 saxan hackerman" , "link": "cppBWJGpHTk" },
+        { "name": "20200731 saxan never trust mike" , "link": "f6sOYysUJNs" },
+        { "name": "20200731 saxan wild aim" , "link": "YzpMcR9xUoc" },
+        { "name": "20200801 saxan wallbang" , "link": "GvAykBRCnns" },
+        { "name": "20200802 gatsby wtf is happening" , "link": "3fOvQnDUf5k" },
+        { "name": "20200802 saxan 3k" , "link": "dW8PRutvjRY" },
+        { "name": "20200802 saxan penta" , "link": "rkfaOognpHc" },
+        { "name": "20200816 colby 2k" , "link": "WYX2Lpld6qs" },
+        ];
 
-          { "name": "20200627 saxan alright triple" , "link": "cvkxdXEqCNg" },
-          { "name": "20200626 saxan teleporter" , "link": "rH9v0oFzE6I" },
-          { "name": "20200626 saxan pistol 3k" , "link": "weM6TZwGJj8" },
-          { "name": "20200626 saxan 3k" , "link": "VnObm4JNPwg" },
-          { "name": "20200626 mike spray and pray" , "link": "zzTl9bMrlvM" },
-          { "name": "20200625 saxan so bad" , "link": "endW0cjjSmY" },
-          { "name": "20200625 saxan pistol 3k" , "link": "1d_-4Xp1rI0" },
-          { "name": "20200703 saxan mikes revenge" , "link": "sCqPvo78r-k" },
-          { "name": "20200703 saxan mike ks bgm" , "link": "-NjUXS_2dCk" },
-          { "name": "20200703 saxan almost worked" , "link": "GZvihkT69JI" },
-          { "name": "20200623 saxan jett 3v1" , "link": "icmbcshojNU" },
-          { "name": "20200623 mike shorty god" , "link": "RcADaRA23Cc" },
-          { "name": "20200622 saxan gatsby 2v5" , "link": "AM5Rz2gKZxM" },
-          { "name": "20200622 saxan 3k awp" , "link": "pN-X9ylQQo8" },
-          { "name": "20200621 saxan marshall" , "link": "qDL3rplE0Do" },
-          { "name": "20200625 saxan 4k" , "link": "ToxoVpWWzi4" },
-          { "name": "20200625 saxan 3k" , "link": "zuVQfwyTViU" },
-          { "name": "20200625 saxan 3k 3 followed by mike" , "link": "1pYImgLgNqo" },
-          { "name": "20200625 saxan 3k 2" , "link": "82AhLf7qaRU" },
-          { "name": "20200625 mike 2v1" , "link": "uEeJTEFPQUc" },
-          { "name": "20200618 saxan holding it down" , "link": "SvnPIXxemJg" },
-          { "name": "20200618 saxan getting flanked" , "link": "3uXSXmBixZ0" },
-          { "name": "20200618 saxan 3k" , "link": "j67tMFqvSOg" },
-          { "name": "20200618 gatsby wisdom" , "link": "mEB6MZBFxa0" },
-          { "name": "20200614 saxan long 4k" , "link": "Fi_DtVQdJnc" },
-          { "name": "20200621 saxan awp" , "link": "dLcuc-YJU8I" },
-          { "name": "20200621 mike 3k" , "link": "i2LrG097O6I" },
-          { "name": "20200621 gatsby blind 2k" , "link": "BBj6TkBrz3k" },
-          { "name": "20200619 saxan 4k" , "link": "KhSUOrH72K4" },
-          { "name": "20200619 mike not great" , "link": "OfVGtYsXNys" },
-          { "name": "20200619 mike long 4k" , "link": "8Oyj_6y5exA" },
-          { "name": "20200619 mike 2v1" , "link": "os-GESyVOJo" },
-          { "name": "20200619 gatsby 2v1" , "link": "Him1Amd34U0" },
-          { "name": "20200618 saxan pistol 4k" , "link": "J_sdbQkm9uQ" },
-          { "name": "20200618 saxan op 4k" , "link": "QBTA_myurEA" },
-          { "name": "20200612 sawyer no fear" , "link": "S7nP476YA0I" },
-          { "name": "20200612 sawyer balls of steel" , "link": "3gnyczHpzck" },
-          { "name": "20200612 sawyer 3v1" , "link": "kHKbd2RsbCE" },
-          { "name": "20200613 saxan 4k" , "link": "QrS13JXsJg8" },
-          { "name": "20200613 saxan 3k flawless" , "link": "8ld13wbheNI" },
-          { "name": "20200612 steven godmode" , "link": "VkUUgUXS_cE" },
-          { "name": "20200612 saxan retake" , "link": "4jnRjravl10" },
-          { "name": "20200612 saxan one taps" , "link": "WVV_BtJBjfY" },
-          { "name": "20200612 saxan marshall" , "link": "PQDRRw4GqoU" },
-          { "name": "20200612 saxan marshall double" , "link": "JBDWmngcNS0" },
-          { "name": "20200612 saxan good round" , "link": "KGozf3tRHiQ" },
-          { "name": "20200612 saxan awp" , "link": "dPbyZ3M5vdk" },
-          { "name": "20200612 saxan 4k" , "link": "aWf5wSRMTXU" },
-          { "name": "20200612 saxan 2v1" , "link": "Z3K0M7URHng" },
-          { "name": "20200612 saxan 2k" , "link": "FWYwG1JMSMo" },
+      let docfrag = document.createDocumentFragment();
+      vids.forEach( v => {
+        let li = document.createElement( 'li' );
+        let p = document.createElement( 'span' );
+        docfrag.appendChild( li );
+        li.appendChild( p );
 
-          { name: "20200731 saxan never trust mike" , link: "f6sOYysUJNs" },
-          { name: "20200731 saxan hackerman" , link: "cppBWJGpHTk" },
-          { name: "20200731 saxan flying" , link: "_gubUCitcUk" },
-          { name: "20200731 mike smart plays" , link: "WB4Li8pJPtU" },
-          { name: "20200816 colby 2k" , link: "WYX2Lpld6qs" },
-          { name: "20200802 saxan penta" , link: "rkfaOognpHc" },
-          { name: "20200802 saxan 3k" , link: "dW8PRutvjRY" },
-          { name: "20200802 gatsby wtf is happening" , link: "3fOvQnDUf5k" },
-          { name: "20200801 saxan wallbang" , link: "GvAykBRCnns" },
-          { name: "20200731 saxan wild aim" , link: "YzpMcR9xUoc" },
-          { name: "20200730 saxan clutch death" , link: "jUzkFTUE4PI" },
-          { name: "20200730 random outsmarted" , link: "_VHInV5qplk" },
-          { name: "20200730 mike spray transfer" , link: "d6IvTeqnv-g" },
-          { name: "20200729 saxan flick" , link: "8J1CFL9WJHQ" },
-          { name: "20200729 mike flick" , link: "EmlhYmFsePA" },
-          { name: "20200728 saxan trying" , link: "EFqyvGtv-BI" },
-          { name: "20200731 mike shot her out of the sky" , link: "H3dFOVaQFPo" },
-          { name: "20200730 saxan op" , link: "tnmCnNm3vVQ" },
-          { name: "20200730 saxan knives" , link: "lI9vS81Sj7A" },
-          { name: "20200730 saxan headshots" , link: "vxDPYwCPTow" },
-          { name: "20200725 saxan op raze ult" , link: "3YKFb5ImK_o" },
-          { name: "20200725 saxan marshall" , link: "ivg53XoLe5Y" },
-          { name: "20200725 saxan dirty jumpshot" , link: "ZuRskvvcMLo" },
-          { name: "20200725 saxan deagle" , link: "4CwD0JozA4A" },
-          { name: "20200728 saxan inhouse op" , link: "8-fYwEw3-Yg" },
-          { name: "20200728 saxan inhouse 4k" , link: "mfueao2vQ7A" },
-          { name: "20200725 saxan wallbang pistol" , link: "CpGG_stACTM" },
-          { name: "20200725 saxan scout 3k" , link: "1qDELAUBdAI" },
-          { name: "20200725 saxan pistol round" , link: "XSrRQRRml60" },
-          { name: "20200725 saxan op wallbang" , link: "yTmE2BoBWQM" },
-          { name: "20200712 saxan sniper" , link: "43NQO13PhIE" },
-          { name: "20200712 saxan nice shooting" , link: "fss6aCLbV9A" },
-          { name: "20200710 saxan jett things" , link: "9RS3i_zlre8" },
-          { name: "20200710 saxan 3k" , link: "NfIFzq7nkEs" },
-          { name: "20200710 mike YOU LIKE THAT bgm" , link: "etl26-UbLiI" },
-          { name: "20200725 random baddy" , link: "zPhpYPR5yFs" },
-          { name: "20200725 mike tries his best" , link: "FL_n8wZ0BOI" },
-          { name: "20200725 mike gets the flank" , link: "0FxfNe4meSM" },
-          { name: "20200725 mike fails to defend his home" , link: "w8vDWtbdBlI" },
-          { name: "20200712 saxan wallbang" , link: "0cR_NAOMYIc" },
-          { name: "20200709 saxan bad teammate bgm" , link: "rV1vPZPWNqQ" },
-          { name: "20200709 saxan 3v1" , link: "evyaoXDCaT0" },
-          { name: "20200709 saxan 2k bgm" , link: "aZQJx1zO-Wk" },
-          { name: "20200704 saxan new crosshair triple" , link: "nTrStuD3o9I" },
-          { name: "20200704 saxan mike tries to get me killed" , link: "YCp_bQLVHz4" },
-          { name: "20200703 saxan pistol 3k" , link: "y9otnMxppBc" },
-          { name: "20200710 mike wtf" , link: "GOvjK07YXg8" },
-          { name: "20200710 mike spooky" , link: "kSKdzCPhsOM" },
-          { name: "20200710 mike 10 iq play bgm" , link: "KaW9awpvWXk" },
-          { name: "20200709 saxan jett things" , link: "cAxITUBgVYY" },
+        p.textContent = v.name;
 
-          ];
+        v.node = li;
 
-        let docfrag = document.createDocumentFragment();
-        vids.forEach( v => {
-          let h = document.createElement( 'div' );
-          let t = document.createElement( 'h1' );
-          docfrag.appendChild( h );
-          h.appendChild( t );
+        p.addEventListener( 'click' , function ( e ) {
+          let m = document.body.querySelector( 'iframe' );
+          if ( m ) {
+            this.parentNode.classList.remove( 'active' );
+            videolist.classList.remove( 'active' );
+            document.body.removeChild( m );
+            }
+          else {
+            m = document.createElement( 'iframe' );
+            m.src = 'https://www.youtube.com/embed/' + v.link;
+            m.controls = true;
+            m.width = null;
+            m.height = null;
+            m.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+            m.allowfullscreen = true;
 
-          t.textContent = v.name;
-
-          t.addEventListener( 'click' , function ( e ) {
-            let m = document.body.querySelector( 'iframe' );
-            if ( m ) {
-              this.parentNode.classList.remove( 'active' );
-              document.body.classList.remove( 'active' );
-              document.body.removeChild( m );
-              }
-            else {
-              m = document.createElement( 'iframe' );
-              m.src = 'https://www.youtube.com/embed/' + v.link;
-              m.controls = true;
-              m.width = null;
-              m.height = null;
-              m.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
-              m.allowfullscreen = true;
-
-              this.parentNode.classList.add( 'active' );
-              document.body.classList.add( 'active' );
-              document.body.appendChild( m );
-              }
-            } );
+            this.parentNode.classList.add( 'active' );
+            videolist.classList.add( 'active' );
+            document.body.appendChild( m );
+            }
           } );
+        } );
 
-        document.body.appendChild( docfrag );
-        </script>
+      videolist.appendChild( docfrag );
+
+      searchbar.addEventListener( 'change' , function ( e ) {
+        let t = searchbar.value;
+        vids.forEach( v => {
+          let b;
+          if ( t ) b = v.name.includes( t );
+          else b = true;
+          if ( b ) v.node.classList.remove( 'hide' );
+          else v.node.classList.add( 'hide' )
+          } );
+        } );
+      </script>
     </body>
   <html>
