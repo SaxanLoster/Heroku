@@ -43,11 +43,11 @@ var urls = {
     search: 'https://new.hulu.com/search#REPLACE',
     },
   'imdb': {
-    direct: 'http://www.imdb.com/title/REPLACE',
+    direct: 'http://www.imdb.com/title/REPLACE/episodes?season=^s$',
     search: 'http://www.imdb.com/find?q=REPLACE&s=tt&ttype=tv&ref_=fn_tv',
     },
   'netflix': {
-    direct: 'http://www.netflix.com/title/REPLACE',
+    direct: 'http://www.netflix.com/watch/REPLACE',
     search: 'http://www.netflix.com/search/REPLACE',
     },
   'ololo': {
@@ -119,6 +119,34 @@ document.querySelector( '#episode' ).addEventListener( 'change' , function ( eve
       } );
     xSetLinks();
     }
+  } );
+
+document.querySelector( '#level' ).addEventListener( 'wheel' , function ( event ) {
+  if ( event.deltaY < 0 ) {
+    this.value = parseInt( this.value ) + 1;
+    }
+  else {
+    this.value = Math.max( this.value - 1 , 1 );
+    }
+  this.dispatchEvent( new Event( 'change' ) );
+  } );
+document.querySelector( '#season' ).addEventListener( 'wheel' , function ( event ) {
+  if ( event.deltaY < 0 ) {
+    this.value = parseInt( this.value ) + 1;
+    }
+  else {
+    this.value = Math.max( this.value - 1 , 1 );
+    }
+  this.dispatchEvent( new Event( 'change' ) );
+  } );
+document.querySelector( '#episode' ).addEventListener( 'wheel' , function ( event ) {
+  if ( event.deltaY < 0 ) {
+    this.value = parseInt( this.value ) + 1;
+    }
+  else {
+    this.value = Math.max( this.value - 1 , 1 );
+    }
+  this.dispatchEvent( new Event( 'change' ) );
   } );
 
 links.forEach( function ( v , i , a ) {
